@@ -50,7 +50,7 @@ stage('Archieve and Dockerfile'){
     'Create archieve': {
       sh 'tar -czf pipeline-akuznetsova-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-project/helloworld-ws/target/helloworld-ws.war'
       archiveArtifacts 'pipeline-akuznetsova-${BUILD_NUMBER}.tar.gz'
-    }
+    },
     'Create Dockerfile': {
       sh 'echo "Placeholder for Dockerfile"'
     }

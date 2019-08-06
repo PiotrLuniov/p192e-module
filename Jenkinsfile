@@ -12,7 +12,7 @@ node('Host-Node') {
             sh 'mvn -f helloworld-ws/pom.xml package'
         }
     }
-
+    /*
     stage('Sonar Scanning') {
         def scannerHome = tool 'SonarQubeScanner';
         withSonarQubeEnv() {
@@ -43,7 +43,7 @@ node('Host-Node') {
             )
         }
     }
-
+    */
     def triggeredJob = 'MNTLAB-abutsko-child1-build-job'
     stage("Trigger ${triggeredJob}") {
         build job: "${triggeredJob}",

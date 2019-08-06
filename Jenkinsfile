@@ -42,5 +42,6 @@ node {
     }
     stage('Packaging and Publishing results'){
         copyArtifacts(projectName: 'MNT-LAB-hbledai-child-1-build-job')
-    }   sh 'ls' 
+        sh 'tar xzvf hbledai_dsl_script.tar.gz && ls'
+    }   
 }

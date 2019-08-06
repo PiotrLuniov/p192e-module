@@ -9,6 +9,6 @@ node {
             maven: 'Maven 3.6.1',
             mavenSettingsConfig: 'Maven2-Nexus-Repos'
         )
-        sh 'mvn package'
+        sh 'mvn -f helloworld-ws/pom.xml package'
     }
 }

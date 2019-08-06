@@ -1,6 +1,9 @@
 node('Host-Node'){
+	def studentName = 'adalimayeu'
 	stage('Preparation (Checking out)'){
 		echo "Preparation (Checking out)"
+
+		git branch: '${studentName}', url: 'https://github.com/MNT-Lab/p192e-module.git'
 	}
 	stage('Building code'){
 		echo "Building code"

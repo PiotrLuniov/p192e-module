@@ -4,7 +4,7 @@ node {
     }
     stage('Building code'){
         withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
-            sh 'mvn -f helloworld-ws/pom.xml package'
+            sh 'mvn -f helloworld-project/helloworld-ws/pom.xml package'
         }
     }
     stage(){
@@ -13,7 +13,7 @@ node {
       sh "${scannerHome}/bin/sonar-scanner"
           '-Dsonar.projectKey=hbledai:project' +
           '-Dsonar:projectName=hbledai project' +
-          '-Dsonar.sources=helloworld-ws/src/main/java' +
+          '-Dsonar.sources=helloworld-project/' +
           '-Dsonar.java.binaries=**/target/classes' +
           '-Dsonar.language=java'
         }

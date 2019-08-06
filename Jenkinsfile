@@ -42,13 +42,13 @@ node {
     )
 }
 stage('Build child'){
+     sh 'cd ${WORKSPACE}'
      build job: 'MNTLAB-akuznetsova-child1-build-job', parameters: [string(name: 'BRANCH_NAME', value: 'akuznetsova')], wait: true
      copyArtifacts filter: 'output.txt', projectName: 'MNTLAB-akuznetsova-child1-build-job'
 }
 stage('Archieve and Dockerfile'){
   parallel(
     'Create archieve': {
-      sh 'cd ${WORKSPACE}'
       sh 'tar -czf pipeline-akuznetsova-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-project/helloworld-ws/target/helloworld-ws.war'
       archiveArtifacts 'pipeline-akuznetsova-${BUILD_NUMBER}.tar.gz'
     },

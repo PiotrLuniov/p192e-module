@@ -71,10 +71,27 @@ Git Information:
     def archive = "pipeline-abutsko-${env.BUILD_NUMBER}.tar.gz"
     stage('Packaging and Publishing results') {
         parallel(
-            'Create Archive for common files': {
+            'Create Archive for common files And Upload them': {
                 sh "tar czf ${archive} --transform='flags=r;s!^.*/!!' output.txt Jenkinsfile **/**/helloworld-ws.war"
+
+                def pom =readMavenPom file: 'helloworld-ws/pom.xml';
+                nexusArtifactUploader {
+                    nexusVersion: 'nexus3',
+                    protocol: 'http',
+                    nexusUrl: 'localhost:8081',
+                    repository 'MNT-pipeline-training',
+                    groupId: pom.groupId,
+                    version: pom.version,
+                    credentialsId: 'nexus',
+                    artifacts: [
+                        artifactId: pom.artifactId,
+                        classifier: '',
+                        file: archive,
+                        type: 'tar.gz'
+                    ]
+                }
             },
-            'Build Docker Image': {
+            'Building And Pushing Docker Image': {
                 // Create Dockerfile
                 writeFile file: 'Dockerfile',
                           text: '''

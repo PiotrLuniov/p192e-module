@@ -13,12 +13,14 @@ node('Host-Node') {
         }
 
 	stage('SonarQube analysis') {
+		scannerHome = tool 'SonarQubeScanner'
 		withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac', installationName: 'SonarQubeScanner') {
-			sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:4.0.0.1744:sonar'
+			"${scannerHome}/bin/sonar-scanner"
+//			sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:4.0.0.1744:sonar -f helloworld-ws/pom.xml -D'
 	    	}
-        	timeout(time: 10, unit: 'MINUTES') {
-        		waitForQualityGate abortPipeline: true
-		}
+//        	timeout(time: 10, unit: 'MINUTES') {
+//        		waitForQualityGate abortPipeline: true
+//		}
 	}
 
 //	stage('SonarQube analysis'){

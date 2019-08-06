@@ -8,7 +8,8 @@ node {
         withMaven(
             maven: 'Maven 3.6.1',
             mavenSettingsConfig: 'Maven2-Nexus-Repos'
-        )
-        sh 'mvn -f helloworld-ws/pom.xml package'
+        ) {
+            sh 'mvn -f helloworld-ws/pom.xml package'
+        }
     }
 }

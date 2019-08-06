@@ -43,7 +43,7 @@ node('Host-Node'){
 
 	stage('Packaging and Publishing results'){
 		parallel 'Archiving artifact': {
-				echo ""
+				archiveArtifacts 'output.txt, Jenkinsfile, helloworld-ws/target/helloworld-ws.war'
 			},
 			'Creating Docker Image': {
 				echo ""

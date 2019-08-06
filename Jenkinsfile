@@ -26,7 +26,7 @@ node('Host-Node') {
 //				-Dsonar.sources=helloworld-ws/src/main/java \
 				-Dsonar.login=ashamchonak \
 				-Dsonar.password=ashamchonak \
-				-Dsonar.java.binaries=**/target/classes \
+//				-Dsonar.java.binaries=**/target/classes \
 				'
 			}
 	    	}

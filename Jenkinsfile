@@ -1,4 +1,4 @@
-node {
+node('Host-Node') {
     stage('Checkout GitHub Repository') {
         git branch: 'abutsko',
             url: 'https://github.com/MNT-Lab/p192e-module.git'
@@ -33,13 +33,13 @@ node {
             steps {
                 parallel (
                     'Pre-Integration Test': {
-                        sh 'mvn pre-integration-test -f /helloworld-ws/pom.xml'
+                        sh 'mvn -f /helloworld-ws/pom.xml pre-integration-test'
                     },
                     'Integration Test': {
-                        sh 'mvn integration-test -f /helloworld-ws/pom.xml'
+                        sh 'mvn -f /helloworld-ws/pom.xml integration-test '
                     },
                     'Post-Integration Test': {
-                        sh 'mvn post-integration-test -f /helloworld-ws/pom.xml'
+                        sh 'mvn -f /helloworld-ws/pom.xml post-integration-test'
                     }
                 )
             }

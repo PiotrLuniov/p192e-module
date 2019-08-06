@@ -34,10 +34,10 @@ node {
                 parallel (
                     'Pre-Integration Test': {
                         sh 'mvn pre-integration-test -f /helloworld-ws/pom.xml'
-                    }
+                    },
                     'Integration Test': {
                         sh 'mvn integration-test -f /helloworld-ws/pom.xml'
-                    }
+                    },
                     'Post-Integration Test': {
                         sh 'mvn post-integration-test -f /helloworld-ws/pom.xml'
                     }

@@ -7,7 +7,7 @@ node {
             sh 'mvn clean package -f helloworld-ws/pom.xml '
         }
     }
-    stage(){
+    stage('Sonar'){
         def scannerHome = tool 'SonarQubeScanner';
     withSonarQubeEnv() { // If you have configured more than one global server connection, you can specify its name
       sh "${scannerHome}/bin/sonar-scanner" +

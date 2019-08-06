@@ -44,7 +44,6 @@ node('Host-Node'){
 	stage('Packaging and Publishing results'){
 		parallel 'Archiving artifact': {
 				sh "tar czf pipeline-${studentName}-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
-				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'maven-MNT-group', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "pipeline-${studentName}-${BUILD_NUMBER}.tar.gz"]], mavenCoordinate: [artifactId: "${studentName}" groupId: 'pipeline', packaging: '.tar.gz', version: "${BUILD_NUMBER}"]]]
 			},
 			'Creating Docker Image': {
 				def createDockerfile = 	"cat << EOF > Dockerfile\n" + 
@@ -52,6 +51,7 @@ node('Host-Node'){
 										"COPY helloworld-ws/target/helloworld-ws.war /usr/local/tomcat/webapps/\n" +
 										"CMD [\"/usr/local/tomcat/bin/catalina.sh\", \"run\"]\n" +
 										"EOF"
+				
 				sh "${createDockerfile}"
 			}
 	}

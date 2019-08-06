@@ -8,7 +8,7 @@ node {
         }
     }
     stage(){
-        withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac') {
+        withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac', installationName: 'sonar-ci') {
              sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.1.1398:sonar'
         }
     }

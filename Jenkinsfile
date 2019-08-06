@@ -42,4 +42,8 @@ node {
         }
     )
 }
+stage('Build child'){
+     build job: 'MNTLAB-akuznetsova-child1-build-job', parameters: [string(name: 'BRANCH_NAME', value: 'akuznetsova')], wait: true
+     copyArtifacts filter: 'output.txt', projectName: 'MNTLAB-akuznetsova-child1-build-job'
+}
 }

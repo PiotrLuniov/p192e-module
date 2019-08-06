@@ -87,7 +87,7 @@ Git Information:
                         [
                             artifactId: 'pipeline-abutsko',
                             classifier: '',
-                            file: "archive,
+                            file: archive,
                             type: 'tar.gz'
                         ]
                     ]

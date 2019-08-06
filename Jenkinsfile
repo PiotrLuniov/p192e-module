@@ -43,25 +43,35 @@ EOF
   }
 
   stage('run-parallel-mvn-tests') {
-    withMaven(
-      jdk: 'JDK9',
-      maven: 'Maven 3.6.1', 
-      mavenSettingsConfig: 'Maven2-Nexus-Repos') {
-        steps {
-          parallel(
-            a: {
-            sh "mvn pre-integration-test -f helloworld-ws/pom.xml"
-            },
-            b: {
-            sh "mvn integration-test -f helloworld-ws/pom.xml"
-            },
-            c: {
-            sh "mvn post-integration-test -f helloworld-ws/pom.xml"
-            }
-          )
-        }
+    parallel(
+	    a: {
+	    withMaven(
+	        jdk: 'JDK9',
+	        maven: 'Maven 3.6.1', 
+	        mavenSettingsConfig: 'Maven2-Nexus-Repos') {
+	    	sh "mvn pre-integration-test -f helloworld-ws/pom.xml"
+	    	}
+	    },
+	    b: {
+	    withMaven(
+	        jdk: 'JDK9',
+	        maven: 'Maven 3.6.1', 
+	        mavenSettingsConfig: 'Maven2-Nexus-Repos') {	
+	        sh "mvn integration-test -f helloworld-ws/pom.xml"
+	    	}
+	    },
+	    c: {
+	    withMaven(
+	        jdk: 'JDK9',
+	        maven: 'Maven 3.6.1', 
+	        mavenSettingsConfig: 'Maven2-Nexus-Repos') {
+	        sh "mvn post-integration-test -f helloworld-ws/pom.xml"
+	        }
+		}
+    )
+        
     }
-  }
+
 
 
   stage('Triggering job'){

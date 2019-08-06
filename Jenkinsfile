@@ -85,7 +85,7 @@ Git Information:
                     credentialsId: 'nexus',
                     artifacts: [
                         [
-                            artifactId: pom.artifactId,
+                            artifactId: archive,
                             classifier: '',
                             file: archive,
                             type: 'tar.gz'

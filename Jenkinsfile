@@ -36,6 +36,8 @@ node {
                     }
                 }
             )
-        
-    }
+        }
+    stage('Triggering job and fetching artefact after finishing'){
+        build job: 'MNT-LAB-hbledai-child-1-build-job', parameters: [string(name: 'BRANCH', value: 'hbledai')]
+    }    
 }

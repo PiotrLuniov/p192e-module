@@ -74,8 +74,8 @@ Git Information:
             'Create Archive for common files And Upload them': {
                 sh "tar czf ${archive} --transform='flags=r;s!^.*/!!' output.txt Jenkinsfile **/**/helloworld-ws.war"
 
-                def pom =readMavenPom file: 'helloworld-ws/pom.xml';
-                nexusArtifactUploader {
+                def pom =readMavenPom file: 'helloworld-ws/pom.xml'
+                nexusArtifactUploader(
                     nexusVersion: 'nexus3',
                     protocol: 'http',
                     nexusUrl: 'localhost:8081',
@@ -89,7 +89,7 @@ Git Information:
                         file: archive,
                         type: 'tar.gz'
                     ]
-                }
+                )
             },
             'Building And Pushing Docker Image': {
                 // Create Dockerfile

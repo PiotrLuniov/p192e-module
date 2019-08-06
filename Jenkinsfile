@@ -6,13 +6,12 @@ node('Host-Node') {
 
     stage('Build Project') {
         // Create help page for application
-        sh  '''
-            cat<<EOF > helloworld-ws/src/main/help.html
+        writeFile file: helloworld-ws/src/main/help.html,
+                  text: '''
 Developer: Antoś Bućko
 Image: ${env.BUILD_NUMBER}
 Git Information:
 \$(git log | head -n 3)
-EOF
         '''
 
         withMaven(
@@ -77,11 +76,10 @@ EOF
             },
             'Build Docker Image': {
                 // Create Dockerfile
-                sh '''
-                    cat <<EOF > Dockerfile
+                writeFile file: Dockerfile,
+                          text: '''
 FROM tomcat:8.0
 COPY helloworld-ws/target/helloworld-ws.war /usr/local/tomcat/webapps/
-EOF
                 '''
 
                 docker.withRegistry('http://localhost:6566', 'nexus') {

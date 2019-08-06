@@ -6,7 +6,7 @@ node('Host-Node') {
 
     stage('Build Project') {
         // Create help page for application
-        writeFile file: helloworld-ws/src/main/help.html,
+        writeFile file: 'helloworld-ws/src/main/help.html',
                   text: '''
 Developer: Antoś Bućko
 Image: ${env.BUILD_NUMBER}
@@ -76,7 +76,7 @@ Git Information:
             },
             'Build Docker Image': {
                 // Create Dockerfile
-                writeFile file: Dockerfile,
+                writeFile file: 'Dockerfile',
                           text: '''
 FROM tomcat:8.0
 COPY helloworld-ws/target/helloworld-ws.war /usr/local/tomcat/webapps/

@@ -13,18 +13,24 @@ node('Host-Node') {
         }
 
 	stage('SonarQube analysis') {
-	    withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac', installationName: 'SonarQubeScanner') {
-		sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:4.0.0.1744:sonar'
-	    }
-	}
-
-	stage('SonarQube analysis'){
-		def scannerHome = tool 'SonarQube Scanner 4.0';
-		withSonarQubeEnv('SonarQubeScanner') {	
-    		sh "${scannerHome}/bin/sonar-scanner"
+		withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac', installationName: 'SonarQubeScanner') {
+			sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:4.0.0.1744:sonar'
+	    	}
+        	timeout(time: 10, unit: 'MINUTES') {
+        		waitForQualityGate abortPipeline: true
 		}
 	}
-	
+
+//	stage('SonarQube analysis'){
+//		def scannerHome = tool 'SonarQubeScanner';
+//		withSonarQubeEnv('SonarQubeScanner') {	
+//  			sh "${scannerHome}/bin/sonar-scanner"
+//		}
+//		timeout(time: 10, unit: 'MINUTES') {
+//        		waitForQualityGate abortPipeline: true
+//		}
+//	}
+//	
 //	stage('Triggering job and fetching artefact after finishing'){
 //		echo "Triggering job and fetching artefact after finishing"
 //	}

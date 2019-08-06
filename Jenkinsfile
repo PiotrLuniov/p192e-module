@@ -4,7 +4,7 @@ node('Host-Node'){
 		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
 	}
 	stage('Building code'){
-		withMaven(jdk: 'JDK9', maven: 'M3') {
+		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
     		sh 'mvn package -f helloworld-ws/pom.xml'
 		}
 	}

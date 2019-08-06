@@ -44,7 +44,7 @@ node('Host-Node') {
         }
     }
 
-    def triggeredJob = 'MNTLAB-abutsko-child1-job'
+    def triggeredJob = 'MNTLAB-abutsko-child1-build-job'
     stage("Trigger ${triggeredJob}") {
         build job: "${triggeredJob}",
               parameters: [

@@ -66,7 +66,16 @@ node {
                 sh "tar czf ${archive} --transform='flags=r;s!^.*/!!' output.txt Jenkinsfile **/**/helloworld-ws.war"
             },
             'Build Docker Image': {
+                sh 'echo hello'
             }
         )
+    }
+
+    docker.withTool('dockerTool') {
+        withDockerServer([uri: 'tcp://docker-in-docker:2375']) {
+            stage ('Building') {
+                sh 'docker images'
+            }
+        }
     }
 }

@@ -17,8 +17,7 @@ node('Host-Node'){
 		
 	}
 	stage('Testing'){
-		parallel 
-			'pre-integration-test': {
+		parallel 'pre-integration-test': {
 				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {
    					sh 'mvn pre-integration-test -f helloworld-ws/pom.xml'
 				}

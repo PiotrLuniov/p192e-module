@@ -84,10 +84,12 @@ Git Information:
                     version: pom.version,
                     credentialsId: 'nexus',
                     artifacts: [
-                        artifactId: pom.artifactId,
-                        classifier: '',
-                        file: archive,
-                        type: 'tar.gz'
+                        [
+                            artifactId: pom.artifactId,
+                            classifier: '',
+                            file: archive,
+                            type: 'tar.gz'
+                        ]
                     ]
                 )
             },

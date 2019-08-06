@@ -55,7 +55,18 @@ node('Host-Node') {
               ],
               wait: true
 
-        copyArtifacts filter: '*.tar.gz',
+        copyArtifacts filter: 'output.txt',
                       projectName: "${triggeredJob}"
+    }
+
+    def archive = "pipeline-abutsko-${env.BUILD_NUMBER}.tar.gz"
+    stage('Packaging and Publishing results') {
+        parallel(
+            'Create Archive for common files': {
+                sh "tar czf ${archive} output.txt Jenkinsfile helloworld-ws.war"
+            }/*,
+            'Build Docker Image': {
+            }*/
+        )
     }
 }

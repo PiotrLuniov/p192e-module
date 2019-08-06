@@ -10,7 +10,7 @@ node('Host-Node'){
 	}
 	stage('Sonar scan'){
 		withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac') {
-    		sh "${scannerHome}/bin/sonar-scanner"
+    		sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
 		}
 	}
 	stage('Testing'){

@@ -46,7 +46,14 @@ node('Host-Node'){
 				sh "tar czf pipeline-${studentName}-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
 			},
 			'Creating Docker Image': {
-				echo ""
+				def createDockerfile = '''
+				cat << EOF > Dockerfile
+				FROM tomcat:8.0
+				COPY helloworld-ws/target/helloworld-ws.war /usr/local/tomcat/webapps/
+				CMD ["/usr/local/tomcat/bin/catalina.sh", "run"]
+				EOF
+				'''
+				sh "${createDockerfile}"
 			}
 	}
 	stage('Asking for manual approval'){

@@ -1,5 +1,6 @@
 node {
 	def studentName = 'ashamchonak'
+	
 	stage('Preparation (Checking out)'){
 		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
 	}
@@ -8,9 +9,10 @@ node {
 
 	stage('Building code'){
 		withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1', mavenSettingsFilePath: 'helloworld-ws/pom.xml') {
-        mvn clean package
+			sh "mvn clean verify"
+		}
         }
-	}
+	
 
 
 

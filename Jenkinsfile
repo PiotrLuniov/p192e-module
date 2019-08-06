@@ -30,7 +30,6 @@ node('Host-Node') {
             maven: 'Maven 3.6.1',
             mavenSettingsConfig: 'Maven2-Nexus-Repos'
         ) {
-            steps {
                 parallel (
                     'Pre-Integration Test': {
                         sh 'mvn -f /helloworld-ws/pom.xml pre-integration-test'
@@ -43,6 +42,5 @@ node('Host-Node') {
                     }
                 )
             }
-        }
     }
 }

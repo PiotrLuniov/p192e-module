@@ -75,10 +75,10 @@ EOF
 
 
   stage('Triggering job'){
-    build job: 'MNT-LAB-apavarnitsyn-child1-build-job', parameters: [string(name: 'BRANCH', value: 'apavarnitsyn')], wait: true
+    build job: 'MNTLAB-apavarnitsyn-child1-build-job', parameters: [string(name: 'BRANCH', value: 'apavarnitsyn')], wait: true
 }
   stage('Packaging and Publishing results'){
-    copyArtifacts(projectName: 'MNT-LAB-apavarnitsyn-child1-build-job')
+    copyArtifacts(projectName: 'MNTLAB-apavarnitsyn-child1-build-job')
     sh 'tar xzvf apavarnitsyn_dsl_script.tar.gz && ls'
 } 
   stage('build-Docker-image') {

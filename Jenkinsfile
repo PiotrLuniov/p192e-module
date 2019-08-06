@@ -30,6 +30,7 @@ EOF
 
  		}	
   }	
+/*
 
   stage('Sonar-scan') {
     def scannerHome = tool 'SonarQubeScanner';
@@ -38,9 +39,9 @@ EOF
        '-Dsonar.projectKey=apavarnitsyn ' +
        '-Dsonar.language=java ' +
        '-Dsonar.sources=helloworld-ws/src/main/java  '+
-       '-Dsonar.java.binaries=**/target/classes'
+       '-Dsonar.java.binaries=**\/target/classes'
     }
-  }
+  } 
 
   stage('run-parallel-mvn-tests') {
     parallel(
@@ -73,7 +74,7 @@ EOF
     }
 
 
-
+*/
   stage('Triggering job'){
     build job: 'MNTLAB-apavarnitsyn-child1-build-job', parameters: [string(name: 'BRANCH_NAME', value: 'apavarnitsyn')], wait: true
 }
@@ -84,7 +85,7 @@ EOF
   stage('build-Docker-image') {
     // Shell docker build step
 sh """ 
-cp helloworld-project/helloworld-ws/target/helloworld-ws.war hello.war
+cp helloworld-ws/target/helloworld-ws.war hello.war
 cat << EOF > Dockerfile
 FROM tomcat
 COPY hello.war /usr/local/tomcat/webapps/ 

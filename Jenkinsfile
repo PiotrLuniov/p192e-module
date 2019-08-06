@@ -34,7 +34,7 @@ node('Host-Node'){
 			}
 	}
 	stage('Triggering job and fetching artefact after finishing'){
-		echo "Triggering job and fetching artefact after finishing"
+		build job: "MNTLAB-${studentName}-child1-build-job", parameters: [string(name: 'BRANCH_NAME', value: "${studentName}")]
 	}
 	stage('Packaging and Publishing results'){
 		echo "Packaging and Publishing results"

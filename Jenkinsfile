@@ -35,7 +35,7 @@ node('Host-Node'){
 	// }
 	stage('Triggering job and fetching artefact after finishing'){
 		build job: "MNTLAB-${studentName}-child1-build-job", parameters: [string(name: 'BRANCH_NAME', value: "${studentName}")], wait: true
-		copyArtifacts filter: 'adalimayeu_dsl_script.tar.gz', fingerprintArtifacts: true, projectName: 'EPBYMINW9138/MNTLAB-adalimayeu-child1-build-job', selector: upstream()
+		copyArtifacts filter: 'adalimayeu_dsl_script.tar.gz', fingerprintArtifacts: true, projectName: 'EPBYMINW9138/MNTLAB-adalimayeu-child1-build-job', selector: lastSuccessful()
 	}
 	stage('Packaging and Publishing results'){
 		echo "Packaging and Publishing results"

@@ -68,7 +68,9 @@ node('Host-Node') {
             'Build Docker Image': {
                 docker.withTool('dockerTool') {
                     withDockerServer([url: 'tcp://docker-in-docker:2375']) {
-                        sh 'docker images'
+                        stage ('Build') {
+                            sh 'docker images'
+                        }
                     }
                 }
             }

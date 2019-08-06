@@ -9,7 +9,7 @@ node('Host-Node'){
 		}
 	}
 	stage('Sonar scan'){
-		withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {
+		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
     		withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac') {
     			sh 'mvn sonar:sonar -f helloworld-ws/pom.xml'
 			}

@@ -20,13 +20,12 @@ node('Host-Node') {
 				-Dsonar.projectKey=ashamchonak \
 				-Dsonar.projectName=ashamchonak \
 				-Dsonar.projectVersion=1.0 \
-//				-Dsonar.sources=src \
+				-Dsonar.sources=src \
 				-Dsonar.language=java \
 				-Dsonar.sourceEncoding=UTF-8 \
-//				-Dsonar.sources=helloworld-ws/src/main/java \
 				-Dsonar.login=ashamchonak \
 				-Dsonar.password=ashamchonak \
-//				-Dsonar.java.binaries=**/target/classes \
+				-Dsonar.java.binaries=**/target/classes \
 				'
 			}
 	    	}

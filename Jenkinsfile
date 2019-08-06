@@ -15,18 +15,7 @@ node('Host-Node') {
 	stage('SonarQube analysis') {
 		scannerHome = tool 'SonarQubeScanner'
 		withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac', installationName: 'SonarQubeScanner') {
-			sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar \
-			-Dsonar.projectKey=ashamchonak \
-			-Dsonar.projectName=ashamchonak \
-			-Dsonar.projectVersion=1.0 \
-			-Dsonar.sources=src \
-			-Dsonar.language=java \
-			-Dsonar.sourceEncoding=UTF-8 \
-			-Dsonar.sources=helloworld-ws/src/main/java \
-			-Dsonar.login=ashamchonak \
-			-Dsonar.password=ashamchonak \
-			-Dsonar.java.binaries=**/target/classes \
-			'
+			sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar 			-Dsonar.projectKey=ashamchonak 		-Dsonar.projectName=ashamchonak 			-Dsonar.projectVersion=1.0 			-Dsonar.sources=src 			-Dsonar.language=java 			-Dsonar.sourceEncoding=UTF-8 			-Dsonar.sources=helloworld-ws/src/main/java 			-Dsonar.login=ashamchonak 			-Dsonar.password=ashamchonak 			-Dsonar.java.binaries=**/target/classes 			'
 			}
 	    	}
 //        	timeout(time: 10, unit: 'MINUTES') {

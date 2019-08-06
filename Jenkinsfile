@@ -15,6 +15,27 @@ node {
           '-Dsonar.sources=helloworld-ws/src/main/java ' +
           '-Dsonar.java.binaries=**/target/classes ' +
           '-Dsonar.language=java '
+            
+        }
+    }
+    stage('run-parallel-branches') {
+        parallel(
+            'pre-integration-test': {
+                withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
+                sh 'mvn pre-integration-test -f helloworld-ws/pom.xml '
+                }
+            },
+            'integration-test': {
+                withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
+                sh 'mvn integration-test -f helloworld-ws/pom.xml '
+                    }
+            },
+            'post-integration-test': {
+                withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
+                sh 'mvn post-integration-test -f helloworld-ws/pom.xml '
+                    }
+                }
+            )
         }
     }
 }

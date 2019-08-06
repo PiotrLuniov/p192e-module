@@ -8,7 +8,7 @@ node {
     	withMaven(
         maven: 'Maven 3.6.1', 
         globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') { 
-      		sh "mvn -f helloworld-project/helloworld-ws/pom.xml package"
+      		sh "mvn -f helloworld-ws/pom.xml package"
 		}
 	}
 	stage('Sonar scan') {
@@ -24,7 +24,7 @@ node {
 		    	withMaven(
 		        maven: 'Maven 3.6.1',
 		        mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
-		      		sh "mvn -f helloworld-project/helloworld-ws/pom.xml pre-integration-test"
+		      		sh "mvn -f helloworld-ws/pom.xml pre-integration-test"
 				}
             } 
             stage('integration test') {
@@ -33,7 +33,7 @@ node {
 		    	withMaven(
 		        maven: 'Maven 3.6.1',
 		        mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
-		      		sh "mvn -f helloworld-project/helloworld-ws/pom.xml integration-test"
+		      		sh "mvn -f helloworld-ws/pom.xml integration-test"
 				}
             }
             stage('post-integration test') {
@@ -42,7 +42,7 @@ node {
 		    	withMaven(
 		        maven: 'Maven 3.6.1',
 		        mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
-		      		sh "mvn -f helloworld-project/helloworld-ws/pom.xml post-integration-test"
+		      		sh "mvn -f helloworld-ws/pom.xml post-integration-test"
 				}
             }
         }

@@ -5,7 +5,7 @@ node {
    }
    stage('Build') {
        sh 'cd helloworld-ws/'
-      withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
+      withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1', globalMavenSettingsFilePath: 'MNT-group-nexus-ci'){
           sh 'mvn -f helloworld-ws/pom.xml test package'
       }
    }

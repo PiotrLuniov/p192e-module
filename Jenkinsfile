@@ -3,11 +3,11 @@ node {
 		checkout([$class: 'GitSCM', branches: [[name: '*/mmarkova']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/MNT-Lab/p192e-module']]])
 	}
 	stage('Building code') {
-		git url: 'https://github.com/MNT-Lab/p192e-module'
+		git url: 'https://github.com/MNT-Lab/p192e-module/pom.xml'
  
     	withMaven(
         maven: 'Maven 3.6.1', 
-        mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') { 
+        globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') { 
       		sh "mvn package"
 		}
 	}

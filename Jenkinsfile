@@ -30,17 +30,32 @@ node('Host-Node') {
             maven: 'Maven 3.6.1',
             mavenSettingsConfig: 'Maven2-Nexus-Repos'
         ) {
-                parallel (
-                    'Pre-Integration Test': {
-                        sh 'mvn -f helloworld-ws/pom.xml pre-integration-test'
-                    },
-                    'Integration Test': {
-                        sh 'mvn -f helloworld-ws/pom.xml integration-test'
-                    },
-                    'Post-Integration Test': {
-                        sh 'mvn -f helloworld-ws/pom.xml post-integration-test'
-                    }
+            parallel (
+                'Pre-Integration Test': {
+                    sh 'mvn -f helloworld-ws/pom.xml pre-integration-test'
+                },
+                'Integration Test': {
+                    sh 'mvn -f helloworld-ws/pom.xml integration-test'
+                },
+                'Post-Integration Test': {
+                    sh 'mvn -f helloworld-ws/pom.xml post-integration-test'
+                }
+            )
+        }
+    }
+
+    def triggeredJob = 'MNTLAB-abutsko-child1-job'
+    stage("Trigger ${triggeredJob}") {
+        build job: "${triggeredJob}",
+              parameters: [
+                string(
+                    name: 'BRANCH_NAME',
+                    value: 'abutsko'
                 )
-            }
+              ],
+              wait: true
+
+        copyArtifacts filter: '*.tar.gz',
+                      projectName: "${triggeredJob}"
     }
 }

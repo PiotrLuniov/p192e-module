@@ -12,4 +12,16 @@ node {
             sh 'mvn -f helloworld-ws/pom.xml package'
         }
     }
+
+    stage('Sonar Scanning') {
+        def scannerHome = tool 'SonarQubeScanner';
+        withSonarQubeEnv() {
+            sh "${scannerNome}/bin/sonar-scanner "
+               + '-Dsonar.projectName=abutsko-helloworld'
+               + '-Dsonar.projectKey=abutsko-helloworld'
+               + '-Dsonar.language=java'
+               + '-Dsonar.sources=helloworld-ws/src'
+               + '-Dsonar.java.binaries=**/target/classes'
+        }
+    }
 }

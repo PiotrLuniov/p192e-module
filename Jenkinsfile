@@ -63,7 +63,7 @@ node('Host-Node') {
     stage('Packaging and Publishing results') {
         parallel(
             'Create Archive for common files': {
-                sh "tar czf ${archive} output.txt Jenkinsfile **/**/helloworld-ws.war"
+                sh "tar czf ${archive} --transform '!^.*/!!' output.txt Jenkinsfile **/**/helloworld-ws.war"
             }/*,
             'Build Docker Image': {
             }*/

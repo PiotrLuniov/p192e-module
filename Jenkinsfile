@@ -12,8 +12,9 @@ node {
 		}
 	}
 	stage('Sonar scan') {
-		 withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac', installationName: 'SonarQubeScanner') { 
-      		sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.3.0.1492:sonar'
+		def sqScannerHome = tool 'SonarQubeScanner'
+		 withSonarQubeEnv() { 
+      		sh "${sqScannerHome}/bin/sonar-scanner 'Dsonar.projectKey=helloworld-ws:mmarkova'"
       	}
 	}
 	stage('Testing') {

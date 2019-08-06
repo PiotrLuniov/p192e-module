@@ -7,7 +7,7 @@ node {
  
     	withMaven(
         maven: 'Maven 3.6.1', 
-        mavenSettingsConfig: 'MNT-group nexus-ci') { 
+        mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') { 
       		sh "mvn package"
 		}
 	}
@@ -23,7 +23,7 @@ node {
  
 		    	withMaven(
 		        maven: 'Maven 3.6.1',
-		        mavenSettingsConfig: 'MNT-group nexus-ci') {
+		        mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
 		      		sh "mvn pre-integration-test"
 				}
             } 
@@ -32,7 +32,7 @@ node {
  
 		    	withMaven(
 		        maven: 'Maven 3.6.1',
-		        mavenSettingsConfig: 'MNT-group nexus-ci') {
+		        mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
 		      		sh "mvn integration-test"
 				}
             }
@@ -41,7 +41,7 @@ node {
  
 		    	withMaven(
 		        maven: 'Maven 3.6.1',
-		        mavenSettingsConfig: 'MNT-group nexus-ci') {
+		        mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
 		      		sh "mvn post-integration-test"
 				}
             }

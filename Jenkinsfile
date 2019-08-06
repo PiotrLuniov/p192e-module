@@ -8,10 +8,10 @@ node(){
 			sh 'mvn clean package -f helloworld-ws/pom.xml' 
 		}
 	}
+    stage('Sonar scan') {
+        withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac') {
+            sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar -f helloworld-ws/pom.xml' 
 }
-
-//     stage('Sonar scan') {
-//         sh 'make publish'
 //     }
 
 //     stage('Testing') {

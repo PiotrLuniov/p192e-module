@@ -75,7 +75,7 @@ EOF
 
 
   stage('Triggering job'){
-    build job: 'MNTLAB-apavarnitsyn-child1-build-job', parameters: [string(name: 'BRANCH', value: 'apavarnitsyn')], wait: true
+    build job: 'MNTLAB-apavarnitsyn-child1-build-job', parameters: [string(name: 'BRANCH_NAME', value: 'apavarnitsyn')], wait: true
 }
   stage('Packaging and Publishing results'){
     copyArtifacts(projectName: 'MNTLAB-apavarnitsyn-child1-build-job')

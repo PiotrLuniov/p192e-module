@@ -16,7 +16,18 @@ node('Host-Node') {
 		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
 			withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac') {
 				sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar \
-				-f helloworld-ws/pom.xml		-Dsonar.projectKey=ashamchonak 		-Dsonar.projectName=ashamchonak 			-Dsonar.projectVersion=1.0 			-Dsonar.sources=src 			-Dsonar.language=java 			-Dsonar.sourceEncoding=UTF-8 			-Dsonar.sources=src/main/java 			-Dsonar.login=ashamchonak 			-Dsonar.password=ashamchonak 			-Dsonar.java.binaries=**/target/classes 			'
+				-f helloworld-ws/pom.xml \
+				-Dsonar.projectKey=ashamchonak \
+				-Dsonar.projectName=ashamchonak \
+				-Dsonar.projectVersion=1.0 \
+				-Dsonar.sources=src \
+				-Dsonar.language=java \
+				-Dsonar.sourceEncoding=UTF-8 \
+				-Dsonar.sources=helloworld-ws/src/main/java \
+				-Dsonar.login=ashamchonak \
+				-Dsonar.password=ashamchonak \
+				-Dsonar.java.binaries=**/target/classes \
+				'
 			}
 	    	}
 //        	timeout(time: 10, unit: 'MINUTES') {

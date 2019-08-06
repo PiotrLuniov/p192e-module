@@ -38,7 +38,7 @@ node('Host-Node'){
 	stage('Triggering job and fetching artefact after finishing'){
 		build job: "MNTLAB-${studentName}-child1-build-job", parameters: [string(name: 'BRANCH_NAME', value: "${studentName}")], wait: true
 		copyArtifacts filter: "${studentName}_dsl_script.tar.gz", fingerprintArtifacts: true, projectName: "EPBYMINW9138/MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
-		sh "tar -xcf ${studentName}_dsl_script.tar.gz"
+		sh "tar -xzf ${studentName}_dsl_script.tar.gz"
 	}
 
 	stage('Packaging and Publishing results'){

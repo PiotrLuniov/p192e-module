@@ -14,15 +14,29 @@ node(){
 			sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar -f helloworld-ws/pom.xml ' +
 			'-Dsonar.projectKey=kkaminski ' +
 			'-Dsonar.projectName=kkaminski '
-		}
+			}
 		}
 	}
+    stage('Testing') {
+    	parallel(
+    		'pre-integration-test': {
+    			withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1', MavenSettingsConfig: 'MNT-group nexus-ci') {
+    				sh 'mvn pre-integration-test -f helloworld-ws/pom.xml' 
+    			}
+    		},
+    		'integration-test': {
+    			withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1', MavenSettingsConfig: 'MNT-group nexus-ci') {
+    				sh 'mvn integration-test -f helloworld-ws/pom.xml' 
+    			}
+    		},
+    		'post-integration-test': {
+    			withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1', MavenSettingsConfig: 'MNT-group nexus-ci') {
+    				sh 'mvn post-integration-test -f helloworld-ws/pom.xml' 
+    			}
+    		}
+    	)
+	}
 }
-//     }
-
-//     stage('Testing') {
-//         sh 'make publish'
-//     }
  
 //     stage('Triggering job and fetching artefact after finishing') {
 //         sh 'make publish'

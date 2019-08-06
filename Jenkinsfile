@@ -35,7 +35,7 @@ node('Host-Node') {
                         sh 'mvn -f helloworld-ws/pom.xml pre-integration-test'
                     },
                     'Integration Test': {
-                        sh 'mvn -f helloworld-ws/pom.xml integration-test '
+                        sh 'mvn -f helloworld-ws/pom.xml integration-test'
                     },
                     'Post-Integration Test': {
                         sh 'mvn -f helloworld-ws/pom.xml post-integration-test'

@@ -1,12 +1,12 @@
 node {
    stage('Preparation') {
-      git branch: 'akuznetsova', url: 'https://github.com/MNT-Lab/build-t00ls.git'
+      git branch: 'akuznetsova', url: 'https://github.com/MNT-Lab/p192e-module.git'
 
    }
    stage('Build') {
-       sh 'cd helloworld-project/helloworld-ws/'
+       sh 'cd helloworld-ws/'
       withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
-          sh 'mvn -f helloworld-project/helloworld-ws/pom.xml test package'
+          sh 'mvn -f helloworld-ws/pom.xml test package'
       }
    }
    stage('Scan') {
@@ -15,7 +15,7 @@ node {
          sh "${scannerHome}/bin/sonar-scanner " +
          '-Dsonar.projectKey=helloworld-ws:akuznetsova ' +
          '-Dsonar.language=java ' +
-         '-Dsonar.sources=helloworld-project/ '+
+         '-Dsonar.sources=helloworld-ws/ '+
          '-Dsonar.java.binaries=**/target/classes'
       }
    }
@@ -23,19 +23,19 @@ node {
     parallel(
         'Pre Integration': {
               withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
-                sh 'cd helloworld-project/helloworld-ws/ &&  ' +
+                sh 'cd helloworld-ws/ &&  ' +
                 'mvn pre-integration-test'
               }
         },
         'Integration': {
               withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
-                sh 'cd helloworld-project/helloworld-ws/ &&  ' +
+                sh 'cd helloworld-ws/ &&  ' +
                 'mvn integration-test'
               }
         },
         'Post Integration': {
               withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
-                sh 'cd helloworld-project/helloworld-ws/ &&  ' +
+                sh 'cd helloworld-ws/ &&  ' +
                 'mvn post-integration-test'
               }
         }
@@ -49,9 +49,7 @@ stage('Build child'){
 stage('Archieve and Dockerfile'){
   parallel(
     'Create archieve': {
-      sh 'pwd'
-      sh 'ls'
-      sh 'tar -czf pipeline-akuznetsova-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-project/helloworld-ws/target/helloworld-ws.war'
+      sh 'tar -czf pipeline-akuznetsova-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war'
       archiveArtifacts 'pipeline-akuznetsova-${BUILD_NUMBER}.tar.gz'
     },
     'Create Dockerfile': {

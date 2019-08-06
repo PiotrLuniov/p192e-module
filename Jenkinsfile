@@ -1,5 +1,6 @@
-node {
-    stage('Checking out') {
+node () {
+
+    stage('Checking out') {
        git 'https://github.com/MNT-Lab/p192e-module'
     }
 

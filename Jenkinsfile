@@ -15,7 +15,7 @@ node('Host-Node') {
 	stage('SonarQube analysis') {
 		scannerHome = tool 'SonarQubeScanner'
 		withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac', installationName: 'SonarQubeScanner') {
-			"${scannerHome}/bin/sonar-scanner"
+			sh "${scannerHome}/bin/sonar-scanner -f helloworld-ws/pom.xml"
 //			sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:4.0.0.1744:sonar -f helloworld-ws/pom.xml -D'
 	    	}
 //        	timeout(time: 10, unit: 'MINUTES') {

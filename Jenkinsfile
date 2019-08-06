@@ -49,6 +49,8 @@ stage('Build child'){
 stage('Archieve and Dockerfile'){
   parallel(
     'Create archieve': {
+      sh 'pwd'
+      sh 'ls'
       sh 'tar -czf pipeline-akuznetsova-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-project/helloworld-ws/target/helloworld-ws.war'
       archiveArtifacts 'pipeline-akuznetsova-${BUILD_NUMBER}.tar.gz'
     },

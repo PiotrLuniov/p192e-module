@@ -6,7 +6,7 @@ node {
    stage('Build') {
      sh 'ls ../../EPBYMINW9149/'
       withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
-         sh 'cd helloworld-ws && mvn dependency:purge-local-repository '
+         sh 'cd helloworld-ws && mvn dependency:purge-local-repository clean install'
           sh 'mvn -f helloworld-ws/pom.xml package'
       }
    }

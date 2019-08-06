@@ -61,12 +61,23 @@ node('Host-Node') {
 
     def archive = "pipeline-abutsko-${env.BUILD_NUMBER}.tar.gz"
     stage('Packaging and Publishing results') {
+        agent {
+            docker {
+                image 'dranser/jenkins-ssh-dind',
+                args '-v /var/run/docker.sock:/var/run/docker.sock'
+            }
+        }
         parallel(
             'Create Archive for common files': {
                 sh "tar czf ${archive} --transform='flags=r;s!^.*/!!' output.txt Jenkinsfile **/**/helloworld-ws.war"
-            }/*,
+            },
             'Build Docker Image': {
-            }*/
+                docker.withTool('dockerTool') {
+                    withDockerServer([url: 'tcp://docker-in-docker:2375']) {
+                        sh 'docker images'
+                    }
+                }
+            }
         )
     }
 }

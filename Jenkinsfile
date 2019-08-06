@@ -24,7 +24,7 @@ EOF
 	withMaven(
     jdk: 'JDK9',
     maven: 'Maven 3.6.1', 
-    mavenSettingsConfig: 'MNT-group nexus-ci') { 
+    mavenSettingsConfig: 'Maven2-Nexus-Repos') { 
 
  		sh "mvn -f helloworld-ws/pom.xml clean package" 
 
@@ -46,7 +46,7 @@ EOF
     withMaven(
       jdk: 'JDK9',
       maven: 'Maven 3.6.1', 
-      mavenSettingsConfig: 'MNT-group nexus-ci') {
+      mavenSettingsConfig: 'Maven2-Nexus-Repos') {
         steps {
           parallel(
             a: {

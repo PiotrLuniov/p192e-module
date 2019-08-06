@@ -83,10 +83,7 @@ COPY helloworld-ws/target/helloworld-ws.war /usr/local/tomcat/webapps/
                 '''
 
                 docker.withRegistry('http://localhost:6566', 'nexus') {
-                    def appImage = docker.build(
-                        "localhost:6566/helloworld-abutsko:${env.BUILD_NUMBER}",
-                        "Dockerfile"
-                    )
+                    def appImage = docker.build("localhost:6566/helloworld-abutsko:${env.BUILD_NUMBER}")
                     appImage.push()
                 }
             }

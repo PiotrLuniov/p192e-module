@@ -5,11 +5,13 @@ node('Host-Node'){
 	}
 	stage('Building code'){
 		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
-    		sh 'mvn package -f helloworld-ws/pom.xml'
+    		sh 'mvn clean package -f helloworld-ws/pom.xml'
 		}
 	}
 	stage('Sonar scan'){
-		echo "Sonar scan"
+		withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac') {
+    		sh 'mvn sonar:sonar'
+		}
 	}
 	stage('Testing'){
 		echo "Testing"

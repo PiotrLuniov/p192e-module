@@ -6,7 +6,7 @@ node {
    }
    stage('Build') {
        sh 'cd helloworld-project/helloworld-ws/'
-      withMaven(jdk: 'java-8', maven: 'Maven 3.6.1'){
+      withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
           sh 'mvn -f helloworld-project/helloworld-ws/pom.xml test package'
       }
    }

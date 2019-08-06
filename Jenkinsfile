@@ -16,28 +16,28 @@ node('Host-Node'){
 //     }
 //}
 
-   /* stage('Sonar scan') {
-        sh 'make publish'
-    }
+//     stage('Sonar scan') {
+//         sh 'make publish'
+//     }
 
-    stage('Testing') {
-        sh 'make publish'
-    }
+//     stage('Testing') {
+//         sh 'make publish'
+//     }
  
-    stage('Triggering job and fetching artefact after finishing') {
-        sh 'make publish'
-    }
+//     stage('Triggering job and fetching artefact after finishing') {
+//         sh 'make publish'
+//     }
 
-    stage('Packaging and Publishing results') {
-        sh 'make publish'
-    }
+//     stage('Packaging and Publishing results') {
+//         sh 'make publish'
+//     }
 
-    stage('Asking for manual approval') {
-        sh 'make publish'
-    }
+//     stage('Asking for manual approval') {
+//         sh 'make publish'
+//     }
 
-    stage('Deployment') {
-        sh 'make publish'
-    }
-} */
+//     stage('Deployment') {
+//         sh 'make publish'
+//     }
+// } 
 

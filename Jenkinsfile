@@ -44,7 +44,7 @@ node('Host-Node'){
 	stage('Packaging and Publishing results'){
 		parallel 'Archiving artifact': {
 				sh "tar czf pipeline-${studentName}-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
-				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'maven-MNT-group', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: 'pipeline-adalimayeu-42.tar.gz']], mavenCoordinate: [artifactId: 'adalimayeu', groupId: 'pipeline', packaging: '.tar.gz', version: '42']]]
+				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'maven-MNT-group', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "pipeline-${studentName}-43.tar.gz"]], mavenCoordinate: [artifactId: "${studentName}", groupId: 'pipeline', packaging: '.tar.gz', version: '43']]]
 			},
 			'Creating Docker Image': {
 				def createDockerfile = 	"cat << EOF > Dockerfile\n" + 

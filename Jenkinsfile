@@ -8,6 +8,7 @@ node {
        sh 'mvn clean package'
        }
     }
+}
 
    /* stage('Sonar scan') {
         sh 'make publish'

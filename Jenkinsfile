@@ -9,7 +9,11 @@ node {
     }
     stage(){
         withSonarQubeEnv(jdk: 'JDK9', credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac', installationName: 'sonar-ci') {
-             sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.1.1398:sonar'
+          '-Dsonar.projectKey=hbledai:project' +
+          '-Dsonar:projectName=hbledai project' +
+          '-Dsonar.sources=helloworld-ws/src/main/java' +
+          '-Dsonar.java.binaries=**/target/classes' +
+          '-Dsonar.language=java'
         }
     }
 }

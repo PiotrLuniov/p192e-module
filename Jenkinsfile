@@ -11,7 +11,7 @@ node('Host-Node'){
 	stage('Sonar scan'){
 		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
     		withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac') {
-    			sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
+    			sh 'mvn sonar:sonar'
 			}
 		}
 		

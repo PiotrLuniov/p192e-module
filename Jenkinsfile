@@ -1,9 +1,9 @@
-node () {
-    stage('Checking out') {
+node{
+    stage('Checking out'){
        git 'https://github.com/MNT-Lab/p192e-module'
     }
-    stage('Building code') {
-       withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
+    stage('Building code'){
+       withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
        sh 'mvn clean package -f helloworls-ws/pom.xml' 
        }
     }

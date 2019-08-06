@@ -4,7 +4,7 @@ node {
 
    }
    stage('Build') {
-     sh 'ls ../../.m2'
+     sh 'ls ../../'
       withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
           sh 'mvn -f helloworld-ws/pom.xml package'
       }

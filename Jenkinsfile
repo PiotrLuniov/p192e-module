@@ -11,7 +11,7 @@ node('Host-Node'){
 	stage('Sonar scan'){
 		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
     		withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac') {
-    			def sonarOptions = '-Dsonar.projectKey=adalimayeu:helloworld -Dsonar.projectName=adalimayeu:helloworld -Dsonar.sources=helloworld-ws/src/main/java -Dsonar.java.binaries=**/target/classes -Dsonar.language=java'
+    			def sonarOptions = '-Dsonar.projectKey=adalimayeu:helloworld -Dsonar.projectName=adalimayeu:helloworld -Dsonar.sources=src/main/java -Dsonar.java.binaries=**/target/classes -Dsonar.language=java'
     			sh "mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar -f helloworld-ws/pom.xml ${sonarOptions}"
 			}
 		}

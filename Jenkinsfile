@@ -1,12 +1,12 @@
 node('Host-Node'){
 	def studentName = 'adalimayeu'
 	stage('Preparation (Checking out)'){
-		echo "Preparation (Checking out)"
-
 		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
 	}
 	stage('Building code'){
-		echo "Building code"
+		withMaven(jdk: 'JDK9', maven: 'M3') {
+    		sh 'mvn package -f helloworld-ws/pom.xml'
+		}
 	}
 	stage('Sonar scan'){
 		echo "Sonar scan"

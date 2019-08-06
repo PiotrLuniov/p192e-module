@@ -4,8 +4,9 @@ node {
 
    }
    stage('Build') {
+     sh 'ls ../'
       withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
-          sh 'mvn -f helloworld-ws/pom.xml clean test package'
+          sh 'mvn -f helloworld-ws/pom.xml package'
       }
    }
    stage('Scan') {

@@ -79,7 +79,7 @@ Git Information:
                     nexusVersion: 'nexus3',
                     protocol: 'http',
                     nexusUrl: 'localhost:8081',
-                    repository 'MNT-pipeline-training',
+                    repository: 'MNT-pipeline-training',
                     groupId: pom.groupId,
                     version: pom.version,
                     credentialsId: 'nexus',

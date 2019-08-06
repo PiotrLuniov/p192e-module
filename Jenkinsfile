@@ -3,12 +3,12 @@ node {
 		checkout([$class: 'GitSCM', branches: [[name: '*/mmarkova']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/MNT-Lab/p192e-module']]])
 	}
 	stage('Building code') {
-		git url: 'https://github.com/MNT-Lab/p192e-module/pom.xml'
+		git url: 'https://github.com/MNT-Lab/p192e-module'
  
     	withMaven(
         maven: 'Maven 3.6.1', 
         globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') { 
-      		sh "mvn package"
+      		sh "mvn -f helloworld-project/helloworld-ws/pom.xml package"
 		}
 	}
 	stage('Sonar scan') {
@@ -24,7 +24,7 @@ node {
 		    	withMaven(
 		        maven: 'Maven 3.6.1',
 		        mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
-		      		sh "mvn pre-integration-test"
+		      		sh "mvn -f helloworld-project/helloworld-ws/pom.xml pre-integration-test"
 				}
             } 
             stage('integration test') {
@@ -33,7 +33,7 @@ node {
 		    	withMaven(
 		        maven: 'Maven 3.6.1',
 		        mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
-		      		sh "mvn integration-test"
+		      		sh "mvn -f helloworld-project/helloworld-ws/pom.xml integration-test"
 				}
             }
             stage('post-integration test') {
@@ -42,7 +42,7 @@ node {
 		    	withMaven(
 		        maven: 'Maven 3.6.1',
 		        mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
-		      		sh "mvn post-integration-test"
+		      		sh "mvn -f helloworld-project/helloworld-ws/pom.xml post-integration-test"
 				}
             }
         }

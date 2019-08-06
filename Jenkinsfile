@@ -10,7 +10,7 @@ node('Host-Node'){
 	}
 	stage('Sonar scan'){
 		withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac') {
-    		sh 'mvn sonar:sonar'
+    		sh 'mvn sonar:sonar -f helloworld-ws/pom.xml'
 		}
 	}
 	stage('Testing'){

@@ -23,7 +23,7 @@ node {
    stage('Tests') {
     parallel(
         'Pre Integration': {
-            container('node') {
+            container('Host-Node') {
               withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
                 sh 'cd helloworld-project/helloworld-ws/ &&  ' +
                 'mvn pre-integration-test'
@@ -31,7 +31,7 @@ node {
             }
         },
         'Integration': {
-            container('node') {
+            container('Host-Node') {
               withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
                 sh 'cd helloworld-project/helloworld-ws/ &&  ' +
                 'mvn integration-test'
@@ -39,7 +39,7 @@ node {
             }
         },
         'Post Integration': {
-            container('node') {
+            container('Host-Node') {
               withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
                 sh 'cd helloworld-project/helloworld-ws/ &&  ' +
                 'mvn post-integration-test'

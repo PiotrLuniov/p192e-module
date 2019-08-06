@@ -16,12 +16,12 @@ node {
     stage('Sonar Scanning') {
         def scannerHome = tool 'SonarQubeScanner';
         withSonarQubeEnv() {
-            sh "${scannerHome}/bin/sonar-scanner "
-               + '-Dsonar.projectName=abutsko-helloworld '
-               + '-Dsonar.projectKey=abutsko-helloworld '
-               + '-Dsonar.language=java '
-               + '-Dsonar.sources=helloworld-ws/src '
-               + '-Dsonar.java.binaries=**/target/classes'
+            sh "${scannerHome}/bin/sonar-scanner \
+               -Dsonar.projectName=abutsko-helloworld \
+               -Dsonar.projectKey=abutsko-helloworld \
+               -Dsonar.language=java \
+               -Dsonar.sources=helloworld-ws/src \
+               -Dsonar.java.binaries=**/target/classes"
         }
     }
 }

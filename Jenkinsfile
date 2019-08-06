@@ -6,7 +6,7 @@ node('Host-Node') {
 
     stage('Build Project') {
         // Create help page for application
-        sh '''
+        sh  '''
             cat<<EOF > helloworld-ws/src/main/help.html
 Developer: Antoś Bućko
 Image: ${env.BUILD_NUMBER}
@@ -90,6 +90,7 @@ EOF
                         "Dockerfile"
                     )
                     appImage.push()
+                }
             }
         )
     }

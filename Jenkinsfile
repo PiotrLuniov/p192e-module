@@ -38,6 +38,9 @@ node {
             )
         }
     stage('Triggering job and fetching artefact after finishing'){
-        build job: 'MNT-LAB-hbledai-child-1-build-job', parameters: [string(name: 'BRANCH', value: 'hbledai')]
-    }    
+        build job: 'MNT-LAB-hbledai-child-1-build-job', parameters: [string(name: 'BRANCH', value: 'hbledai')], wait: true
+    }
+    stage('Packaging and Publishing results'){
+        copyArtifacts(projectName: 'MNT-LAB-hbledai-child-1-build-job')
+    }   sh 'tar xzvf hbledai_dsl_script.tar.gz && ls' 
 }

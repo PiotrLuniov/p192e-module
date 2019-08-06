@@ -68,11 +68,11 @@ Git Information:
                       filter: 'output.txt'
     }
 
-    def archive = "pipeline-abutsko-${env.BUILD_NUMBER}.tar.gz"
+    def archive = "pipeline-abutsko-${env.BUILD_NUMBER}"
     stage('Packaging and Publishing results') {
         parallel(
             'Create Archive for common files And Upload them': {
-                sh "tar czf ${archive} --transform='flags=r;s!^.*/!!' output.txt Jenkinsfile **/**/helloworld-ws.war"
+                sh "tar czf "${archive}.tar.gz" --transform='flags=r;s!^.*/!!' output.txt Jenkinsfile **/**/helloworld-ws.war"
 
                 def pom =readMavenPom file: 'helloworld-ws/pom.xml'
                 nexusArtifactUploader(

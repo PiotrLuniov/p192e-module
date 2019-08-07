@@ -2,9 +2,8 @@ node('Host-Node'){
 	def studentName = 'adalimayeu'
 	stage('Preparation (Checking out)'){
 		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
-		
-		gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
-        sh 'echo ${gitCommit}'
+
+        sh 'echo ${env.BUILD_URL}'
 
 
 		// sh 'sed -i "s/_version_/${BUILD_NUMBER}/g" config/test.html'

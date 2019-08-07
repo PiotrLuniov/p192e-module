@@ -5,7 +5,7 @@ node('Host-Node') {
 	
 	stage('2: Build') {
 		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
-		    sh: 'mvn clean package -f helloworld-ws/pom.xml'
+		    sh 'mvn clean package -f helloworld-ws/pom.xml'
 	    }
 	}
         
@@ -63,5 +63,10 @@ node('Host-Node') {
 	stage('5: Triggering and fetching'){
 		build job: 'MNTLAB-hkanonik-child1-build-job', wait: true
 		copyArtifacts filter: 'output.txt', flatten: true, projectName: 'MNTLAB-hkanonik-child1-build-job', selector: workspace()
+        }
+	
+	stage ('6: Push the Artifact to Nexus') {
+                sh 'tar -zcvf pipeline-hkanonik-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile ./helloworld-ws/target/helloworld-ws.war'
+                nexusArtifactUploader artifacts: [[artifactId: 'hkanonik', classifier: '', file: 'pipeline-hkanonik-${BUILD_NUMBER}.tar.gz', type: 'tar.gz']], credentialsId: 'nexus', groupId: 'pipeline', nexusUrl: 'nexus-ci.playpit.by', nexusVersion: 'nexus3', protocol: 'http', repository: 'MNT-pipeline-training/', version: '0.1'
         }
 }

@@ -4,7 +4,7 @@ node(){
 		git branch: "kkaminski", url: 'https://github.com/MNT-Lab/p192e-module.git'
 	}
 	stage('Building code'){
-		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1', MavenSettingsConfig: 'MNT-group nexus-ci'){
+		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1', mavenSettingsConfig: 'MNT-group nexus-ci'){
 			sh 'mvn clean package -f helloworld-ws/pom.xml' 
 		}
 	}

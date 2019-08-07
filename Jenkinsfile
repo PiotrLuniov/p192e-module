@@ -89,7 +89,7 @@ node('Host-Node') {
 			'Creating Docker Image': {
 				
 			}
-		
+		)
 		echo "Packaging and Publishing results"
 	}
 	

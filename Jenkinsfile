@@ -60,7 +60,7 @@ node {
     		'create Docker image': {
     			withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'http://localhost:6566') {
     				sh "docker build -t helloworld-${STUDENT}:$BUILD_NUMBER ."
-		    		sh "docker push helloworld-${STUDENT}:${BUILD_NUMBER}"
+		    		sh "docker push localhost:6566/helloworld-${STUDENT}:${BUILD_NUMBER}"
 		    	}
     		}
     	)

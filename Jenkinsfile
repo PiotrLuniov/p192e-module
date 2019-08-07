@@ -3,6 +3,8 @@ node {
 	def MAVEN_CONFIG = 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac'
 	def STUDENT = 'mmarkova'
 
+	// create main function for tests (?)
+
 	stage('Preparation') {
 		checkout([$class: 'GitSCM', branches: [[name: "*/$STUDENT"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/MNT-Lab/p192e-module']]])
 	}
@@ -31,7 +33,9 @@ node {
 		    	withMaven(
 			        maven: "$MAVEN_VERSION",
 			        globalMavenSettingsConfig: "$MAVEN_CONFIG") {
-			      		sh "cd helloworld-ws && mvn pre-integration-test -fae"
+		    			dir('helloworld-ws') {
+			      			sh "mvn pre-integration-test -fae"
+			      	}
 				}
             }, 
             'integration test': {
@@ -39,7 +43,9 @@ node {
 		    	withMaven(
 			        maven: "$MAVEN_VERSION",
 			        globalMavenSettingsConfig: "$MAVEN_CONFIG") {
-			      		sh "cd helloworld-ws && mvn integration-test -fae"
+		    			dir('helloworld-ws') {
+			      			sh "mvn integration-test -fae"
+			      	}
 				}
             },
             'post-integration test': {
@@ -47,18 +53,30 @@ node {
 		    	withMaven(
 			        maven: "$MAVEN_VERSION",
 			        globalMavenSettingsConfig: "$MAVEN_CONFIG") {
-			      		sh "cd helloworld-ws && mvn post-integration-test -fae"
+		    			dir('helloworld-ws') {
+			      			sh "mvn post-integration-test -fae"
+			      	}
 				}
             }
         )
     }
     stage('Triggering job and fetching artefact after finishing') {
     	build job: "MNTLAB-$STUDENT-child1-build-job", parameters: [string(name: 'BRANCH_NAME', value: "$STUDENT")], wait: true
-    	copyArtifacts filter: 'output.txt', projectName: "MNTLAB-$STUDENT-child1-build-job"
+    	copyArtifacts filter: 'jobs.groovy', projectName: "MNTLAB-$STUDENT-child1-build-job"
     }
- //    stage('Packaging and Publishing results') {
-
- //    }
+    stage('Packaging and Publishing results') {
+    	parallel (
+    		'archive': {
+    			sh "tar -czf pipeline-$STUDENT-${BUILD_NUMBER}.tar.gz jobs.groovy Jenkinsfile helloworld-ws/target/helloworld-ws.war"
+      			//archiveArtifacts "pipeline-$STUDENT-${BUILD_NUMBER}.tar.gz"
+    		},
+    		'create Docker image': {
+    			sh "docker build -t helloworld-$STUDENT:$BUILD_NUMBER ."
+    			//create Dockerfile, build it and publish
+    		}
+    	)
+    	//publish all to Nexus
+    }
  //    stage('Asking for manual approval') {
 
  //    }

@@ -64,16 +64,8 @@ node('Host-Node'){
 	// 	}
 	// }
 	stage('Deployment'){
-		// node('k8s-slave'){
-		// 	sh "kubectl cluster-info"
-		// }		
-
-
-withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'hbledai', namespace: 'default', serverUrl: 'https://34.67.225.132') {
-    kubectl cluster-info
-}
-
-
+		node('k8s-slave'){
+		 	sh "kubectl cluster-info"
+		}	
 	}
-
 }

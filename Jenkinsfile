@@ -3,13 +3,9 @@ node('Host-Node'){
 	stage('Preparation (Checking out)'){
 		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
 
-        sh "git rev-parse HEAD"
-
-
-		// sh 'sed -i "s/_version_/${BUILD_NUMBER}/g" config/test.html'
-		// sh 'sed -i "s/_COMMIT_/${scmInfo.GIT_COMMIT}/g" config/test.html'
-		// sh 'sed -i "s/_COMMITTER_/${GIT_COMMITTER_NAME}/g" config/test.html'
-		// sh 'sed -i "s/_date_/$(date)/g" config/test.html'
+		sh 'sed -i "s/_version_/${BUILD_NUMBER}/g" config/test.html'
+		sh 'sed -i "s/_COMMIT_/$(git rev-parse HEAD)/g" config/test.html'
+		sh 'sed -i "s/_date_/$(date)/g" config/test.html'
 
 		sh 'cp config/test.html helloworld-ws/src/main/webapp/test.html'
 	}

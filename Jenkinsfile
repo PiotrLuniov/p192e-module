@@ -95,7 +95,7 @@ EOF
             }
             )
         }
-    stage("Asking for manual approval") {
+stage("Asking for manual approval") {
                 timeout(time: 300, unit: 'SECONDS') {                  
                        def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next'  
                 }
@@ -105,19 +105,24 @@ podTemplate(cloud: 'Kubernetes')
 {
   node('HBLEDAI_kubectl'){
     stage ('test'){
-    sh '''
-    
+    sh '''   
     if [ ! $(kubectl get secret -n hbledai | grep -q regcred && echo $?) ]
     then
     kubectl create secret docker-registry regcred --docker-server=nexus-ci.playpit.by:6566 --docker-username=admin --docker-password=admin123
     fi
     '''
     sh 'echo "${env.CONTAINER_NAME}" && echo $CONTAINER_NAME'
-
+        }       
     }
-        
-    }
-}  
 }
+  emailext (
+      subject: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+      body: """
+STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
+Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]"
+""",
+      recipientProviders: [brokenBuildSuspects()],
+      to: 'hannabledai@gmail.com'
+    )  
 }
 

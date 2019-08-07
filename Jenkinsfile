@@ -2,7 +2,6 @@ node('Host-Node'){
 	def studentName = 'adalimayeu'
 	stage('Preparation (Checking out)'){
 		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
-		sh "rm pipeline-adalimayeu-40.tar.gz pipeline-adalimayeu-41.tar.gz pipeline-adalimayeu-42.tar.gz pipeline-adalimayeu-43.tar.gz pipeline-adalimayeu-44.tar.gz pipeline-adalimayeu-45.tar.gz pipeline-adalimayeu-46.tar.gz pipeline-adalimayeu-47.tar.gz pipeline-adalimayeu-48.tar.gz pipeline-adalimayeu-49.tar.gz pipeline-adalimayeu-50.tar.gz pipeline-adalimayeu-51.tar.gz pipeline-adalimayeu-52.tar.gz pipeline-adalimayeu-53.tar.gz pipeline-adalimayeu-54.tar.gz pipeline-adalimayeu-55.tar.gz pipeline-adalimayeu-56.tar.gz pipeline-adalimayeu-57.tar.gz pipeline-adalimayeu-58.tar.gz pipeline-adalimayeu-59.tar.gz pipeline-adalimayeu-60.tar.gz pipeline-adalimayeu-61.tar.gz "
 	}
 	stage('Building code'){
 		withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {

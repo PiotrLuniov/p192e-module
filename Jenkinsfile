@@ -1,4 +1,6 @@
 node {
+	def MAVEN_VERSION = 'Maven 3.6.1'
+	def MAVEN_CONFIG = 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac'
 	stage('Preparation') {
 		checkout([$class: 'GitSCM', branches: [[name: '*/mmarkova']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/MNT-Lab/p192e-module']]])
 	}
@@ -6,8 +8,8 @@ node {
 		git url: 'https://github.com/MNT-Lab/p192e-module'
  
     	withMaven(
-        maven: 'Maven 3.6.1', 
-        globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') { 
+        maven: "$MAVEN_VERSION", 
+        globalMavenSettingsConfig: "$MAVEN_CONFIG") { 
       		sh "mvn -f helloworld-ws/pom.xml package"
 		}
 	}
@@ -23,30 +25,24 @@ node {
 	stage('Testing') {
         parallel {
             stage('pre-integration test') {
-            	git url: 'https://github.com/MNT-Lab/p192e-module'
- 
 		    	withMaven(
 		        maven: 'Maven 3.6.1',
-		        mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
-		      		sh "mvn -f helloworld-ws/pom.xml pre-integration-test"
+		        globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
+		      		sh "mvn helloworld-ws pre-integration-test"
 				}
             } 
             stage('integration test') {
-            	git url: 'https://github.com/MNT-Lab/p192e-module'
- 
 		    	withMaven(
 		        maven: 'Maven 3.6.1',
-		        mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
-		      		sh "mvn -f helloworld-ws/pom.xml integration-test"
+		        globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
+		      		sh "mvn helloworld-ws integration-test"
 				}
             }
             stage('post-integration test') {
-            	git url: 'https://github.com/MNT-Lab/p192e-module'
- 
 		    	withMaven(
 		        maven: 'Maven 3.6.1',
-		        mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
-		      		sh "mvn -f helloworld-ws/pom.xml post-integration-test"
+		        globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
+		      		sh "mvn helloworld-ws post-integration-test"
 				}
             }
         }

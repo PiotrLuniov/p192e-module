@@ -56,9 +56,8 @@ node('Host-Node'){
 				sh "${createDockerfile}"
 
 				//withDockerServer([uri: 'tcp://localhost:2375']) {
-					// withDockerRegistry(credentialsId: 'nexus', url: 'http://nexus-ci.playpit.by:6566') {
+					withDockerRegistry(credentialsId: 'nexus', url: 'http://localhost:6566') {
 						sh '''
-							docker 
 							docker build -t localhost:6566/helloworld-adalimayeu:55 .
 							docker push localhost:6566/helloworld-adalimayeu:55
 							'''
@@ -66,7 +65,7 @@ node('Host-Node'){
 
 					    // def image = docker.build("<http://nexus-ci.playpit.by:6566/helloworld-adalimayeu:55")
 						// image.push()
-					// }
+					}
 				//}
 				//buildImage email: '', name: "helloworld-${studentName}:42", password: '', path: '', rm: false, timeout: 0, username: ''
 			}

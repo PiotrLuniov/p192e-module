@@ -27,9 +27,6 @@ node('Host-Node') {
 				'
 			}
 	    	}
-        	//timeout(time: 1, unit: 'MINUTES') {
-        	//	waitForQualityGate abortPipeline: true
-		//}
 	}
 
 	stage('Testing') { 

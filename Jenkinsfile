@@ -24,8 +24,7 @@ node('Host-Node') {
 				-Dsonar.sourceEncoding=UTF-8 \
 				-Dsonar.login=ashamchonak \
 				-Dsonar.password=ashamchonak \
-				-Dsonar.java.binaries=**/target/classes \
-				-X '
+				'
 			}
 	    	}
 //        	timeout(time: 10, unit: 'MINUTES') {

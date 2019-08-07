@@ -69,15 +69,13 @@ node('Host-Node') {
 	stage('Packaging and Publishing results'){
 		parallel (
 			'Archiving artifact': {
-				
 				copyArtifacts filter: "output.txt", fingerprintArtifacts: true, \
 					projectName: "MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
-				
-				sh "ls -la"
 				sh "rm -rf pipeline-${studentName}-*.tar.gz"
+				sh "cp helloworld-ws/target/helloworld-ws.war helloworld-ws.war"
 				sh "ls -la"
 				sh "tar -czvf pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz \
-					output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
+					output.txt Jenkinsfile helloworld-ws.war"
 				sh "ls -la"
 				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', \
 					packages: [[$class: 'MavenPackage', \

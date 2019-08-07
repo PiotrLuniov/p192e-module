@@ -68,17 +68,17 @@ node('Host-Node') {
 	}
 	
 	stage('Packaging and Publishing results'){
-		
-			pipeline {
-		    		agent any
-		    		stages {
-					stage('Example') {
-				    		steps { 
-							echo 'Hello World'
-				    		}
+
+		parallel {
+			agent any
+			stages {
+				stage('Example') {
+					steps { 
+						echo 'Hello World'
 					}
-			    	}
+				}
 			}
+		}
                 
 		parallel (
 			'Archiving artifact': {

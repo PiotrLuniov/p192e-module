@@ -65,12 +65,8 @@ node('Host-Node'){
 	// }
 	stage('Deployment'){
 
-podTemplate(cloud: 'Kubernetes', inheritFrom: '', instanceCap: 0, namespace: '', nodeSelector: '', podRetention: always(), serviceAccount: '', workspaceVolume: emptyDirWorkspaceVolume(false), yaml: '') {
-    node('k8s-slave') {
-        stage('Run shell') {
-            sh 'echo hello world'
-        }
-    }
+withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'jenkins-k8s-token', namespace: 'default', serverUrl: 'https://34.67.225.132') {
+    sh "kubectl cluster-info"
 }
 
 	}

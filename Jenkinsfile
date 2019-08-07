@@ -31,9 +31,26 @@ node('Host-Node') {
 
 	stage('Testing') {
 		parallel {
-	
+			stage('Test On Linux') {
+			    agent {
+				label "linux"
+			    }
+			    steps {
+				sh "run-tests.sh"
+			    }
+			    post {
+				always {
+				    junit "**/TEST-*.xml"
+				}
+			    }
+			}
 			stage('pre-integration-test') { 
-				steps {sh "echo 1"}
+				agent {
+					label "1"
+			    	}
+				steps {
+					sh "echo 1"
+				}
 				//withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {
 				//	sh "mvn pre-integration-test -f helloworld-ws/pom.xml"
 				//}
@@ -41,7 +58,12 @@ node('Host-Node') {
 			}
 
 			stage('integration-test') { 
-				steps {sh "echo 2"}
+				agent {
+					label "2"
+			    	}
+				steps {
+					sh "echo 2"
+				}
 				//withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {
 				//	sh "mvn integration-test -f helloworld-ws/pom.xml"
 				//}
@@ -49,7 +71,12 @@ node('Host-Node') {
 			}
 
 			stage('post-integration-test') { 
-				steps {sh "echo 3"}
+				agent {
+					label "2"
+			    	}
+				steps {
+					sh "echo 2"
+				}
 				//withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {
 				//	sh "mvn post-integration-test -f helloworld-ws/pom.xml"
 				//}

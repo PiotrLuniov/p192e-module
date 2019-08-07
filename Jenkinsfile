@@ -122,9 +122,6 @@ echo "kubectl switch from \$1 to \$2"
     echo "sleep"
     sleep 30
     TEST_CURL=\$(curl -IL tomcat-\$2-svc.apavarnitsyn.svc.k8s.playpit.by:8080/hello/)
-# //   TEST_CURL1=\$(curl  tomcat-\$2-svc.apavarnitsyn.svc.k8s.playpit.by:8080/hello/test.html)
-
-# // if [ \$(echo "$TEST_CURL1" | grep -c 'version') -gt 0 ]
 
     if [ \$(echo "$TEST_CURL" | grep -c 'HTTP/1.1 200') -gt 0 ]
 

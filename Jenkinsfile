@@ -1,8 +1,10 @@
 node {
 	def MAVEN_VERSION = 'Maven 3.6.1'
 	def MAVEN_CONFIG = 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac'
+	def STUDENT = 'mmarkova'
+
 	stage('Preparation') {
-		checkout([$class: 'GitSCM', branches: [[name: '*/mmarkova']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/MNT-Lab/p192e-module']]])
+		checkout([$class: 'GitSCM', branches: [[name: "*/$STUDENT"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/MNT-Lab/p192e-module']]])
 	}
 	stage('Building code') {
 		git url: 'https://github.com/MNT-Lab/p192e-module'
@@ -17,9 +19,9 @@ node {
 		def sqScannerHome = tool 'SonarQubeScanner'
 		 withSonarQubeEnv() { 
       		sh "${sqScannerHome}/bin/sonar-scanner -X \
-      		'-Dsonar.projectKey=helloworld-ws:mmarkova' \
-      		'-Dsonar.language=java' \
-      		'-Dsonar.java.binaries=*/target/classes'"
+      		-Dsonar.projectKey=helloworld-ws:$STUDENT \
+      		-Dsonar.language=java \
+      		-Dsonar.java.binaries=*/target/classes"
       	}
 	}
 	stage('Testing') {
@@ -50,9 +52,10 @@ node {
             }
         )
     }
-    // stage('Triggering job and fetching artefact after finishing') {
-
-    // }
+    stage('Triggering job and fetching artefact after finishing') {
+    	build job: "MNTLAB-$STUDENT-child1-job", parameters: [string(name: 'BRANCH_NAME', value: "$STUDENT")], wait: true
+    	copyArtifacts filter: 'output.txt', projectName: "MNTLAB-$STUDENT-child1-build-job"
+    }
  //    stage('Packaging and Publishing results') {
 
  //    }

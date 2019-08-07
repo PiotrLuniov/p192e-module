@@ -1,6 +1,7 @@
 node('Host-Node') {
+    def student = "iyaruk"
     stage('Checkout GitHub Repository') {
-        git branch: 'iyaruk',
+        git branch: '${student}',
             url: 'https://github.com/MNT-Lab/p192e-module.git'
     }
 
@@ -13,8 +14,8 @@ node('Host-Node') {
     def scannerHome = tool 'SonarQubeScanner';
     withSonarQubeEnv() {
     sh "${scannerHome}/bin/sonar-scanner \
-               -Dsonar.projectName=iyaruk-helloworld \
-               -Dsonar.projectKey=iyaruk-helloworld \
+               -Dsonar.projectName=${student}-helloworld \
+               -Dsonar.projectKey=${student}-helloworld \
                -Dsonar.language=java \
                -Dsonar.sources=helloworld-ws/src \
                -Dsonar.java.binaries=**/target/classes"
@@ -36,5 +37,8 @@ node('Host-Node') {
             
             )
         }
-}
+     stage('Triggering and fetching'){
+        build job: 'MNT-LAB-iyaruk-child-1-build-job', parameters: [string(name: 'BRANCH', value: '${student}')], wait: true
+    }
+    }
 }

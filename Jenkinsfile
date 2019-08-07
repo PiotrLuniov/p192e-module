@@ -111,7 +111,7 @@ podTemplate(cloud: 'Kubernetes')
     kubectl create secret docker-registry regcred --docker-server=nexus-ci.playpit.by:6566 --docker-username=admin --docker-password=admin123
     fi
     '''
-    sh 'echo "${env.CONTAINER_NAME}" && echo $CONTAINER_NAME'
+    
         }       
     }
 }

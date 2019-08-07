@@ -27,21 +27,12 @@ node('Host-Node') {
 				'
 			}
 	    	}
-//        	timeout(time: 10, unit: 'MINUTES') {
-//        		waitForQualityGate abortPipeline: true
-//		}
+        	timeout(time: 10, unit: 'MINUTES') {
+        		waitForQualityGate abortPipeline: true
+		}
 	}
 
-//	stage('SonarQube analysis'){
-//		def scannerHome = tool 'SonarQubeScanner';
-//		withSonarQubeEnv('SonarQubeScanner') {	
-//  			sh "${scannerHome}/bin/sonar-scanner"
-//		}
-//		timeout(time: 10, unit: 'MINUTES') {
-//        		waitForQualityGate abortPipeline: true
-//		}
-//	}
-//	
+	
 //	stage('Triggering job and fetching artefact after finishing'){
 //		echo "Triggering job and fetching artefact after finishing"
 //	}

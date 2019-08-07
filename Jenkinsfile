@@ -55,12 +55,12 @@ node(){
 			}
 		)
 	}
-} 
-
-
-//     stage('Asking for manual approval') {
-//         sh 'make publish'
-//     }
+ 	stage('Asking for manual approval') {
+        timeout(time: 1, unit: 'MINUTES') {
+		input(id: 'Deployment of artifact', message: 'Deploying the current artifact?', ok: 'Continue')
+		}
+	}
+}
 
 //     stage('Deployment') {
 //         sh 'make publish'

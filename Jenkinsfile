@@ -1,6 +1,6 @@
 node('Host-Node') {
     stage('Checkout GitHub Repository') {
-        git branch: '${student}',
+        git branch: 'iyaruk',
             url: 'https://github.com/MNT-Lab/p192e-module.git'
     }
 

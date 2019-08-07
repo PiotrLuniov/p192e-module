@@ -3,7 +3,8 @@ node('Host-Node'){
 	stage('Preparation (Checking out)'){
 		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
 		
-		echo "scm : ${GIT_COMMIT}"
+		gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+        sh 'echo ${gitCommit}'
 
 
 		// sh 'sed -i "s/_version_/${BUILD_NUMBER}/g" config/test.html'

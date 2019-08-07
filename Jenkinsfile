@@ -11,7 +11,7 @@ node('Host-Node') {
         
 	stage('3: SonarQube') {
                 def scannerHome = tool 'SonarQubeScanner';
-                withSonarQubeEnv(credentialsId: '337eb4ff5f9443842411a35ca7e63e82de1aceac') {
+                withSonarQubeEnv() {
                         sh '''
                         ${scannerHome}/bin/sonar-scanner \
                         -Dsonar.projectKey= \

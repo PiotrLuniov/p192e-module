@@ -41,14 +41,23 @@ node(){
 		copyArtifacts filter: "kkaminski_dsl_script.tar.gz", fingerprintArtifacts: true, projectName: "MNTLAB-kkaminski-child1-build-job", selector: lastSuccessful()
 		sh "tar -xzf kkaminski_dsl_script.tar.gz"
 		}
-} 
-//     stage('Triggering job and fetching artefact after finishing') {
-//         sh 'make publish'
-//     }
+	stage('Packaging and Publishing results') {
+     	parallel(
+     		'Create archieve': {
+      	sh 'tar czf kkaminski-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-project/helloworld-ws/target/helloworld-ws.war'
+      	archiveArtifacts 'pipeline-kkaminski-${BUILD_NUMBER}.tar.gz'
+	},
+			'Create docker image': {
+				sh '''
+				cat <<EOF > helloworld-kkaminski:${BUILD_NUMBER}
+				    FROM tomcat
+				    ADD helloworld-project/helloworld-ws/target/helloworld-ws.war /usr/local/tomcat/webapps
+				    EOF
+				   '''
+			},
 
-//     stage('Packaging and Publishing results') {
-//         sh 'make publish'
-//     }
+} 
+
 
 //     stage('Asking for manual approval') {
 //         sh 'make publish'

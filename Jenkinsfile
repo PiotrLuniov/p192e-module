@@ -5,14 +5,10 @@ node('Host-Node') {
     }
 
     stage('Build Project') {
-        // Create help page for application
-        writeFile file: 'helloworld-ws/src/main/help.html',
-                  text: '''
-Developer: Antoś Bućko
-Image: ${env.BUILD_NUMBER}
-Git Information:
-\$(git log | head -n 3)
-        '''
+        // Add git information to help page
+        sh 'cat $(git log | head -n 3) > config/help.html'
+
+        sh 'cp config/help.html helloworld-ws/src/main/help.html'
 
         withMaven(
             maven: 'Maven 3.6.1',
@@ -94,15 +90,8 @@ Git Information:
                 )
             },
             'Building And Pushing Docker Image': {
-                // Create Dockerfile
-                writeFile file: 'Dockerfile',
-                          text: '''
-FROM tomcat:8.0
-COPY helloworld-ws/target/helloworld-ws.war /usr/local/tomcat/webapps/
-                '''
-
                 docker.withRegistry('http://localhost:6566', 'nexus') {
-                    def appImage = docker.build("localhost:6566/helloworld-abutsko:${env.BUILD_NUMBER}")
+                    def appImage = docker.build("localhost:6566/helloworld-abutsko:${env.BUILD_NUMBER}", 'config/')
                     appImage.push()
                 }
             }

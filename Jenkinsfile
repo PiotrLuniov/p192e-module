@@ -57,15 +57,14 @@ node('Host-Node') {
 //			}
 //		)
 //	}
-	
-	stage('Triggering job and fetching artefact after finishing'){		
-		build job: "MNTLAB-${studentName}-child1-build-job", \
-			parameters: [string(name: 'BRANCH_NAME', value: "${studentName}")], \
-			wait: true, propagate: true		
-		copyArtifacts filter: "output.txt", fingerprintArtifacts: true, \
-			projectName: "MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
-		sh " ls -la		"				
-	}
+//	
+//	stage('Triggering job and fetching artefact after finishing'){		
+//		build job: "MNTLAB-${studentName}-child1-build-job", \
+//			parameters: [string(name: 'BRANCH_NAME', value: "${studentName}")], \
+//			wait: true, propagate: true		
+//		copyArtifacts filter: "output.txt", fingerprintArtifacts: true, \
+//			projectName: "MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
+//	}
 	
 	stage('Packaging and Publishing results'){
 		parallel (
@@ -73,8 +72,23 @@ node('Host-Node') {
 				
 				copyArtifacts filter: "output.txt", fingerprintArtifacts: true, \
 					projectName: "MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
-				sh " ls -la		"
-				sh " tree "
+				
+				sh "ls -la"
+				
+				sh "tar -czvf pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz \
+					output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
+				
+				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', \
+					packages: [[$class: 'MavenPackage', \
+						    mavenAssetList: [[classifier: '', extension: '', \
+								      filePath: 'output.txt']], \
+					mavenCoordinate: [artifactId: 'Artifact', groupId: 'Group', \
+							  packaging: 'pack', version: '1'] \
+						   ]], \
+					tagName: 'ashamchonak'
+				
+				sh "ls -la"
+				
 			},
 			
 			

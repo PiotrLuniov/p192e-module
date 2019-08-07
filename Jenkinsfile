@@ -6,7 +6,7 @@ node('Host-Node') {
 
     stage('Build Project') {
         // Add git information to help page
-        sh 'cat \$(git log | head -n 3) > config/help.html'
+        sh 'git log | head -n 3 > config/help.html'
 
         sh 'cp config/help.html helloworld-ws/src/main/help.html'
 

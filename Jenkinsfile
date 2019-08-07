@@ -58,7 +58,7 @@ node {
 				]
     		},
     		'create Docker image': {
-    			withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'http://nexus-ci.playpit.by/repository/docker:6566') {
+    			withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'http://localhost:6566') {
     				sh "docker build -t helloworld-${STUDENT}:$BUILD_NUMBER ."
 		    		sh "docker push helloworld-${STUDENT}:${BUILD_NUMBER}"
 		    	}

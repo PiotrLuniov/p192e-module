@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: tomcat-ingress
+spec:
+  rules:
+  - host: apavarnitsyn.k8s.playpit.by
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: tomcat-blue-svc
+          servicePort: 8080

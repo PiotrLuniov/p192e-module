@@ -7,7 +7,7 @@ node ('Host-Node') {
 	}
 
 	stage ('Apavarnitsyn-Maven-Build') {
- 			// Shell build test.html step
+ 			
 sh """ 
 
 cat << EOF > helloworld-ws/src/main/webapp/test.html
@@ -20,13 +20,14 @@ cat << EOF > helloworld-ws/src/main/webapp/test.html
 </body>
 </html> 
 EOF
- """		// Maven build step
+ """	
 	withMaven(
     jdk: 'JDK9',
     maven: 'Maven 3.6.1', 
     mavenSettingsConfig: 'Maven2-Nexus-Repos') { 
 
  		sh "mvn -f helloworld-ws/pom.xml clean package" 
+ 		sh "cp helloworld-ws/target/helloworld-ws.war hello.war"
 
  		}	
   }	
@@ -82,25 +83,27 @@ EOF
     copyArtifacts(projectName: 'MNTLAB-apavarnitsyn-child1-build-job')
     sh 'tar xzvf apavarnitsyn_dsl_script.tar.gz && ls'
 } 
-  stage('build-Docker-image') {
-    // Shell docker build step
-sh """ 
-cp helloworld-ws/target/helloworld-ws.war hello.war
-cat << EOF > Dockerfile
-FROM tomcat
-COPY hello.war /usr/local/tomcat/webapps/ 
-EOF
-
-docker build -t docker/helloworld-apavarnitsyn:${env.BUILD_NUMBER} .
-docker tag docker/helloworld-apavarnitsyn:${env.BUILD_NUMBER} localhost:6566/helloworld-apavarnitsyn:${env.BUILD_NUMBER}
-docker push localhost:6566/helloworld-apavarnitsyn:${env.BUILD_NUMBER}
+  stage('Build-Docker-image') {
 
 
-""" 
+
+  	stage('Packaging and Publishing results'){
+		parallel 'Packaging': {
+				sh "tar czf pipeline-apavarnitsyn-${env.BUILD_NUMBER}.tar.gz output.txt Jenkinsfile hello.war"
+				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "pipeline-apavarnitsyn-\${BUILD_NUMBER}.tar.gz"]], mavenCoordinate: [artifactId: 'apavarnitsyn', groupId: 'pipeline', packaging: '.tar.gz', version: '${BUILD_NUMBER}']]]
+			},
+			'Publishing Docker Image': {
+                docker.withRegistry('http://localhost:6566', 'nexus') {
+                    def appImage = docker.build("localhost:6566/helloworld-apavarnitsyn:${env.BUILD_NUMBER}", '-f files/Dockerfile .')
+                    appImage.push()
+                }
+			}
+
+
 }
 }
 
-node () { 
+node ('k8s-slave') { 
 
   stage ('Apavarnitsyn-CD-Kubectl - Build') {
  	
@@ -109,8 +112,8 @@ sh """
 function kubeswitch {
 echo "kubectl switch from \$1 to \$2"
     echo "\$2 install"
-    ./kubectl apply -f \$2/deployment.yml --namespace=apavarnitsyn
-    ./kubectl apply -f \$2/service.yml --namespace=apavarnitsyn
+    kubectl apply -f files/\$2/deployment.yml --namespace=apavarnitsyn
+    kubectl apply -f files/\$2/service.yml --namespace=apavarnitsyn
     echo "sleep"
     sleep 30
     TEST_CURL=\$(curl -IL tomcat-\$2-svc.apavarnitsyn.svc.k8s.playpit.by:8080/hello/)
@@ -123,90 +126,25 @@ echo "kubectl switch from \$1 to \$2"
         
         then
             echo "heath-page checked"
-            ./kubectl apply -f \$2/ingress.yml --namespace=apavarnitsyn
+            kubectl apply -f files/\$2/ingress.yml --namespace=apavarnitsyn
             echo "Everything is OK. Clean up"
-            ./kubectl delete -f \$1/deployment.yml --namespace=apavarnitsyn
-            ./kubectl delete -f \$1/service.yml  --namespace=apavarnitsyn
+            kubectl delete -f files/\$1/deployment.yml --namespace=apavarnitsyn
+            kubectl delete -f files/\$1/service.yml  --namespace=apavarnitsyn
             echo "Tomcat \$2 installed succesfully"    
         else
             echo "ALARM! Traceback!"
-            ./kubectl delete -f \$2/deployment.yml --namespace=apavarnitsyn
-            ./kubectl delete -f \$2/service.yml --namespace=apavarnitsyn
+            kubectl delete -f files/\$2/deployment.yml --namespace=apavarnitsyn
+            kubectl delete -f files/\$2/service.yml --namespace=apavarnitsyn
     fi
 
 
 }
 
-function deploycreate {
-
-cat << EOF > \$1/deployment.yml
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: tomcat-\$1
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: tomcat-\$1
-    spec:
-      containers:
-        - name: tomcat-\$1
-          image: nexus-ci.playpit.by:6566/helloworld-apavarnitsyn:${env.BUILD_NUMBER}
-          ports:
-            - containerPort: 8080
-      imagePullSecrets:
-        - name: regcred
-EOF
-cat << EOF > \$1/service.yml
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: tomcat-\$1
-  name: tomcat-\$1-svc
-spec:
-  ports:
-    - port: 8080
-      protocol: TCP
-      targetPort: 8080
-  selector: 
-    app: tomcat-\$1
-  type: LoadBalancer
-EOF
-
-cat << EOF > \$1/ingress.yml
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: tomcat-ingress
-spec:
-  rules:
-  - host: tomcat
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: tomcat-\$1-svc
-          servicePort: 8080
-EOF
-
-}
 
 # main
 
-curl -LO https://storage.googleapis.com/kubernetes-release/release/\$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-chmod +x ./kubectl 
 
-mkdir green
-mkdir blue
-
-deploycreate green
-deploycreate blue
-
-
-TEST=\$(.kubectl get pods) 
+TEST=\$(kubectl get pods) 
 if [ \$(echo "$TEST" | grep -c 'tomcat-blue') -lt 1 ]
 	then 
     kubeswitch green blue 

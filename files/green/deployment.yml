@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tomcat-green
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tomcat-green
+    spec:
+      containers:
+        - name: tomcat-green
+          image: nexus-ci.playpit.by:6566/helloworld-apavarnitsyn:${env.BUILD_NUMBER}
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: regcred
+        

@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tomcat-blue
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tomcat-blue
+    spec:
+      containers:
+        - name: tomcat-blue
+          image: nexus-ci.playpit.by:6566/helloworld-apavarnitsyn:${env.BUILD_NUMBER}
+          ports:
+            - containerPort: 8080
+      imagePullSecrets:
+        - name: regcred
+        

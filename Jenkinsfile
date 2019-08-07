@@ -29,41 +29,35 @@ node('Host-Node') {
 //	    	}
 //	}
 
-	stages('Testing') {
+	stage('Testing') {
 		parallel {
-			stage('pre-integration-test') { 
-				agent {
-					label "1"
-			    	}
-				steps {
+			'pre-integration-test': { 
+				
+				
 					sh "echo 1"
-				}
+				
 				//withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {
 				//	sh "mvn pre-integration-test -f helloworld-ws/pom.xml"
 				//}
 
 			}
 
-			stage('integration-test') { 
-				agent {
-					label "2"
-			    	}
-				steps {
+			'integration-test': { 
+				
+				
 					sh "echo 2"
-				}
+				
 				//withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {
 				//	sh "mvn integration-test -f helloworld-ws/pom.xml"
 				//}
 
 			}
 
-			stage('post-integration-test') { 
-				agent {
-					label "2"
-			    	}
-				steps {
+			'post-integration-test': { 
+				
+				
 					sh "echo 2"
-				}
+				
 				//withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {
 				//	sh "mvn post-integration-test -f helloworld-ws/pom.xml"
 				//}

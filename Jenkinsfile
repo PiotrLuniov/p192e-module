@@ -58,8 +58,8 @@ node('Host-Node'){
 				//withDockerServer([uri: 'tcp://localhost:2375']) {
 					withDockerRegistry(credentialsId: 'nexus', url: 'http://nexus-ci.playpit.by:6566') {
 						sh '''
-							docker build -t http://nexus-ci.playpit.by:6566/helloworld-adalimayeu:55 .
-							docker push http://nexus-ci.playpit.by:6566/helloworld-adalimayeu:55
+							docker build -t nexus-ci.playpit.by:6566/helloworld-adalimayeu:55 .
+							docker push nexus-ci.playpit.by:6566/helloworld-adalimayeu:55
 							'''
 
 

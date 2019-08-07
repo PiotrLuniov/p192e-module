@@ -1,6 +1,5 @@
 node('Host-Node') {
 	def studentName = "ashamchonak"
-	def folderName = "EPBYMINW5961"
 	
 	stage('Preparation (Checking out)'){
 		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
@@ -58,32 +57,45 @@ node('Host-Node') {
 //			}
 //		)
 //	}
-
 	
-	stage('Triggering job and fetching artefact after finishing'){
-	
-		
+	stage('Triggering job and fetching artefact after finishing'){		
 		build job: "MNTLAB-${studentName}-child1-build-job", \
 			parameters: [string(name: 'BRANCH_NAME', value: "${studentName}")], \
-			wait: true, propagate: true
-		
+			wait: true, propagate: true		
 		copyArtifacts filter: "output.txt", fingerprintArtifacts: true, \
 			projectName: "MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
-				
-		
-//		//triggerRemoteJob abortTriggeredJob: true, job: 'MNTLAB-ashamchonak-child1-build-job', \
-//			maxConn: 1, parameters: 'BRANCH_NAME=ashamchonak', remoteJenkinsUrl: 'localhost', \
-//			useCrumbCache: true, useJobInfoCache: true
-		
-		echo "Triggering job and fetching artefact after finishing"
+		sh " ls -la		"				
 	}
-
+	
+	stage('Packaging and Publishing results'){
+		parallel {
+			pipeline {
+		    		agent any
+		    		stages {
+					stage('Example') {
+				    		steps { 
+							echo 'Hello World'
+				    		}
+					}
+			    	}
+			}
+                }
+		parallel (
+			'Archiving artifact': {
+				
+			}
+			
+			
+			'Creating Docker Image': {
+				
+			}
+		
+		echo "Packaging and Publishing results"
+	}
 	
 	
-//	stage('Packaging and Publishing results'){
-//		echo "Packaging and Publishing results"
-//	}
-//	stage('Asking for manual approval'){
+	
+	
 //		echo "Asking for manual approval"
 //	}
 //	stage('Deployment'){

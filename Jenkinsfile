@@ -82,8 +82,8 @@ node('Host-Node') {
 					packages: [[$class: 'MavenPackage', \
 						    mavenAssetList: [[classifier: '', extension: '', \
 							filePath: "pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz"]], \
-					mavenCoordinate: [artifactId: 'Artifact', groupId: 'Group', \
-							  packaging: 'pack', version: '1'] \
+					mavenCoordinate: [artifactId: "${studentName}", groupId: 'pipeline', \
+							  packaging: '.tar.gz', version: '${BUILD_NUMBER}'] \
 						   ]], \
 					tagName: 'ashamchonak'
 				

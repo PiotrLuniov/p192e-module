@@ -65,9 +65,11 @@ node {
     		}
     	)
     }
- //    stage('Asking for manual approval') {
-
- //    }
+    stage('Asking for manual approval') {
+		timeout(time: 1, unit: 'MINUTES') {
+		input(id: 'Deployment of artifact', message: 'I wonder if you would like to continue?', ok: 'Yes')
+}
+    }
  //    stage('Deployment (rolling update, zero downtime') {
 
  //    }

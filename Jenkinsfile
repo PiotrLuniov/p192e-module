@@ -42,10 +42,10 @@ node(){
 		sh "tar -xzf kkaminski_dsl_script.tar.gz && ls"
 		}
 	stage('Packaging and Publishing results') {
-     	parallel(
-     		'Create archieve': {
-      			sh 'tar czf pipeline-kkaminski-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war'
-      			nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', packages: [[$class: 'MavenPackage', mavenAssetList: [[filePath: "pipeline-kkaminski-\${BUILD_NUMBER}.tar.gz"]], mavenCoordinate: [artifactId: "kkaminski", groupId: 'pipeline', packaging: '.tar.gz', version: '${BUILD_NUMBER}']]]
+		parallel(
+			'Create archieve': {
+				sh 'tar czf pipeline-kkaminski-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war'
+				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', packages: [[$class: 'MavenPackage', mavenAssetList: [[filePath: "pipeline-kkaminski-\${BUILD_NUMBER}.tar.gz"]], mavenCoordinate: [artifactId: "kkaminski", groupId: 'pipeline', packaging: '.tar.gz', version: '${BUILD_NUMBER}']]]
 	},
 			'Create docker image and push it': {
 				withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'http://localhost:6566') {
@@ -55,9 +55,9 @@ node(){
 			}
 		)
 	}
- 	stage('Asking for manual approval') {
-        timeout(time: 1, unit: 'MINUTES') {
-		input(id: 'Deployment of artifact', message: 'Deploying the current artifact?', ok: 'Continue')
+		stage('Asking for manual approval') {
+			timeout(time: 1, unit: 'MINUTES') {
+			input(id: 'Deployment of artifact', message: 'Deploying the current artifact?', ok: 'Continue')
 		}
 	}
 }

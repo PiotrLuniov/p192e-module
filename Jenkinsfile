@@ -30,7 +30,7 @@ node('Host-Node') {
 //	}
 
 	stage('Testing') {
-		parallel {
+		parallel (
 			'pre-integration-test': { 
 				
 				
@@ -63,7 +63,7 @@ node('Host-Node') {
 				//}
 
 			}
-		}
+		)
 	}
 	
 	

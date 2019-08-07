@@ -88,7 +88,9 @@ node('Host-Node') {
 				
 			'Creating Docker Image': {
 				withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'http://localhost:6566') {
+					sh "ls -la"
 					sh "docker build -t localhost:6566/helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
+					sh "docker images"
 					sh "docker push localhost:6566/helloworld-${studentName}:${BUILD_NUMBER}"
 					
 				}

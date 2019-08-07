@@ -5,10 +5,7 @@ node('Host-Node') {
     }
 
     stage('Build Project') {
-         withMaven(
-            maven: 'Maven 3.6.1',
-            mavenSettingsConfig: 'Maven2-Nexus-Repos'
-        ) {
+         withMaven(maven: 'Maven 3.6.1') {
             sh 'mvn -f helloworld-ws/pom.xml package'
         }
     }
@@ -23,4 +20,20 @@ node('Host-Node') {
                -Dsonar.java.binaries=**/target/classes"
         }
     }
+    
+    stage('Tests') {
+        withMaven(maven: 'Maven 3.6.1',) {
+            parallel (
+                '1 - Pre-Int': {
+                    sh 'mvn -f helloworld-ws/pom.xml pre-integration-test'
+                   },
+                '2 - Int': {
+                    sh 'mvn -f helloworld-ws/pom.xml integration-test'
+                   },
+                '3 - Post-Int': {
+                    sh 'mvn -f helloworld-ws/pom.xml post-integration-test'
+                   }
+            
+            )
+        }
 }

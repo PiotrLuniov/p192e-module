@@ -77,8 +77,26 @@ node('Host-Node') {
         }
 	
 	stage ('7: Asking for manual approval') {
-		timeout(time: 15, unit: 'MINUTES') {
-			input id: 'deployment', message: 'Do you want to continue deploying the artifacts?', ok: 'Yes'
+		/*
+                timeout(time: 15, unit: 'MINUTES') {
+                     input id: 'deployment', message: 'Do you want to continue deploying the artifacts?', ok: 'Yes'
                 }
+                */
+
+                try {
+                        timeout(time:15, unit:'MINUTES') {
+                                env.approval = input message: 'Do you want to continue deploying the artifacts?', ok: 'Continue',
+                                parameters: [choice(name: 'approval', choices: 'Yes\nNo', description: 'Continue deploying the artifacts?')]
+                                
+                                if (env.approval == 'Yes'){
+                                        env.DPROD = true
+                                } else {
+                                        env.DPROD = false
+                                }
+                        }
+                } catch (error) {
+                        env.DPROD = true
+                        echo 'Timeout has been reached! Deploying automatically'
+                }  
         }
 }

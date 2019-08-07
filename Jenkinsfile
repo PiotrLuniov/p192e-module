@@ -68,21 +68,13 @@ node('Host-Node') {
 	}
 	
 	stage('Packaging and Publishing results'){
-
-		parallel {
-			agent any
-			stages {
-				stage('Example') {
-					steps { 
-						echo 'Hello World'
-					}
-				}
-			}
-		}
-                
 		parallel (
 			'Archiving artifact': {
 				
+				copyArtifacts filter: "output.txt", fingerprintArtifacts: true, \
+					projectName: "MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
+				sh " ls -la		"
+				sh " tree "
 			},
 			
 			

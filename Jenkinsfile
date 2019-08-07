@@ -39,7 +39,7 @@ node(){
 	stage('Triggering job and fetching artefact after finishing'){
 		build job: "MNTLAB-kkaminski-child1-build-job", parameters: [string(name: 'BRANCH_NAME', value: "kkaminski")], wait: true
 		copyArtifacts filter: "kkaminski_dsl_script.tar.gz", fingerprintArtifacts: true, projectName: "MNTLAB-kkaminski-child1-build-job", selector: lastSuccessful()
-		sh "tar -xzf kkaminski_dsl_script.tar.gz"
+		sh "tar -xzf kkaminski_dsl_script.tar.gz && ls"
 		}
 	stage('Packaging and Publishing results') {
      	parallel(

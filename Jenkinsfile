@@ -1,8 +1,15 @@
 node('Host-Node'){
 	def studentName = 'adalimayeu'
-	// stage('Preparation (Checking out)'){
-	// 	git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
-	// }
+	stage('Preparation (Checking out)'){
+		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
+		
+		sh 'sed -i s/*version*/${BUILD_NUMBER}/g config/test.html'
+		sh 'sed -i s/*COMMIT*/${GIT_COMMIT}/g config/test.html'
+		sh 'sed -i s/*COMMITTER*/${GIT_COMMITTER_NAME}/g config/test.html'
+		sh 'sed -i s/*date*/$(date)/g config/test.html'
+
+		sh 'cp config/test.html helloworld-ws/src/main/webapp/test.html'
+	}
 	// stage('Building code'){
 	// 	withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {
  //    		sh 'mvn clean package -f helloworld-ws/pom.xml'
@@ -67,7 +74,5 @@ node('Host-Node'){
 		// node('k8s-slave'){
 		// 	sh "kubectl cluster-info"
 		// }
-		emailext body: 'test', subject: 'test', to: 'alex.dalimaev@yandex.by'
-
 	}
 }

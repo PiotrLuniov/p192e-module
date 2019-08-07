@@ -83,7 +83,7 @@ node('Host-Node') {
 		parallel (
 			'Archiving artifact': {
 				
-			}
+			},
 			
 			
 			'Creating Docker Image': {

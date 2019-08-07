@@ -44,18 +44,17 @@ node(){
 	stage('Packaging and Publishing results') {
      	parallel(
      		'Create archieve': {
-      	sh 'tar czf kkaminski-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-project/helloworld-ws/target/helloworld-ws.war'
-      	archiveArtifacts 'pipeline-kkaminski-${BUILD_NUMBER}.tar.gz'
+      			sh 'tar czf pipelinekkaminski-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-project/helloworld-ws/target/helloworld-ws.war'
+      			nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', packages: [[$class: 'MavenPackage', mavenAssetList: [[filePath: "pipeline-kkaminski-\${BUILD_NUMBER}.tar.gz"]], mavenCoordinate: [artifactId: "kkaminski", groupId: 'pipeline', packaging: '.tar.gz', version: '${BUILD_NUMBER}']]]
 	},
-			'Create docker image': {
-				sh '''
-				cat <<EOF > helloworld-kkaminski:${BUILD_NUMBER}
-				    FROM tomcat
-				    ADD helloworld-project/helloworld-ws/target/helloworld-ws.war /usr/local/tomcat/webapps
-				    EOF
-				   '''
-			},
-
+			'Create docker image and push it': {
+				withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'http://localhost:6566') {
+					sh "docker build -t localhost:6566/helloworld-$kkaminski:${BUILD_NUMBER} -f Dockerfile ."
+					sh "docker push localhost:6566/helloworld-${studentName}:${BUILD_NUMBER}"
+ 				}			
+			}
+		)
+	}
 } 
 
 

@@ -77,11 +77,11 @@ node('Host-Node') {
 				
 				sh "tar -czvf pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz \
 					output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
-				
+				sh "ls -la"
 				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', \
 					packages: [[$class: 'MavenPackage', \
 						    mavenAssetList: [[classifier: '', extension: '', \
-								      filePath: 'output.txt']], \
+							filePath: "pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz"]], \
 					mavenCoordinate: [artifactId: 'Artifact', groupId: 'Group', \
 							  packaging: 'pack', version: '1'] \
 						   ]], \

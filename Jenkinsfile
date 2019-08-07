@@ -64,10 +64,14 @@ node('Host-Node'){
 	// 	}
 	// }
 	stage('Deployment'){
-	podTemplate(inheritFrom: '', instanceCap: 0, namespace: '', nodeSelector: '', podRetention: always(), serviceAccount: '', workspaceVolume: emptyDirWorkspaceVolume(false), yaml: '') {
-	    node('k8s-slave') {
-	            sh 'echo hello world'
-	    }
-	}
+
+podTemplate {
+    node('k8s-slave') {
+        stage('Run shell') {
+            sh 'echo hello world'
+        }
+    }
+}
+
 	}
 }

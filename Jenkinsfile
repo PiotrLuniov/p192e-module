@@ -40,7 +40,7 @@ node('Host-Node') {
 				//	sh "mvn pre-integration-test -f helloworld-ws/pom.xml"
 				//}
 
-			}
+			},
 
 			'integration-test': { 
 				
@@ -51,7 +51,7 @@ node('Host-Node') {
 				//	sh "mvn integration-test -f helloworld-ws/pom.xml"
 				//}
 
-			}
+			},
 
 			'post-integration-test': { 
 				

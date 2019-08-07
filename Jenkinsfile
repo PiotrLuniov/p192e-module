@@ -71,7 +71,7 @@ node('Host-Node'){
 	// }
 	stage('Deployment'){
 		node('HBLEDAI_kubectl'){
-			sh "kubectl cluster-info"
+			sh "kubectl config view"
 		}
 	}
 }

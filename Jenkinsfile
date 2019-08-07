@@ -2,6 +2,7 @@ node('Host-Node'){
 	def studentName = 'adalimayeu'
 	stage('Preparation (Checking out)'){
 		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
+		sh "rm pipeline-adalimayeu-40.tar.gz pipeline-adalimayeu-41.tar.gz pipeline-adalimayeu-42.tar.gz pipeline-adalimayeu-43.tar.gz pipeline-adalimayeu-44.tar.gz pipeline-adalimayeu-45.tar.gz pipeline-adalimayeu-46.tar.gz pipeline-adalimayeu-47.tar.gz pipeline-adalimayeu-48.tar.gz pipeline-adalimayeu-49.tar.gz pipeline-adalimayeu-50.tar.gz pipeline-adalimayeu-51.tar.gz pipeline-adalimayeu-52.tar.gz pipeline-adalimayeu-53.tar.gz pipeline-adalimayeu-54.tar.gz pipeline-adalimayeu-55.tar.gz pipeline-adalimayeu-56.tar.gz pipeline-adalimayeu-57.tar.gz pipeline-adalimayeu-58.tar.gz pipeline-adalimayeu-59.tar.gz pipeline-adalimayeu-60.tar.gz pipeline-adalimayeu-61.tar.gz "
 	}
 	stage('Building code'){
 		withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {
@@ -47,14 +48,6 @@ node('Host-Node'){
 				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz"]], mavenCoordinate: [artifactId: "${studentName}", groupId: 'pipeline', packaging: '.tar.gz', version: '${BUILD_NUMBER}']]]
 			},
 			'Creating Docker Image': {
-				def createDockerfile = 	"cat << EOF > Dockerfile\n" + 
-										"FROM tomcat:8.0\n" +
-										"COPY helloworld-ws/target/helloworld-ws.war /usr/local/tomcat/webapps/\n" +
-										"CMD [\"/usr/local/tomcat/bin/catalina.sh\", \"run\"]\n" +
-										"EOF"
-				
-				sh "${createDockerfile}"
-
 				withDockerRegistry(credentialsId: 'nexus', url: 'http://localhost:6566') {
 					sh "docker build -t localhost:6566/helloworld-${studentName}:${BUILD_NUMBER} ."
 					sh "docker push localhost:6566/helloworld-${studentName}:${BUILD_NUMBER}"
@@ -62,7 +55,9 @@ node('Host-Node'){
 			}
 	}
 	stage('Asking for manual approval'){
-		echo "Asking for manual approval"
+		timeout(time: 1, unit: 'MINUTES') {
+			input(id: "Deploy artifact", message: "Deploy helloworld-${studentName}:\${BUILD_NUMBER}?", ok: 'Deploy')
+		}
 	}
 	stage('Deployment'){
 		echo "Deployment"

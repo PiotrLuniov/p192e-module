@@ -90,9 +90,8 @@ node('Host-Node') {
                 )
             },
             'Building And Pushing Docker Image': {
-                sh 'ls -l'
                 docker.withRegistry('http://localhost:6566', 'nexus') {
-                    def appImage = docker.build("localhost:6566/helloworld-abutsko:${env.BUILD_NUMBER}", '-f config/Dockerfile')
+                    def appImage = docker.build("localhost:6566/helloworld-abutsko:${env.BUILD_NUMBER}", '-f config/Dockerfile .')
                     appImage.push()
                 }
             }

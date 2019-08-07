@@ -44,7 +44,7 @@ node(){
 	stage('Packaging and Publishing results') {
      	parallel(
      		'Create archieve': {
-      			sh 'tar czf pipelinekkaminski-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-project/helloworld-ws/target/helloworld-ws.war'
+      			sh 'tar czf pipeline-kkaminski-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-project/helloworld-ws/target/helloworld-ws.war'
       			nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', packages: [[$class: 'MavenPackage', mavenAssetList: [[filePath: "pipeline-kkaminski-\${BUILD_NUMBER}.tar.gz"]], mavenCoordinate: [artifactId: "kkaminski", groupId: 'pipeline', packaging: '.tar.gz', version: '${BUILD_NUMBER}']]]
 	},
 			'Create docker image and push it': {

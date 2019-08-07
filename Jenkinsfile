@@ -37,7 +37,7 @@ node('Host-Node') {
             )
         }
      stage('Triggering and fetching'){
-        build job: 'MNT-LAB-iyaruk-child-1-build-job', parameters: [string(name: 'BRANCH', value: 'iyaruk')], wait: true
+        build job: 'MNT-LAB-iyaruk-child1-build-job', parameters: [string(name: 'BRANCH', value: 'iyaruk')], wait: true
     }
     }
 }

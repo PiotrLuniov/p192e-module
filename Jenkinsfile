@@ -29,7 +29,7 @@ node {
 		    	withMaven(
 			        maven: "$MAVEN_VERSION",
 			        globalMavenSettingsConfig: "$MAVEN_CONFIG") {
-			      		sh "mvn helloworld-ws pre-integration-test"
+			      		sh "cd helloworld-ws && mvn -fn pre-integration-test"
 				}
             }, 
             'integration test': {
@@ -37,7 +37,7 @@ node {
 		    	withMaven(
 			        maven: "$MAVEN_VERSION",
 			        globalMavenSettingsConfig: "$MAVEN_CONFIG") {
-			      		sh "mvn helloworld-ws integration-test"
+			      		sh "cd helloworld-ws && mvn -fn integration-test"
 				}
             },
             'post-integration test': {
@@ -45,7 +45,7 @@ node {
 		    	withMaven(
 			        maven: "$MAVEN_VERSION",
 			        globalMavenSettingsConfig: "$MAVEN_CONFIG") {
-			      		sh "mvn helloworld-ws post-integration-test"
+			      		sh "cd helloworld-ws && mvn -fn post-integration-test"
 				}
             }
         )

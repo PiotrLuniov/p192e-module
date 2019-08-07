@@ -49,10 +49,10 @@ node {
 				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', packages: [
 					[$class: 'MavenPackage', mavenAssetList: [[filePath: "${WORKSPACE}/pipeline-${STUDENT}-${BUILD_NUMBER}.tar.gz"]], 
 						mavenCoordinate: [
-							artifactId: "${STUDENT}-tar-gz", 
-							groupId: 'mnt-group', 
+							artifactId: "${STUDENT}", 
+							groupId: 'pipeline', 
 							packaging: 'tar.gz', 
-							version: '1.0'
+							version: "${BUILD_NUMBER}"
 						]
 					]
 				]

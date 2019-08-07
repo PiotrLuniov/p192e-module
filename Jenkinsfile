@@ -94,6 +94,7 @@ node('Host-Node') {
                     def appImage = docker.build("localhost:6566/helloworld-abutsko:${env.BUILD_NUMBER}", 'config/')
                     appImage.push()
                 }
+                sh 'ls -l'
             }
         )
     }

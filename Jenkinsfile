@@ -91,10 +91,10 @@ FROM tomcat
 COPY hello.war /usr/local/tomcat/webapps/ 
 EOF
 
-docker build -t docker/helloworld-apavarnitsyn:$BUILD_NUMBER .
-docker login -u admin -p admin123 http://nexus-ci.playpit.by:6566/v1/
-docker tag docker/helloworld-apavarnitsyn:$BUILD_NUMBER nexus-ci.playpit.by:6566/helloworld-apavarnitsyn:$BUILD_NUMBER
-docker push nexus-ci.playpit.by:6566/helloworld-apavarnitsyn:$BUILD_NUMBER
+docker build -t docker/helloworld-apavarnitsyn:${env.BUILD_NUMBER} .
+docker login -u admin -p admin123 http://localhost:6566/v1/
+docker tag docker/helloworld-apavarnitsyn:${env.BUILD_NUMBER} localhost:6566/helloworld-apavarnitsyn:${env.BUILD_NUMBER}
+docker push localhost:6566/helloworld-apavarnitsyn:${env.BUILD_NUMBER}
 
 
 """ 
@@ -154,7 +154,7 @@ spec:
     spec:
       containers:
         - name: tomcat-\$1
-          image: nexus-ci.playpit.by:6566/helloworld-apavarnitsyn:$BUILD_NUMBER
+          image: nexus-ci.playpit.by:6566/helloworld-apavarnitsyn:${env.BUILD_NUMBER}
           ports:
             - containerPort: 8080
       imagePullSecrets:

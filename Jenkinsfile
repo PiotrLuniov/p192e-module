@@ -3,6 +3,22 @@ node {
 	def MAVEN_CONFIG = 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac'
 	def STUDENT = 'mmarkova'
 
+	def test(command) {
+		try {
+        	git url: 'https://github.com/MNT-Lab/p192e-module'
+	    	withMaven(
+		        maven: "$MAVEN_VERSION",
+		        globalMavenSettingsConfig: "$MAVEN_CONFIG") {
+	    			dir('helloworld-ws') {
+		      			sh "mvn $command -fae"
+		      	}
+			}
+		}
+		catch(all) {
+			echo '$command failure'
+		}
+	}
+
 	// create main function for tests (?)
 
 	stage('Preparation') {
@@ -29,34 +45,13 @@ node {
 	stage('Testing') {
         parallel (
             'pre-integration test': {
-            	git url: 'https://github.com/MNT-Lab/p192e-module'
-		    	withMaven(
-			        maven: "$MAVEN_VERSION",
-			        globalMavenSettingsConfig: "$MAVEN_CONFIG") {
-		    			dir('helloworld-ws') {
-			      			sh "mvn pre-integration-test -fae"
-			      	}
-				}
+            	test('pre-integration-test')
             }, 
             'integration test': {
-            	git url: 'https://github.com/MNT-Lab/p192e-module'
-		    	withMaven(
-			        maven: "$MAVEN_VERSION",
-			        globalMavenSettingsConfig: "$MAVEN_CONFIG") {
-		    			dir('helloworld-ws') {
-			      			sh "mvn integration-test -fae"
-			      	}
-				}
+            	test('integration-test')
             },
             'post-integration test': {
-            	git url: 'https://github.com/MNT-Lab/p192e-module'
-		    	withMaven(
-			        maven: "$MAVEN_VERSION",
-			        globalMavenSettingsConfig: "$MAVEN_CONFIG") {
-		    			dir('helloworld-ws') {
-			      			sh "mvn post-integration-test -fae"
-			      	}
-				}
+            	test('post-integration-test')
             }
         )
     }

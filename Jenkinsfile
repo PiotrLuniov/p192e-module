@@ -69,4 +69,10 @@ node('Host-Node') {
                 sh 'tar -zcvf pipeline-hkanonik-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile ./helloworld-ws/target/helloworld-ws.war'
                 nexusArtifactUploader artifacts: [[artifactId: 'hkanonik', classifier: '', file: 'pipeline-hkanonik-${BUILD_NUMBER}.tar.gz', type: 'tar.gz']], credentialsId: 'nexus', groupId: 'pipeline', nexusUrl: 'nexus-ci.playpit.by', nexusVersion: 'nexus3', protocol: 'http', repository: 'MNT-pipeline-training/', version: '0.1'
         }
+	
+	stage ('7: Asking for manual approval') {
+		timeout(time: 15, unit: 'MINUTES') {
+			input id: 'deployment', message: 'Do you want to continue deploying the artifacts?', ok: 'Yes'
+                }
+        }
 }

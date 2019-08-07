@@ -100,13 +100,21 @@ EOF
                        def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next'  
                 }
             }
+            def CONTAINER_NAME = "hbledai:${env.BUILD_ID}"
 podTemplate(cloud: 'Kubernetes')
 {
   node('HBLEDAI_kubectl'){
     stage ('test'){
-       // withKubeConfig(credentialsId: 'jenkins-k8s-token',serverUrl: 'k8s.playpit.by') {
-    //sh 'kubectl get pods -n hbledai'
-//}
+    sh '''
+    
+    if [ ! $(kubectl get secret -n hbledai | grep -q regcred && echo $?) ]
+    then
+    kubectl create secret docker-registry regcred --docker-server=nexus-ci.playpit.by:6566 --docker-username=admin --docker-password=admin123
+    fi
+    '''
+    sh 'echo "${env.CONTAINER_NAME}" && echo $CONTAINER_NAME'
+
+    }
         
     }
 }  

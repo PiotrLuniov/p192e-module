@@ -56,7 +56,7 @@ node('Host-Node'){
 				sh "${createDockerfile}"
 
 				//withDockerServer([uri: 'tcp://localhost:2375']) {
-					withDockerRegistry(credentialsId: 'nexus', url: 'http://nexus-ci.playpit.by:6566/helloworld-adalimayeu:55') {
+					withDockerRegistry(credentialsId: 'nexus', url: 'http://nexus-ci.playpit.by:6566') {
 					    def image = docker.build("<http://nexus-ci.playpit.by:6566/helloworld-adalimayeu:55")
 						image.push()
 					}

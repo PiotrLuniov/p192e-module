@@ -20,7 +20,6 @@ node('Host-Node') {
 				-Dsonar.projectKey=ashamchonak \
 				-Dsonar.projectName=ashamchonak \
 				-Dsonar.projectVersion=1.0 \
-
 				-Dsonar.language=java \
 				-Dsonar.sourceEncoding=UTF-8 \
 				-Dsonar.login=ashamchonak \

@@ -3,6 +3,11 @@ node('Host-Node'){
 	stage('Preparation (Checking out)'){
 		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
 		
+		echo "scm : ${scmInfo}"
+		echo ":::::::::::GIT_SHORT_COMMIT::::::::::::::::::::::::"
+		echo 'scm : the commit id is ' +scmVars.GIT_COMMIT
+  		echo 'scm : the commit branch  is ' +scmVars.GIT_BRANCH
+
 		sh 'sed -i "s/_version_/${BUILD_NUMBER}/g" config/test.html'
 		sh 'sed -i "s/_COMMIT_/${scmInfo.GIT_COMMIT}/g" config/test.html'
 		sh 'sed -i "s/_COMMITTER_/${GIT_COMMITTER_NAME}/g" config/test.html'

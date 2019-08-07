@@ -68,7 +68,7 @@ node('Host-Node') {
 	}
 	
 	stage('Packaging and Publishing results'){
-		parallel {
+		
 			pipeline {
 		    		agent any
 		    		stages {
@@ -79,7 +79,7 @@ node('Host-Node') {
 					}
 			    	}
 			}
-                }
+                
 		parallel (
 			'Archiving artifact': {
 				

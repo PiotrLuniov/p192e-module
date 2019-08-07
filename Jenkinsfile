@@ -3,7 +3,7 @@ node('Host-Node'){
 	stage('Preparation (Checking out)'){
 		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
 
-        sh "echo ${env.BUILD_URL}"
+        sh "git rev-parse HEAD"
 
 
 		// sh 'sed -i "s/_version_/${BUILD_NUMBER}/g" config/test.html'

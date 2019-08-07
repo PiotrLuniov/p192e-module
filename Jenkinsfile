@@ -13,7 +13,7 @@ node('Host-Node') {
                 def scannerHome = tool 'SonarQubeScanner';
                 withSonarQubeEnv() {
 			sh "${scannerHome}/bin/sonar-scanner " +
-          		'-Dsonar.projectKey= ' +
+          		'-Dsonar.projectKey=hkanonik ' +
 			'-Dsonar.projectName=hkanonik ' +
           		'-Dsonar.sources=helloworld-ws/src/main/java ' +
           		'-Dsonar.java.binaries=**/target/classes ' +

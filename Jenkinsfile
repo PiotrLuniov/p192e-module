@@ -92,7 +92,6 @@ COPY hello.war /usr/local/tomcat/webapps/
 EOF
 
 docker build -t docker/helloworld-apavarnitsyn:${env.BUILD_NUMBER} .
-docker login -u admin -p admin123 http://localhost:6566/v1/
 docker tag docker/helloworld-apavarnitsyn:${env.BUILD_NUMBER} localhost:6566/helloworld-apavarnitsyn:${env.BUILD_NUMBER}
 docker push localhost:6566/helloworld-apavarnitsyn:${env.BUILD_NUMBER}
 
@@ -115,7 +114,7 @@ echo "kubectl switch from \$1 to \$2"
     echo "sleep"
     sleep 30
     TEST_CURL=\$(curl -IL tomcat-\$2-svc.apavarnitsyn.svc.k8s.playpit.by:8080/hello/)
-    TEST_CURL1=\$(curl  tomcat-\$2-svc.apavarnitsyn.svc.k8s.playpit.by:8080/hello/test.html)
+#    TEST_CURL1=\$(curl  tomcat-\$2-svc.apavarnitsyn.svc.k8s.playpit.by:8080/hello/test.html)
 
 # if [ \$(echo "$TEST_CURL1" | grep -c 'version') -gt 0 ]
 

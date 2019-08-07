@@ -99,8 +99,8 @@ EOF
                 }
 			}
 
-
-}
+	}
+  }
 }
 
 node ('k8s-slave') { 

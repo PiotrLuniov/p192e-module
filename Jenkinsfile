@@ -54,8 +54,8 @@ node('Host-Node'){
 			}
 	}
 	stage('Asking for manual approval'){
-		timeout(time: 1, unit: 'MINUTES') {
-			input(id: "Deploy artifact", message: "Deploy helloworld-${studentName}:\${BUILD_NUMBER}?", ok: 'Deploy')
+		timeout(time: 2, unit: 'MINUTES') {
+			input(id: "Deploy artifact", message: "Deploy helloworld-${studentName}:${env.BUILD_NUMBER}?", ok: 'Deploy')
 		}
 	}
 	stage('Deployment'){

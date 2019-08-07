@@ -70,7 +70,7 @@ node('Host-Node'){
 	// 	}
 	// }
 	stage('Deployment'){
-		node('k8s-slave'){
+		node('HBLEDAI_kubectl'){
 			sh "kubectl cluster-info"
 		}
 	}

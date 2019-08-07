@@ -1,6 +1,6 @@
 node {
     def student = 'pramanouski'
-    stage('Preparation') {
+    stage('1-Jenkisfile') {
      checkout scm
     }
 

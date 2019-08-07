@@ -91,7 +91,7 @@ node('Host-Node') {
 					sh "docker build -t helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
 					//sh "docker build -t localhost:6566/helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
 					sh "docker images"
-					sh "docker push helloworld-${studentName}:${BUILD_NUMBER}"
+					sh "docker push localhost:6566/helloworld-${studentName}:${BUILD_NUMBER}"
 				}
 			}
 		)

@@ -3,22 +3,6 @@ node {
 	def MAVEN_CONFIG = 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac'
 	def STUDENT = 'mmarkova'
 
-	def test(command) {
-		try {
-        	git url: 'https://github.com/MNT-Lab/p192e-module'
-	    	withMaven(
-		        maven: "$MAVEN_VERSION",
-		        globalMavenSettingsConfig: "$MAVEN_CONFIG") {
-	    			dir('helloworld-ws') {
-		      			sh "mvn $command -fae"
-		      	}
-			}
-		}
-		catch(all) {
-			echo '$command failure'
-		}
-	}
-
 	// create main function for tests (?)
 
 	stage('Preparation') {
@@ -78,4 +62,20 @@ node {
  //    stage('Deployment (rolling update, zero downtime') {
 
  //    }
+}
+
+def test(command) {
+	try {
+    	git url: 'https://github.com/MNT-Lab/p192e-module'
+    	withMaven(
+	        maven: "$MAVEN_VERSION",
+	        globalMavenSettingsConfig: "$MAVEN_CONFIG") {
+    			dir('helloworld-ws') {
+	      			sh "mvn ${command} -fae"
+	      	}
+		}
+	}
+	catch(all) {
+		echo "${command} failure"
+	}
 }

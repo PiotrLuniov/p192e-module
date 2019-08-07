@@ -31,19 +31,6 @@ node('Host-Node') {
 
 	stage('Testing') {
 		parallel {
-			stage('Test On Linux') {
-			    agent {
-				label "linux"
-			    }
-			    steps {
-				sh "run-tests.sh"
-			    }
-			    post {
-				always {
-				    junit "**/TEST-*.xml"
-				}
-			    }
-			}
 			stage('pre-integration-test') { 
 				agent {
 					label "1"

@@ -74,7 +74,8 @@ node('Host-Node') {
 					projectName: "MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
 				
 				sh "ls -la"
-				
+				sh "rm -rf pipeline-${studentName}-*.tar.gz"
+				sh "ls -la"
 				sh "tar -czvf pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz \
 					output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
 				sh "ls -la"

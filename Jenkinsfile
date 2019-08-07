@@ -5,7 +5,6 @@ node('Host-Node') {
 		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
 	}
 
-
 	stage('Building code'){
 		withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
 			jdk: 'JDK9', maven: 'Maven 3.6.1') {
@@ -69,21 +68,21 @@ node('Host-Node') {
 	stage('Packaging and Publishing results'){
 		parallel (
 			'Archiving artifact': {
-//				copyArtifacts filter: "output.txt", fingerprintArtifacts: true, \
-//					projectName: "MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
-//				sh "rm -rf pipeline-${studentName}-*.tar.gz"
-//				sh "cp -f helloworld-ws/target/helloworld-ws.war helloworld-ws.war"
-//				
-//				sh "tar -czvf pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz \
-//					output.txt Jenkinsfile helloworld-ws.war"
-//				
-//				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', \
-//					packages: [[$class: 'MavenPackage', \
-//						mavenAssetList: [[classifier: '', extension: '', \
-//							filePath: "pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz"]], \
-//						mavenCoordinate: [artifactId: "${studentName}", groupId: 'pipeline', \
-//							packaging: 'tar.gz', version: '${BUILD_NUMBER}'] \
-//					]]
+				copyArtifacts filter: "output.txt", fingerprintArtifacts: true, \
+					projectName: "MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
+				sh "rm -rf pipeline-${studentName}-*.tar.gz"
+				sh "cp -f helloworld-ws/target/helloworld-ws.war helloworld-ws.war"
+				
+				sh "tar -czvf pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz \
+					output.txt Jenkinsfile helloworld-ws.war"
+				
+				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', \
+					packages: [[$class: 'MavenPackage', \
+						mavenAssetList: [[classifier: '', extension: '', \
+							filePath: "pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz"]], \
+						mavenCoordinate: [artifactId: "${studentName}", groupId: 'pipeline', \
+							packaging: 'tar.gz', version: '${BUILD_NUMBER}'] \
+					]]
 			},
 				
 			'Creating Docker Image': {
@@ -92,16 +91,12 @@ node('Host-Node') {
 					sh "docker build -t localhost:6566/helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
 					sh "docker images"
 					sh "docker push localhost:6566/helloworld-${studentName}:${BUILD_NUMBER}"
-					
 				}
-			
-				
 			}
 		)
 		echo "Packaging and Publishing results"
 	}
-	
-	
+		
 	
 	
 //		echo "Asking for manual approval"

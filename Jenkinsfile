@@ -6,7 +6,7 @@ node('Host-Node') {
 
     stage('Build Project') {
         // Add git information to help page
-        sh 'git log | head -n 3 > config/help.html'
+        sh 'git log | head -n 3 >> config/help.html'
 
         sh 'cp config/help.html helloworld-ws/src/main/help.html'
 
@@ -92,7 +92,7 @@ node('Host-Node') {
             'Building And Pushing Docker Image': {
                 sh 'ls -l'
                 docker.withRegistry('http://localhost:6566', 'nexus') {
-                    def appImage = docker.build("localhost:6566/helloworld-abutsko:${env.BUILD_NUMBER}", 'config/')
+                    def appImage = docker.build("localhost:6566/helloworld-abutsko:${env.BUILD_NUMBER}", '-f config/Dockerfile')
                     appImage.push()
                 }
             }

@@ -1,4 +1,5 @@
 
+/*
 node ('Host-Node') { 
 
 	stage ('Apavarnitsyn-Checkout') {
@@ -31,7 +32,7 @@ EOF
 
  		}	
   }	
-/*
+
 
   stage('Sonar-scan') {
     def scannerHome = tool 'SonarQubeScanner';
@@ -75,7 +76,7 @@ EOF
     }
 
 
-*/
+
   stage('Triggering job'){
     build job: 'MNTLAB-apavarnitsyn-child1-build-job', parameters: [string(name: 'BRANCH_NAME', value: 'apavarnitsyn')], wait: true
 }
@@ -102,8 +103,12 @@ EOF
 	}
   }
 }
-
+*/
 node ('k8s-slave') { 
+	stage ('Apavarnitsyn-Checkout') {
+    git branch: "apavarnitsyn", url: 'https://github.com/MNT-Lab/p192e-module.git'
+
+	}
 
   stage ('Apavarnitsyn-CD-Kubectl - Build') {
  	

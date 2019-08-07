@@ -110,8 +110,65 @@ podTemplate(cloud: 'Kubernetes')
     then
     kubectl create secret docker-registry regcred --docker-server=nexus-ci.playpit.by:6566 --docker-username=admin --docker-password=admin123
     fi
+    cat << EOF > hello.yaml
+apiVersion: extensions/v1beta1 
+kind: Deployment
+metadata:
+  name: tomcat
+  labels:
+    app: tomcat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tomcat
+  template:
+    metadata:
+      labels:
+        app: tomcat
+    spec:
+      containers:
+      - name: tomcat
+        image: ${CONTAINER_NAME}
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: regcred
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tomcat-svc
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: tomcat-svc-p
+  selector:
+    app: tomcat
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: tomcat-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+
+spec:
+  rules:
+  - host: tomcat.hello
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: tomcat-svc
+          servicePort: 8080
+EOF
+kubectl apply -f hello.yaml
     '''
-    
+
         }       
     }
 }

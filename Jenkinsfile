@@ -2,13 +2,15 @@ node('Host-Node'){
 	def studentName = 'adalimayeu'
 	stage('Preparation (Checking out)'){
 		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
+	}
 
+	stage('Create health page'){
 		sh 'sed -i "s/_version_/${BUILD_NUMBER}/g" config/test.html'
 		sh 'sed -i "s/_COMMIT_/$(git rev-parse HEAD)/g" config/test.html'
 		sh 'sed -i "s/_date_/$(date)/g" config/test.html'
-
 		sh 'cp config/test.html helloworld-ws/src/main/webapp/test.html'
 	}
+
 	// stage('Building code'){
 	// 	withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {
  //    		sh 'mvn clean package -f helloworld-ws/pom.xml'

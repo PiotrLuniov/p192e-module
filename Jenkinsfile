@@ -36,7 +36,7 @@ node('Host-Node') {
 			'Pre Integration': {
 				withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
                     			sh '''
-                    			cd helloworld-project/helloworld-ws/ 
+                    			cd ./helloworld-ws 
                     			mvn pre-integration-test
                     			'''
                 		}
@@ -44,7 +44,7 @@ node('Host-Node') {
             		'Integration': {
                 		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
                     			sh '''
-                    			cd helloworld-project/helloworld-ws/
+                    			cd ./helloworld-ws
                     			mvn integration-test
                     			'''
                 		}
@@ -52,7 +52,7 @@ node('Host-Node') {
             		'Post Integration': {
                 		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
                     			sh '''
-                    			cd helloworld-project/helloworld-ws/
+                    			cd ./helloworld-ws
                     			mvn post-integration-test
                     			'''
                 		}

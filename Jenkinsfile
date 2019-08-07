@@ -29,7 +29,7 @@ node('Host-Node') {
 //	    	}
 //	}
 
-	stage('Testing') {
+	stages('Testing') {
 		parallel {
 			stage('pre-integration-test') { 
 				agent {

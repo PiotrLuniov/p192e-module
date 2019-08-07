@@ -68,6 +68,12 @@ node('Host-Node') {
 	stage ('6: Push the Artifact to Nexus') {
                 sh 'tar -zcvf pipeline-hkanonik-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile ./helloworld-ws/target/helloworld-ws.war'
                 nexusArtifactUploader artifacts: [[artifactId: 'hkanonik', classifier: '', file: 'pipeline-hkanonik-${BUILD_NUMBER}.tar.gz', type: 'tar.gz']], credentialsId: 'nexus', groupId: 'pipeline', nexusUrl: 'nexus-ci.playpit.by', nexusVersion: 'nexus3', protocol: 'http', repository: 'MNT-pipeline-training/', version: '0.1'
+		
+             	docker.withRegistry('http://localhost:6566', 'nexus') {
+                        def dockerfile = 'Dockerfile.webapp'
+                        def webappImage = docker.build("localhost:6566/helloworld-hkanonik:${BUILD_NUMBER}", "-f ./dockerfiles/${dockerfile} .")
+                        webappImage.push()
+                }  
         }
 	
 	stage ('7: Asking for manual approval') {

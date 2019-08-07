@@ -64,7 +64,7 @@ node('Host-Node'){
 	// 	}
 	// }
 	stage('Deployment'){
-	podTemplate {
+	podTemplate(inheritFrom: '', instanceCap: 0, namespace: '', nodeSelector: '', podRetention: always(), serviceAccount: '', workspaceVolume: emptyDirWorkspaceVolume(false), yaml: '') {
 	    node('k8s-slave') {
 	            sh 'echo hello world'
 	    }

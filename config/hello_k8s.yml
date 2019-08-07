@@ -1,3 +1,14 @@
+apiVersion: v1
+data:
+  .dockerconfigjson: eyJhdXRocyI6eyJuZXh1cy1jaS5wbGF5cGl0LmJ5OjY1NjYiOnsidXNlcm5hbWUiOiJhZG1pbiIsInBhc3N3b3JkIjoiYWRtaW4xMjMiLCJlbWFpbCI6ImFAYS5ieSIsImF1dGgiOiJZV1J0YVc0NllXUnRhVzR4TWpNPSJ9fX0=
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: my-secret
+  namespace: adalimayeu
+type: kubernetes.io/dockerconfigjson
+---
+
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -10,9 +21,11 @@ spec:
       labels:
         app: tomcat
     spec:
+      imagePullSecrets:
+      - name: my-secret
       containers:
       - name: tomcat
-        image: nexus-ci.playbit.by/helloworld-adalimayeu:66
+        image: nexus-ci.playpit.by:6566/helloworld-adalimayeu:66
 
         ports:
         - name: tom-port
@@ -31,21 +44,21 @@ spec:
   - name: tom-svc-port
     port: 8080
     targetPort: tom-port
----
+# ---
 
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
-metadata:
-  name: my-ingress
-  namespace: adalimayeu
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-spec:
-  rules:
-  - host: adalimayeu-app.k8s.playpit.by
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: tomcat-svc
-          servicePort: tom-svc-port
+# apiVersion: networking.k8s.io/v1beta1
+# kind: Ingress
+# metadata:
+#   name: my-ingress
+#   namespace: adalimayeu
+#   annotations:
+#     nginx.ingress.kubernetes.io/rewrite-target: /
+# spec:
+#   rules:
+#   - host: adalimayeu-app.k8s.playpit.by
+#     http:
+#       paths:
+#       - path: /
+#         backend:
+#           serviceName: tomcat-svc
+#           servicePort: tom-svc-port

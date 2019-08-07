@@ -47,9 +47,9 @@ node {
     			sh "tar -czf pipeline-$STUDENT-${BUILD_NUMBER}.tar.gz jobs.groovy Jenkinsfile helloworld-ws/target/helloworld-ws.war"
       			archiveArtifacts "pipeline-${STUDENT}-${BUILD_NUMBER}.tar.gz"
 				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', packages: [
-					[$class: 'MavenPackage', mavenAssetList: [[filePath: '${WORKSPACE}/pipeline-${STUDENT}-${BUILD_NUMBER}.tar.gz']], 
+					[$class: 'MavenPackage', mavenAssetList: [[filePath: "${WORKSPACE}/pipeline-${STUDENT}-${BUILD_NUMBER}.tar.gz"]], 
 						mavenCoordinate: [
-							artifactId: '${STUDENT}-tar-gz', 
+							artifactId: "${STUDENT}-tar-gz", 
 							groupId: 'mnt-group', 
 							packaging: 'tar.gz', 
 							version: '1.0'
@@ -59,7 +59,7 @@ node {
     		},
     		'create Docker image': {
     			sh "docker build -t helloworld-${STUDENT}:$BUILD_NUMBER ."
-    			withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'http://localhost:6566') {
+    			withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'http://nexus-ci.playpit.by/repository/docker:6566') {
 		    		sh "docker push helloworld-${STUDENT}:${BUILD_NUMBER}"
 		    	}
     		}

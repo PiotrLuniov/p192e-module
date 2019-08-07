@@ -64,8 +64,10 @@ node('Host-Node'){
 	// 	}
 	// }
 	stage('Deployment'){
-		node('k8s-slave'){
-		 	sh "kubectl cluster-info"
-		}	
+	podTemplate {
+	    node('k8s-slave') {
+	            sh 'echo hello world'
+	    }
+	}
 	}
 }

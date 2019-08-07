@@ -59,4 +59,9 @@ node('Host-Node') {
             		}
 		)
 	}
+	
+	stage('5: Triggering and fetching'){
+		build job: 'MNTLAB-hkanonik-child1-build-job', wait: true
+		copyArtifacts filter: 'output.txt', flatten: true, projectName: 'MNTLAB-hkanonik-child1-build-job', selector: workspace()
+        }
 }

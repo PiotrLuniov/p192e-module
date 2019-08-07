@@ -68,7 +68,7 @@ node('Host-Node') {
 			wait: true, propagate: true
 		
 		copyArtifacts filter: "output.txt", fingerprintArtifacts: true, \
-			projectName: "${folderName}", selector: lastSuccessful()
+			projectName: "MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
 				
 		
 //		//triggerRemoteJob abortTriggeredJob: true, job: 'MNTLAB-ashamchonak-child1-build-job', \

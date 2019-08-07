@@ -75,7 +75,7 @@ node('Host-Node') {
 				//sh "cp helloworld-ws/target/helloworld-ws.war helloworld-ws.war"
 				sh "ls -la"
 				sh "tar -czvf pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz \
-					output.txt Jenkinsfile -С helloworld-ws/target/ helloworld-ws.war"
+					output.txt Jenkinsfile -С helloworld-ws/target helloworld-ws.war"
 				sh "ls -la"
 				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', \
 					packages: [[$class: 'MavenPackage', \

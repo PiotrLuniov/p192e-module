@@ -158,7 +158,7 @@ metadata:
 
 spec:
   rules:
-  - host: tomcat.hello
+  - host: hbledai.k8s.playpit.by
     http:
       paths:
       - path: /

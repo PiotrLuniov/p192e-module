@@ -12,7 +12,7 @@ node('Host-Node') {
             sh 'mvn -f helloworld-ws/pom.xml package'
         }
     }
-    stage('Sonar Scan) {
+    stage('Sonar Scan') {
     def scannerHome = tool 'SonarQubeScanner';
     withSonarQubeEnv() {
     sh "${scannerHome}/bin/sonar-scanner \

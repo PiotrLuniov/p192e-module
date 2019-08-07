@@ -66,7 +66,9 @@ node('Host-Node'){
 	stage('Deployment'){
 
 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'jenkins-k8s-token', namespace: 'default', serverUrl: 'https://34.67.225.132') {
+    node('k8s-slave'){
     sh "kubectl cluster-info"
+}
 }
 
 	}

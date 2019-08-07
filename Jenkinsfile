@@ -80,12 +80,11 @@ node('Host-Node') {
 				sh "ls -la"
 				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', \
 					packages: [[$class: 'MavenPackage', \
-						    mavenAssetList: [[classifier: '', extension: '', \
+						mavenAssetList: [[classifier: '', extension: '', \
 							filePath: "pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz"]], \
-					mavenCoordinate: [artifactId: "${studentName}", groupId: 'pipeline', \
-							  packaging: '.tar.gz', version: '${BUILD_NUMBER}'] \
-						   ]], \
-					tagName: 'ashamchonak'
+						mavenCoordinate: [artifactId: "${studentName}", groupId: 'pipeline', \
+							packaging: '.tar.gz', version: '${BUILD_NUMBER}'] \
+					]],
 				
 				sh "ls -la"
 				

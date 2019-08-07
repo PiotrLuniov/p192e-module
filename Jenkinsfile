@@ -1,11 +1,11 @@
 node('Host-Node') {
-    stage("1: Git") {
+	stage("1: Git") {
 		git branch: 'hkanonik', url: 'https://github.com/MNT-Lab/p192e-module.git'
 	}
 	
 	stage('2: Build') {
-	    withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
-		    sh: 'mvn clean package -f helloworld-ws/pom.xml'
+		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
+			sh: 'mvn clean package -f helloworld-ws/pom.xml'
 	    }
 	}
     
@@ -17,7 +17,7 @@ node('Host-Node') {
     
 	stage('4: Testing') {
 		parallel(
-		    'Pre Integration': {
+			'Pre Integration': {
                 withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
                     sh '''
                     cd helloworld-project/helloworld-ws/ 
@@ -41,6 +41,6 @@ node('Host-Node') {
                     '''
                 }
             }
-		    )
+		)
 	}
 }

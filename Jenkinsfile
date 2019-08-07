@@ -1,4 +1,4 @@
-node {
+node ('Host-Node'){
     stage('preparation') {
         git branch: 'hbledai', url: 'https://github.com/MNT-Lab/p192e-module.git'
     }
@@ -18,7 +18,7 @@ node {
             
         }
     }
- /*   stage('run-parallel-branches') {
+    stage('run-parallel-branches') {
         parallel(
             'pre-integration-test': {
                 withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
@@ -36,12 +36,80 @@ node {
                     }
                 }
             )
-        }*/
+        }
     stage('Triggering job and fetching artefact after finishing'){
         build job: 'MNT-LAB-hbledai-child-1-build-job', parameters: [string(name: 'BRANCH', value: 'hbledai')], wait: true
     }
+
+    
     stage('Packaging and Publishing results'){
-        copyArtifacts(projectName: 'MNT-LAB-hbledai-child-1-build-job')
-        sh 'tar xzvf hbledai_dsl_script.tar.gz && ls'
-    }   
+         parallel(
+            'Archiving artifact':{
+                copyArtifacts(projectName: 'MNT-LAB-hbledai-child-1-build-job')
+        sh '''
+        tar xzvf hbledai_dsl_script.tar.gz
+        ls helloworld-ws/target/ 
+        tar czvf pipeline-hbledai-${BUILD_NUMBER}.tar.gz Jenkinsfile output.txt helloworld-ws/target/helloworld-ws.war
+            '''
+               /* def pom =readMavenPom file: 'helloworld-ws/pom.xml'
+                nexusPublisher nexusInstanceId: 'nexus', 
+                    nexusRepositoryId: 'MNT-pipeline-training', 
+                    packages: [
+                        [
+                            $class: 'MavenPackage', 
+                            mavenAssetList: [
+                                [
+                                    filePath: "pipeline-hbledai-${env.BUILD_NUMBER}.tar.gz"
+                                    ]
+                                    ], 
+                    mavenCoordinate: [
+                        artifactId: "hbledai", 
+                        groupId: 'pipeline', 
+                        packaging: '.tar.gz', 
+                        version: '${env.BUILD_NUMBER}']
+                        ]
+                        ]
+*/},
+            'Creating Docker Image':{
+                       sh '''
+cat << EOF > $WORKSPACE/Dockerfile
+# Pull base image
+From tomcat:8-jre8
+
+# Maintainer
+MAINTAINER "bledai"
+
+# Copy to images tomcat path
+ADD helloworld-ws/target/helloworld-ws.war  /usr/local/tomcat/webapps/
+EOF
+'''
+
+
+                docker.withRegistry('http://localhost:6566', 'nexus') {
+                def dockerfile = 'Dockerfile'
+                def customImage = docker.build("hbledai:${env.BUILD_ID}", "-f ${dockerfile} .")
+
+                /* Push the container to the custom Registry */
+                customImage.push()
+                }
+            }
+            )
+        }
+    stage("Asking for manual approval") {
+                timeout(time: 300, unit: 'SECONDS') {                  
+                       def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next'  
+                }
+            }
+podTemplate(cloud: 'Kubernetes')
+{
+  node('HBLEDAI_kubectl'){
+    stage ('test'){
+       // withKubeConfig(credentialsId: 'jenkins-k8s-token',serverUrl: 'k8s.playpit.by') {
+    //sh 'kubectl get pods -n hbledai'
+//}
+        
+    }
+}  
 }
+}
+

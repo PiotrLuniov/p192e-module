@@ -7,7 +7,7 @@ node {
 		checkout([$class: 'GitSCM', branches: [[name: "*/$STUDENT"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/MNT-Lab/p192e-module']]])
 	}
 	stage('Building code') {
-		git url: 'https://github.com/MNT-Lab/p192e-module'
+		git branch: "$STUDENT", url: 'https://github.com/MNT-Lab/p192e-module'
  
     	withMaven(
 	        maven: "$MAVEN_VERSION", 
@@ -66,7 +66,7 @@ node {
 
 def test(command) {
 	try {
-    	git url: 'https://github.com/MNT-Lab/p192e-module'
+    	git branch: "$STUDENT", url: 'https://github.com/MNT-Lab/p192e-module'
     	withMaven(
 	        maven: "$MAVEN_VERSION",
 	        globalMavenSettingsConfig: "$MAVEN_CONFIG") {

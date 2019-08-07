@@ -14,7 +14,10 @@ node {
 	stage('Sonar scan') {
 		def sqScannerHome = tool 'SonarQubeScanner'
 		 withSonarQubeEnv() { 
-      		sh "${sqScannerHome}/bin/sonar-scanner 'Dsonar.projectKey=helloworld-ws:mmarkova'"
+      		sh "${sqScannerHome}/bin/sonar-scanner -X \
+      		'-Dsonar.projectKey=helloworld-ws:mmarkova' \
+      		'-Dsonar.language=java ' \
+      		'-Dsonar.java.binaries=*/target/classes'"
       	}
 	}
 	stage('Testing') {

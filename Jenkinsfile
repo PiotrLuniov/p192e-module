@@ -67,11 +67,9 @@ node('Host-Node') {
 			parameters: [string(name: 'BRANCH_NAME', value: "${studentName}")], \
 			wait: true, propagate: true
 		
-		copyArtifacts filter: "${studentName}_dsl_script.tar.gz", fingerprintArtifacts: true, \
+		copyArtifacts filter: "output.txt", fingerprintArtifacts: true, \
 			projectName: "${folderName}", selector: lastSuccessful()
-		
-		sh "tar -xvf ${studentName}_dsl_script.tar.gz jobs.groovy"
-		
+				
 		
 //		//triggerRemoteJob abortTriggeredJob: true, job: 'MNTLAB-ashamchonak-child1-build-job', \
 //			maxConn: 1, parameters: 'BRANCH_NAME=ashamchonak', remoteJenkinsUrl: 'localhost', \

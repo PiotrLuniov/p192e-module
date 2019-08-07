@@ -1,0 +1,15 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: helloworld
+  namespace: abutsko
+spec:
+  rules:
+  - host: abutsko-app.k8s.playpit.by
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: abutsko-helloworld
+          servicePort: abutsko-svc

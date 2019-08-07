@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: abutsko-helloworld
+  namespace: abutsko
+  labels:
+    app: abutsko-helloworld
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: abutsko-hellowolrd
+  template:
+    metadata:
+      labels:
+        app: abutsko-helloworld
+    spec:
+      containers:
+      - name: abutsko-helloworld
+        image: nexus-ci.playpit.by:6566/helloworld-abutsko:PLACE_FOR_NEW_TAG
+        ports:
+        - name: abutsko-app
+          containerPort: 8080
+      imagePullSecrets:
+      - name: docker-repo

@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: abutsko-helloworld
+  namespace: abutsko
+  labels:
+    app: abutsko-helloworld
+spec:
+  selector:
+    app: abutsko-helloworld
+  type: ClusterIP
+  ports:
+  - name: abutsko-svc
+    protocol: TCP
+    port: 8080
+    targetPort: abutsko-app

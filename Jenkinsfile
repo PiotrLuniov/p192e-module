@@ -18,11 +18,11 @@ node('Host-Node') {
 	stage('4: Testing') {
 		parallel(
 			'Pre Integration': {
-                withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
-                    sh '''
-                    cd helloworld-project/helloworld-ws/ 
-                    mvn pre-integration-test
-                    '''
+                		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
+                    			sh '''
+                    			cd helloworld-project/helloworld-ws/ 
+                    			mvn pre-integration-test
+                    			'''
                 }
             },
             'Integration': {

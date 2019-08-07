@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
         - name: tomcat-green
-          image: nexus-ci.playpit.by:6566/helloworld-apavarnitsyn:${env.BUILD_NUMBER}
+          image: nexus-ci.playpit.by:6566/helloworld-apavarnitsyn:14
           ports:
             - containerPort: 8080
       imagePullSecrets:

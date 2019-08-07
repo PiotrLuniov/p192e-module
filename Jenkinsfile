@@ -69,24 +69,28 @@ node('Host-Node') {
 	stage('Packaging and Publishing results'){
 		parallel (
 			'Archiving artifact': {
-				copyArtifacts filter: "output.txt", fingerprintArtifacts: true, \
-					projectName: "MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
-				sh "rm -rf pipeline-${studentName}-*.tar.gz"
-				sh "cp -f helloworld-ws/target/helloworld-ws.war helloworld-ws.war"
-				
-				sh "tar -czvf pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz \
-					output.txt Jenkinsfile helloworld-ws.war"
-				
-				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', \
-					packages: [[$class: 'MavenPackage', \
-						mavenAssetList: [[classifier: '', extension: '', \
-							filePath: "pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz"]], \
-						mavenCoordinate: [artifactId: "${studentName}", groupId: 'pipeline', \
-							packaging: 'tar.gz', version: '${BUILD_NUMBER}'] \
-					]]
+//				copyArtifacts filter: "output.txt", fingerprintArtifacts: true, \
+//					projectName: "MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
+//				sh "rm -rf pipeline-${studentName}-*.tar.gz"
+//				sh "cp -f helloworld-ws/target/helloworld-ws.war helloworld-ws.war"
+//				
+//				sh "tar -czvf pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz \
+//					output.txt Jenkinsfile helloworld-ws.war"
+//				
+//				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', \
+//					packages: [[$class: 'MavenPackage', \
+//						mavenAssetList: [[classifier: '', extension: '', \
+//							filePath: "pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz"]], \
+//						mavenCoordinate: [artifactId: "${studentName}", groupId: 'pipeline', \
+//							packaging: 'tar.gz', version: '${BUILD_NUMBER}'] \
+//					]]
 			},
 				
 			'Creating Docker Image': {
+				withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'localhost:6566') {
+					sh "docker ps"
+					sh "docker -v"
+				}
 			
 				
 			}

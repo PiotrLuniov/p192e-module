@@ -23,7 +23,7 @@ node {
       	}
 	}
 	stage('Testing') {
-        parallel {
+        parallel (
             'pre-integration test': {
             	git url: 'https://github.com/MNT-Lab/p192e-module'
 		    	withMaven(
@@ -31,7 +31,7 @@ node {
 			        globalMavenSettingsConfig: "$MAVEN_CONFIG") {
 			      		sh "mvn helloworld-ws pre-integration-test"
 				}
-            } 
+            }, 
             'integration test': {
             	git url: 'https://github.com/MNT-Lab/p192e-module'
 		    	withMaven(
@@ -39,7 +39,7 @@ node {
 			        globalMavenSettingsConfig: "$MAVEN_CONFIG") {
 			      		sh "mvn helloworld-ws integration-test"
 				}
-            }
+            },
             'post-integration test': {
             	git url: 'https://github.com/MNT-Lab/p192e-module'
 		    	withMaven(
@@ -48,7 +48,7 @@ node {
 			      		sh "mvn helloworld-ws post-integration-test"
 				}
             }
-        }
+        )
     }
     // stage('Triggering job and fetching artefact after finishing') {
 

@@ -70,8 +70,8 @@ node('Host-Node'){
 	// 	}
 	// }
 	stage('Deployment'){
-		// node('k8s-slave'){
-		// 	sh "kubectl cluster-info"
-		// }
+		node('k8s-slave'){
+			sh "kubectl cluster-info"
+		}
 	}
 }

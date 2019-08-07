@@ -8,41 +8,44 @@ node {
 		git url: 'https://github.com/MNT-Lab/p192e-module'
  
     	withMaven(
-        maven: "$MAVEN_VERSION", 
-        globalMavenSettingsConfig: "$MAVEN_CONFIG") { 
-      		sh "mvn -f helloworld-ws/pom.xml package"
-		}
+	        maven: "$MAVEN_VERSION", 
+	        globalMavenSettingsConfig: "$MAVEN_CONFIG") { 
+	      		sh "mvn -f helloworld-ws/pom.xml package"
+			}
 	}
 	stage('Sonar scan') {
 		def sqScannerHome = tool 'SonarQubeScanner'
 		 withSonarQubeEnv() { 
       		sh "${sqScannerHome}/bin/sonar-scanner -X \
       		'-Dsonar.projectKey=helloworld-ws:mmarkova' \
-      		'-Dsonar.language=java ' \
+      		'-Dsonar.language=java' \
       		'-Dsonar.java.binaries=*/target/classes'"
       	}
 	}
 	stage('Testing') {
         parallel {
-            stage('pre-integration test') {
+            'pre-integration test': {
+            	git url: 'https://github.com/MNT-Lab/p192e-module'
 		    	withMaven(
-		        maven: 'Maven 3.6.1',
-		        globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
-		      		sh "mvn helloworld-ws pre-integration-test"
+			        maven: "$MAVEN_VERSION",
+			        globalMavenSettingsConfig: "$MAVEN_CONFIG") {
+			      		sh "mvn helloworld-ws pre-integration-test"
 				}
             } 
-            stage('integration test') {
+            'integration test': {
+            	git url: 'https://github.com/MNT-Lab/p192e-module'
 		    	withMaven(
-		        maven: 'Maven 3.6.1',
-		        globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
-		      		sh "mvn helloworld-ws integration-test"
+			        maven: "$MAVEN_VERSION",
+			        globalMavenSettingsConfig: "$MAVEN_CONFIG") {
+			      		sh "mvn helloworld-ws integration-test"
 				}
             }
-            stage('post-integration test') {
+            'post-integration test': {
+            	git url: 'https://github.com/MNT-Lab/p192e-module'
 		    	withMaven(
-		        maven: 'Maven 3.6.1',
-		        globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
-		      		sh "mvn helloworld-ws post-integration-test"
+			        maven: "$MAVEN_VERSION",
+			        globalMavenSettingsConfig: "$MAVEN_CONFIG") {
+			      		sh "mvn helloworld-ws post-integration-test"
 				}
             }
         }

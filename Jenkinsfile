@@ -97,4 +97,33 @@ node('Host-Node') {
             }
         )
     }
+
+    stage('Asking for manual approval') {
+        timeout(time: 5, unit: 'MINUTES') {
+            input(
+                id: 'Deployment',
+                message: 'Do you want to deploy Docker image?',
+                ok: 'Deploy'
+            )
+        }
+    }
+
+//    podTemplate(
+//        name: 'abutsko-slave',
+//        cloud: 'Kubernetes',
+//        containers: [
+//            containerTemplate(
+//                name: 'jnlp',
+//                image: 'dranser/jenkins-jnlp-kubectl',
+//                ttyEnabled: true
+//            )
+//        ],
+//        serviceAccount: 'jenkins'
+//    ) {
+//        node(POD_LABEL) {
+//            stage('Check kubectl') {
+//                sh 'kubectl get pods'
+//            }
+//        }
+//    }
 }

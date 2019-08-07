@@ -8,11 +8,21 @@ node('Host-Node') {
 		    sh: 'mvn clean package -f helloworld-ws/pom.xml'
 	    }
 	}
+        
 	stage('3: SonarQube') {
-		withSonarQubeEnv(credentialsId: '23e830fe-cdbd-4ec3-b1de-bd3bef64947f') {
-
-        	}
-    	}
+                def scannerHome = tool 'SonarQubeScanner';
+                withSonarQubeEnv(credentialsId: '337eb4ff5f9443842411a35ca7e63e82de1aceac') {
+                        sh '''
+                        ${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey= \
+                        -Dsonar.projectName=hkanonik \
+                        -Dsonar.sources=helloworld-ws/src/main/java \
+                        -Dsonar.java.binaries=**/target/classes \
+                        -Dsonar.language=java
+                        '''
+                }
+        }
+	
 	stage('4: Testing') {
 		parallel(
 			'Pre Integration': {

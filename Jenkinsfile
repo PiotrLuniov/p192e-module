@@ -112,7 +112,7 @@ node ('k8s-slave') {
 
   stage ('Apavarnitsyn-CD-Kubectl - Build') {
  	
-sh """ 
+sh ''' 
 
 function kubeswitch {
 echo "kubectl switch from \$1 to \$2"
@@ -153,6 +153,6 @@ if [ \$(echo "$TEST" | grep -c 'tomcat-blue') -lt 1 ]
 else
 	kubeswitch blue green
 fi 
-""" 
+''' 
 	}
 }

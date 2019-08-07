@@ -54,6 +54,8 @@ node('Host-Node'){
 										"EOF"
 				
 				sh "${createDockerfile}"
+
+				buildImage email: '', name: "helloworld-${studentName}:\${BUILD_NUMBER}", password: '', path: '', rm: false, timeout: 0, username: ''
 			}
 	}
 	stage('Asking for manual approval'){

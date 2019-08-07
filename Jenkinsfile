@@ -84,7 +84,7 @@ node('Host-Node') {
 							filePath: "pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz"]], \
 						mavenCoordinate: [artifactId: "${studentName}", groupId: 'pipeline', \
 							packaging: '.tar.gz', version: '${BUILD_NUMBER}'] \
-					]],
+					]]
 				
 				sh "ls -la"
 				

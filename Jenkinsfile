@@ -53,7 +53,7 @@ node {
         )
     }
     stage('Triggering job and fetching artefact after finishing') {
-    	build job: "MNTLAB-$STUDENT-child1-job", parameters: [string(name: 'BRANCH_NAME', value: "$STUDENT")], wait: true
+    	build job: "MNTLAB-$STUDENT-child1-build-job", parameters: [string(name: 'BRANCH_NAME', value: "$STUDENT")], wait: true
     	copyArtifacts filter: 'output.txt', projectName: "MNTLAB-$STUDENT-child1-build-job"
     }
  //    stage('Packaging and Publishing results') {

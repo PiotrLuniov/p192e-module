@@ -4,7 +4,7 @@ node('Host-Node'){
 		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
 		
 		sh 'sed -i "s/_version_/${BUILD_NUMBER}/g" config/test.html'
-		sh 'sed -i "s/_COMMIT_/${GIT_COMMIT}/g" config/test.html'
+		sh 'sed -i "s/_COMMIT_/${scmInfo.GIT_COMMIT}/g" config/test.html'
 		sh 'sed -i "s/_COMMITTER_/${GIT_COMMITTER_NAME}/g" config/test.html'
 		sh 'sed -i "s/_date_/$(date)/g" config/test.html'
 

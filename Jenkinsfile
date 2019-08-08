@@ -6,9 +6,8 @@ node('Host-Node') {
 
     stage('Build Project') {
         // Add git information to help page
-        sh 'git log | head -n 3 >> config/help.html'
-
-        sh 'cp config/help.html helloworld-ws/src/main/webapp/help.html'
+        sh "echo 'Image: ${env.BUILD_NUMBER}' > helloworld-ws/src/main/webapp/index.html"
+        sh 'git log | head -n 3 >> helloworld-ws/src/main/webapp/index.html'
 
         withMaven(
             maven: 'Maven 3.6.1',

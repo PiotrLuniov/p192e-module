@@ -90,10 +90,10 @@ node('Host-Node') {
                 )
             },
             'Building And Pushing Docker Image': {
-                docker.withRegistry('http://localhost:6566', 'nexus') {
-                    def appImage = docker.build("localhost:6566/helloworld-abutsko:${env.BUILD_NUMBER}", '-f config/Dockerfile .')
-                //docker.withRegistry('http://nexus-ci.playpit.by:8085', 'nexus') {
-                //    def appImage = docker.build("nexus-ci.playpit.by:8085/helloworld-abutsko:${env.BUILD_NUMBER}", '-f config/Dockerfile .')
+                //docker.withRegistry('http://localhost:6566', 'nexus') {
+                //    def appImage = docker.build("localhost:6566/helloworld-abutsko:${env.BUILD_NUMBER}", '-f config/Dockerfile .')
+                docker.withRegistry('http://nexus-ci.playpit.by:6566', 'nexus') {
+                    def appImage = docker.build("nexus-ci.playpit.by:6566/helloworld-abutsko:${env.BUILD_NUMBER}", '-f config/Dockerfile .')
                     appImage.push()
                 }
             }

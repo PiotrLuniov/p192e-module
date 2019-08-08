@@ -15,6 +15,11 @@ metadata:
   name: tomcat-dep
   namespace: _studentName_
 spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
   replicas: 1
   template:
     metadata:
@@ -26,6 +31,15 @@ spec:
       containers:
       - name: tomcat
         image: nexus-ci.playpit.by:6566/helloworld-_studentName_:_buildNumber_
+        imagePullPolicy: Always
+
+        readnessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          sucessThreshold: 2
 
         ports:
         - name: tom-port

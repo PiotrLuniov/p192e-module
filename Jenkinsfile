@@ -117,7 +117,7 @@ node('Host-Node') {
                 } catch (any) {
                         currentBuild.result = 'FAILURE'
                         mail bcc: '', 
-                        body: "<b>BUILD FAILURE</b><br><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL build: <a href=${env.BUILD_URL}> ${env.JOB_NAME}</a>", 
+                        body: "<b>BUILD FAILURE</b><br><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br>Failed Pipeline: ${currentBuild.fullDisplayName}<br> URL build: <a href=${env.BUILD_URL}> ${env.JOB_NAME}</a>", 
                         cc: '', 
                         // from: 'esscyh@gmail.com', 
                         replyTo: '', 

@@ -6,7 +6,7 @@ node('Host-Node') {
 
     stage('Build Project') {
         // Add git information to help page
-        sh 'echo -e "<head>\\n<meta charset="UTF-8">\\n</head>" > helloworld-ws/src/main/webapp/index.html'
+        sh 'echo "<head>\\n<meta charset="UTF-8">\\n</head>" > helloworld-ws/src/main/webapp/index.html'
         sh "echo 'Image: ${env.BUILD_NUMBER}' >> helloworld-ws/src/main/webapp/index.html"
         sh 'git log | head -n 3 >> helloworld-ws/src/main/webapp/index.html'
 

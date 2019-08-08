@@ -20,7 +20,6 @@ node {
          '-Dsonar.java.binaries=helloworld-ws/target'
        }
     }
-  }
 
     stage('Tests') {
      parallel(
@@ -41,3 +40,4 @@ node {
         }
       )
     }
+  }

@@ -36,10 +36,17 @@ node('Host-Node') {
             
             )
         }
-     stage('Triggering and fetching'){
+     stage('Triggering and fetching && Publishing'){
         build job: 'MNTLAB-iyaruk-child1-build-job', parameters: [string(name: 'BRANCH_NAME', value: 'iyaruk')], wait: true
         copyArtifacts filter: 'output.txt', flatten: true, projectName: 'MNTLAB-iyaruk-child1-build-job', selector: workspace()
-        sh "tar -czvf pipeline-iyaruk-\${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
+        sh "tar -czvf pipeline-iyaruk-\${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war
+				
+         nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', \
+			packages: [[$class: 'MavenPackage', mvenAssetList: [[classifier: '', extension: '', \
+			filePath: "pipeline-iyaruk-\${BUILD_NUMBER}.tar.gz"]], \
+		    mavenCoordinate: [artifactId: "iyaruk", groupId: 'pipeline', \
+			packaging: 'tar.gz', version: '${BUILD_NUMBER}'] \
+                ]]
     }
     }
 }

@@ -4,6 +4,8 @@ kind: Ingress
 metadata:
   name: helloworld
   namespace: abutsko
+  annotations:
+    nginx.ingress.kubernetes.io/app-root: /helloworld-ws
 spec:
   rules:
   - host: abutsko-app.k8s.playpit.by

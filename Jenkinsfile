@@ -1,16 +1,12 @@
 
 def pushArtifact(String repo, String studentName){
 	if (repo == 'MNT-pipeline-training'){
-		echo "test MNT-pipeline-training1"
-		sh "tar czf pipeline-${studentName}-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
-		echo "test MNT-pipeline-training2"
 		nexusPublisher nexusInstanceId: 'nexus', 
 			nexusRepositoryId: 'MNT-pipeline-training', 
 			packages: [[$class: 'MavenPackage', 
 				mavenAssetList: [[classifier: '', extension: '', filePath: "pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz"]], 
 				mavenCoordinate: [artifactId: "${studentName}", groupId: 'pipeline', packaging: '.tar.gz', version: '${BUILD_NUMBER}']]
 		]
-		echo "test MNT-pipeline-training3"
 	}
 	if(repo == 'docker'){
 		echo "test docker1"
@@ -75,21 +71,15 @@ node('Host-Node'){
 			sh "tar -xzf ${studentName}_dsl_script.tar.gz"
 		}
 
-
-		stage('1'){
-			pushArtifact('MNT-pipeline-training', studentName)
+		stage('Packaging and Publishing results'){
+			parallel 'Archiving artifact': {
+					sh "tar czf pipeline-${studentName}-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
+					pushArtifact('MNT-pipeline-training', studentName)
+				},
+				'Creating Docker Image': {
+					pushArtifact('docker', studentName)
+				}
 		}
-		stage('2'){
-			pushArtifact('docker', studentName)
-		}
-		// stage('Packaging and Publishing results'){
-		// 	parallel 'Archiving artifact': {
-		// 			pushArtifact('MNT-pipeline-training')
-		// 		},
-		// 		'Creating Docker Image': {
-		// 			pushArtifact('docker')
-		// 		}
-		// }
 
 		// stage('Asking for manual approval'){
 		// 	timeout(time: 2, unit: 'MINUTES') {

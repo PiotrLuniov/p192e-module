@@ -42,7 +42,7 @@ node('Host-Node') {
         sh "tar -czvf pipeline-iyaruk-\${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
 				
          nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', \
-			packages: [[$class: 'MavenPackage', mvenAssetList: [[classifier: '', extension: '', \
+			packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', \
 			filePath: "pipeline-iyaruk-\${BUILD_NUMBER}.tar.gz"]], \
 		    mavenCoordinate: [artifactId: "iyaruk", groupId: 'pipeline', \
 			packaging: 'tar.gz', version: '${BUILD_NUMBER}'] \

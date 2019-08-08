@@ -40,4 +40,25 @@ node {
         }
       )
     }
-  }
+
+    stage('Triggering job and fetching artefact after finishing') {
+      build job: "MNTLAB-${student}-child1-build-job", parameters: [[$class: 'StringParameterValue', name: 'BRANCH_NAME', value: "${student}"]], wait: true
+      copyArtifacts filter: "${student}_dsl_script.tar.gz", fingerprintArtifacts: true, projectName: "MNTLAB-${student}-child1-build-job", selector: lastSuccessful()
+      sh "tar -xvzf ${student}_dsl_script.tar.gz"
+    }
+
+    stage('Packaging and Publishing results'){
+      parallel(
+        'Archiving artifact': {
+          sh "tar cvzf pipeline-${student}-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
+          nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "pipeline-${student}-\${BUILD_NUMBER}.tar.gz"]], mavenCoordinate: [artifactId: "${student}", groupId: 'pipeline', packaging: '.tar.gz', version: '${BUILD_NUMBER}']]]
+        },
+        'Creating Docker Image': {
+          withDockerRegistry(credentialsId: 'nexus', url: 'http://localhost:6566') {
+            sh "docker build -t localhost:6566/helloworld-${student}:${BUILD_NUMBER} -f Dockerfile ."
+            sh "docker push localhost:6566/helloworld-${student}:${BUILD_NUMBER}"
+          }
+        }
+      )
+    }
+}

@@ -95,8 +95,9 @@ node('Host-Node'){
         
         def now = new Date()
         println now.format("HH:mm dd/MM/yy", TimeZone.getTimeZone('UTC'))
-        def body = "There are errors in pipeline:\n${err}\nErrors has appeared: ${now}.format("yyMMdd.HHmm", TimeZone.getTimeZone('UTC'))"
-		// emailext body: 'body', recipientProviders: [developers()], subject: 'Pipeline errors!', to: 'alex.dalimaev@yandex.by'
+
+        def body = "There are errors in pipeline:\n${err}\nErrors has appeared: ${now}.format(\"HH:mm dd/MM/yy\", TimeZone.getTimeZone('UTC'))"
+		emailext body: 'body', recipientProviders: [developers()], subject: 'Pipeline errors!', to: 'alex.dalimaev@yandex.by'
 		currentBuild.result = 'FAILURE'
 	}
 

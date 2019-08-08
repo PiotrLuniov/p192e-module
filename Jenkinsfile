@@ -67,7 +67,7 @@ node('Host-Node') {
 //	
 	stage('Packaging and Publishing results'){
 		parallel (
-			'Archiving artifact': {
+//			'Archiving artifact': {
 //				copyArtifacts filter: "output.txt", fingerprintArtifacts: true, \
 //					projectName: "MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
 //				sh "rm -rf pipeline-${studentName}-*.tar.gz"

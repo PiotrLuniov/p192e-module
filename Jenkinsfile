@@ -108,22 +108,23 @@ node('Host-Node') {
         }
     }
 
-//    podTemplate(
-//        name: 'abutsko-slave',
-//        cloud: 'Kubernetes',
-//        containers: [
-//            containerTemplate(
-//                name: 'jnlp',
-//                image: 'dranser/jenkins-jnlp-kubectl',
-//                ttyEnabled: true
-//            )
-//        ],
-//        serviceAccount: 'jenkins'
-//    ) {
-//        node(POD_LABEL) {
-//            stage('Check kubectl') {
-//                sh 'kubectl get pods'
-//            }
-//        }
-//    }
+    podTemplate(
+        name: 'abutsko',
+        cloud: 'Kubernetes',
+        containers: [
+            containerTemplate(
+                name: 'jnlp',
+                image: 'dranser/jenkins-jnlp-kubectl',
+                ttyEnabled: true
+            )
+        ],
+        serviceAccount: 'jenkins'
+        namespace: 'jenkins'
+    ) {
+        node(POD_LABEL) {
+            stage('Check kubectl') {
+                sh 'kubectl get pods -A'
+            }
+        }
+    }
 }

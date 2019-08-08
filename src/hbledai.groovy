@@ -4,7 +4,7 @@
 	def username = ''
 	def password = ''
 
-	def create_secret (){
+	def createSecret (){
 		sh "kubectl create secret docker-registry ${name} --docker-server=${url} --docker-username=${username} --docker-password=${password}"
 	}
 

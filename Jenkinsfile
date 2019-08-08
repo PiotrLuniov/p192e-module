@@ -8,7 +8,7 @@ node('Host-Node') {
         // Add git information to help page
         sh 'echo "<head>\\n<meta charset="UTF-8">\\n</head>" > helloworld-ws/src/main/webapp/index.html'
         sh "echo 'Image: ${env.BUILD_NUMBER}' >> helloworld-ws/src/main/webapp/index.html"
-        sh 'git log | head -n 3 >> helloworld-ws/src/main/webapp/index.html'
+        sh 'echo \$(git log | head -n 3) >> helloworld-ws/src/main/webapp/index.html'
 
         withMaven(
             maven: 'Maven 3.6.1',

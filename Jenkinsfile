@@ -91,6 +91,6 @@ node('Host-Node'){
 	}
 	finally {
 		echo "test finally"
-		echo "${currentBuild.result}"
+		echo "currentBuild.result"
 	}
 }

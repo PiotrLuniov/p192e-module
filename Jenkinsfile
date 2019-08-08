@@ -1,6 +1,5 @@
 
-def pushArtifact(repo){
-	node('Host-Node'){
+def pushArtifact(String repo){
 	if (repo == 'MNT-pipeline-training'){
 		echo "test MNT-pipeline-training1"
 		sh "tar czf pipeline-${studentName}-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
@@ -20,7 +19,6 @@ def pushArtifact(repo){
 			sh "docker push localhost:6566/helloworld-${studentName}:${BUILD_NUMBER}"
 		}
 		echo "test docker2"
-	}
 	}
 }
 
@@ -79,24 +77,10 @@ node('Host-Node'){
 
 		stage('Packaging and Publishing results'){
 			parallel 'Archiving artifact': {
-		echo "test MNT-pipeline-training1"
-		sh "tar czf pipeline-${studentName}-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
-		echo "test MNT-pipeline-training2"
-		nexusPublisher nexusInstanceId: 'nexus', 
-			nexusRepositoryId: 'MNT-pipeline-training', 
-			packages: [[$class: 'MavenPackage', 
-				mavenAssetList: [[classifier: '', extension: '', filePath: "pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz"]], 
-				mavenCoordinate: [artifactId: "${studentName}", groupId: 'pipeline', packaging: '.tar.gz', version: '${BUILD_NUMBER}']]
-		]
-		echo "test MNT-pipeline-training3"
+					pushArtifact('MNT-pipeline-training')
 				},
 				'Creating Docker Image': {
-		echo "test docker1"
-		withDockerRegistry(credentialsId: 'nexus', url: 'http://localhost:6566') {
-			sh "docker build -t localhost:6566/helloworld-${studentName}:${BUILD_NUMBER} -f config/Dockerfile ."
-			sh "docker push localhost:6566/helloworld-${studentName}:${BUILD_NUMBER}"
-		}
-		echo "test docker2"
+					pushArtifact('docker')
 				}
 		}
 
@@ -107,15 +91,15 @@ node('Host-Node'){
 
 		// }
 
-		stage('Deployment'){
-			node('HBLEDAI_kubectl'){
-				sh "wget https://raw.githubusercontent.com/MNT-Lab/p192e-module/${studentName}/config/hello_k8s.yml"
-				sh "sed -i \"s/_studentName_/${studentName}/g\" hello_k8s.yml"
-				sh 'sed -i "s/_buildNumber_/${BUILD_NUMBER}/g" hello_k8s.yml'
+		// stage('Deployment'){
+		// 	node('HBLEDAI_kubectl'){
+		// 		sh "wget https://raw.githubusercontent.com/MNT-Lab/p192e-module/${studentName}/config/hello_k8s.yml"
+		// 		sh "sed -i \"s/_studentName_/${studentName}/g\" hello_k8s.yml"
+		// 		sh 'sed -i "s/_buildNumber_/${BUILD_NUMBER}/g" hello_k8s.yml'
 
-				sh "kubectl apply --namespace=${studentName} -f hello_k8s.yml"
-			}
-		}
+		// 		sh "kubectl apply --namespace=${studentName} -f hello_k8s.yml"
+		// 	}
+		// }
 
 		currentBuild.result = 'SUCCESS'
 

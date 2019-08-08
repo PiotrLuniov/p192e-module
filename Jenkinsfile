@@ -84,18 +84,21 @@ node('Host-Node'){
 		// 		sh "kubectl apply --namespace=${studentName} -f hello_k8s.yml"
 		// 	}
 		// }
-		// currentBuild.result = 'SUCCESS'
+		currentBuild.result = 'SUCCESS'
 
-	} 
+	}
+
 	catch (err) {
 		echo "There are errors"
 		echo "Caught: ${err}"
         currentBuild.result = 'FAILURE'
 				// emailext body: "$err.getMessage()", subject: 'Errors in the Pipeline ', to: 'alex.dalimaev@yandex.by'
 	}
+
 	finally {
 		if(currentBuild.result == 'SUCCESS'){
 			echo "Pipeline has successfully done."
 		}
 	}
+	
 }

@@ -101,9 +101,9 @@ stage("Asking for manual approval") {
                 }
             }
             def CONTAINER_NAME = "hbledai:${env.BUILD_ID}"
-podTemplate(cloud: 'Kubernetes')
+podTemplate(cloud: 'k8s_bledai')
 {
-  node('HBLEDAI_kubectl'){
+  node('K8S_HBLEDAI'){
     stage ('test'){
     sh '''   
     if [ ! $(kubectl get secret -n hbledai | grep -q regcred && echo $?) ]

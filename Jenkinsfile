@@ -2,7 +2,7 @@ node('Host-Node'){
 	try {
 		def studentName = 'adalimayeu'
 		stage('Preparation (Checking out)'){
-			git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
+			git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-moduleeeee.git'
 		}
 
 		// stage('Create health page'){

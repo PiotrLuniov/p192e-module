@@ -65,6 +65,27 @@ node {
 
 
 
+    stage('Packaging and Publishing results') {
+        parallel(
+                'Archiving artifact': {
+                    copyArtifacts filter: "output.txt", fingerprintArtifacts: true, projectName: "MNTLAB-${STUDENT}-child1-build-job", selector: lastSuccessful()
+                    sh "tar cvzf pipeline-${STUDENT}-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
+                    nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "pipeline-${STUDENT}-\${BUILD_NUMBER}.tar.gz"]], mavenCoordinate: [artifactId: "${STUDENT}", groupId: 'pipeline', packaging: '.tar.gz', version: '${BUILD_NUMBER}']]]
+                },
+                'Creating Docker Image': {
+                    withDockerRegistry(credentialsId: 'nexus', url: 'http://localhost:6566') {
+                        sh "docker build -t localhost:6566/helloworld-${STUDENT}:${BUILD_NUMBER} -f config/Dockerfile ."
+                        sh "docker push localhost:6566/helloworld-${STUDENT}:${BUILD_NUMBER}"
+                    }
+
+                }
+        )
+
+    }
+    
+    
+        
+    
 
 
 

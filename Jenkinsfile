@@ -125,11 +125,11 @@ node ('k8s-slave') {
 	}
 
 	stage('Deployment'){
-		sh 'kubectl apply -f tomcat/tomcat-ns.yml'
-		sh 'kubectl apply -f tomcat/tomcat-dep.yml'
-		sh 'kubectl apply -f tomcat/tomcat-svc.yml'
-                sh 'kubectl apply -f tomcat/tomcat-ing.yml'
-                //sh 'kubectl apply -f tomcat/tomcat.yml'
+		sh 'kubectl apply -f tomcat/tomcat-ns.yaml'
+		sh 'kubectl apply -f tomcat/tomcat-dep.yaml'
+		sh 'kubectl apply -f tomcat/tomcat-svc.yaml'
+                sh 'kubectl apply -f tomcat/tomcat-ing.yaml'
+                //sh 'kubectl apply -f tomcat/tomcat.yaml'
 		echo "Deployment"
 	}
 

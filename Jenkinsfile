@@ -1,15 +1,15 @@
 node('Host-Node') {
-	stage("1: Git") {
+	stage ("1: Git") {
 		git branch: 'hkanonik', url: 'https://github.com/MNT-Lab/p192e-module.git'
         }
 	
-	stage('2: Build') {
-		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
+	stage ('2: Build') {
+		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
 		    sh 'mvn clean package -f helloworld-ws/pom.xml'
 	    }
 	}
         
-	stage('3: SonarQube') {
+	stage ('3: SonarQube') {
                 def scannerHome = tool 'SonarQubeScanner';
                 withSonarQubeEnv() {
 			sh "${scannerHome}/bin/sonar-scanner " +
@@ -31,10 +31,10 @@ node('Host-Node') {
                 }
         } 
 	
-	stage('4: Testing') {
+	stage ('4: Testing') {
 		parallel(
 			'Pre Integration': {
-				withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
+				withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
                     			sh '''
                     			cd ./helloworld-ws 
                     			mvn pre-integration-test
@@ -42,7 +42,7 @@ node('Host-Node') {
                 		}
             		},
             		'Integration': {
-                		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
+                		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
                     			sh '''
                     			cd ./helloworld-ws
                     			mvn integration-test
@@ -60,14 +60,16 @@ node('Host-Node') {
 		)
 	}
 	
-	stage('5: Triggering and fetching'){
+	stage ('5: Triggering and fetching') {
 		build job: 'MNTLAB-hkanonik-child1-build-job', wait: true
 		copyArtifacts filter: 'output.txt', flatten: true, projectName: 'MNTLAB-hkanonik-child1-build-job', selector: workspace()
         }
 	
-	stage('6: Push the Artifact to Nexus') {
+	stage ('6: Push the Artifact to Nexus') {
                 sh 'tar -zcvf pipeline-hkanonik-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile ./helloworld-ws/target/helloworld-ws.war'
-                nexusArtifactUploader artifacts: [[artifactId: 'hkanonik', classifier: '', file: 'pipeline-hkanonik-${BUILD_NUMBER}.tar.gz', type: 'tar.gz']], credentialsId: 'nexus', groupId: 'pipeline', nexusUrl: 'nexus-ci.playpit.by', nexusVersion: 'nexus3', protocol: 'http', repository: 'MNT-pipeline-training/', version: '0.1'
+                nexusArtifactUploader artifacts: [[artifactId: 'hkanonik', classifier: '', file: 'pipeline-hkanonik-${BUILD_NUMBER}.tar.gz', 
+						 type: 'tar.gz']], credentialsId: 'nexus', groupId: 'pipeline', nexusUrl: 'nexus-ci.playpit.by', 
+						 nexusVersion: 'nexus3', protocol: 'http', repository: 'MNT-pipeline-training/', version: '0.1'
 		
              	docker.withRegistry('http://localhost:6566', 'nexus') {
                         def dockerfile = 'Dockerfile.webapp'
@@ -76,7 +78,7 @@ node('Host-Node') {
                 }  
         }
 	
-	stage('7: Asking for manual approval') {
+	stage ('7: Asking for manual approval') {
 		// v2 aborted
                 timeout(time: 15, unit: 'MINUTES') {
                      input id: 'deployment', message: 'Do you want to continue deploying the artifacts?', ok: 'Yes'
@@ -100,5 +102,26 @@ node('Host-Node') {
                         echo 'Timeout has been reached! Deploying automatically'
                 } 
 		*/
+		
+		// send e-mail
+		try {
+                	currentBuild.result = 'SUCCESS'
+                	mail bcc: '', 
+                	body: "<b>BUILD SUCCESS</b><br><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL build: <a href=${env.BUILD_URL}> ${env.JOB_NAME}</a>", 
+                	cc: '', 
+                	// from: 'esscyh@gmail.com', 
+                	replyTo: '', 
+                	subject: 'Jenkins notify - Success', 
+                	to: 'hleb_kanonik@epam.com'
+        	} catch (any) {
+                	currentBuild.result = 'FAILURE'
+                	mail bcc: '', 
+                	body: "<b>BUILD FAILURE</b><br><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL build: <a href=${env.BUILD_URL}> ${env.JOB_NAME}</a>", 
+                	cc: '', 
+                	// from: 'esscyh@gmail.com', 
+                	replyTo: '', 
+                	subject: 'Jenkins notify - Failure', 
+                	to: 'hleb_kanonik@epam.com'
+        	}
         }
 }

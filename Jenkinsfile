@@ -1,19 +1,24 @@
 
 def pushArtifact(repo){
 	if (repo == 'MNT-pipeline-training'){
+		echo "test MNT-pipeline-training1"
 		sh "tar czf pipeline-${studentName}-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
+		echo "test MNT-pipeline-training2"
 		nexusPublisher nexusInstanceId: 'nexus', 
 			nexusRepositoryId: 'MNT-pipeline-training', 
 			packages: [[$class: 'MavenPackage', 
 				mavenAssetList: [[classifier: '', extension: '', filePath: "pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz"]], 
 				mavenCoordinate: [artifactId: "${studentName}", groupId: 'pipeline', packaging: '.tar.gz', version: '${BUILD_NUMBER}']]
 		]
+		echo "test MNT-pipeline-training3"
 	}
 	if(repo == 'docker'){
+		echo "test docker1"
 		withDockerRegistry(credentialsId: 'nexus', url: 'http://localhost:6566') {
 			sh "docker build -t localhost:6566/helloworld-${studentName}:${BUILD_NUMBER} -f config/Dockerfile ."
 			sh "docker push localhost:6566/helloworld-${studentName}:${BUILD_NUMBER}"
 		}
+		echo "test docker2"
 	}
 }
 

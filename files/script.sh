@@ -29,8 +29,8 @@ echo "kubectl switch from $1 to $2"
 
 # main
 ls -ll
-sudo apk add curl
-TEST=$(kubectl get pods) 
+apk add curl
+TEST=$(kubectl get pods --namespace=apavarnitsyn) 
 if [ $(echo "$TEST" | grep -c 'tomcat-blue') -lt 1 ]
 	then 
     kubeswitch green blue 

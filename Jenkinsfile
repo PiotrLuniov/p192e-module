@@ -18,7 +18,7 @@ node ('Host-Node'){
             
         }
     }
-    stage('run-parallel-branches') {
+ /*   stage('run-parallel-branches') {
         parallel(
             'pre-integration-test': {
                 withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
@@ -36,7 +36,7 @@ node ('Host-Node'){
                     }
                 }
             )
-        }
+        }*/
     stage('Triggering job and fetching artefact after finishing'){
         build job: 'MNT-LAB-hbledai-child-1-build-job', parameters: [string(name: 'BRANCH', value: 'hbledai')], wait: true
     }

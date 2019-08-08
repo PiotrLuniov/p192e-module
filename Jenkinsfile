@@ -113,7 +113,8 @@ node('Host-Node') {
                 // from: 'esscyh@gmail.com', 
                 replyTo: '', 
                 subject: 'Jenkins notify - Success', 
-                to: 'hleb_kanonik@epam.com'
+                to: 'hleb_kanonik@epam.com',
+		mimeType: 'text/html'
 		
         } catch (any) {
                 currentBuild.result = 'FAILURE'
@@ -123,7 +124,8 @@ node('Host-Node') {
                 // from: 'esscyh@gmail.com', 
                 replyTo: '', 
                 subject: 'Jenkins notify - Failure', 
-                to: 'hleb_kanonik@epam.com'
+                to: 'hleb_kanonik@epam.com',
+		mimeType: 'text/html'
         }
 **/	
 }

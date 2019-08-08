@@ -1,5 +1,5 @@
 
-def pushArtifact(String repo){
+def pushArtifact(String repo, String studentName){
 	if (repo == 'MNT-pipeline-training'){
 		echo "test MNT-pipeline-training1"
 		sh "tar czf pipeline-${studentName}-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
@@ -77,10 +77,10 @@ node('Host-Node'){
 
 
 		stage('1'){
-			pushArtifact('MNT-pipeline-training')
+			pushArtifact('MNT-pipeline-training', ${studentName})
 		}
 		stage('2'){
-			pushArtifact('docker')
+			pushArtifact('docker', ${studentName})
 		}
 		// stage('Packaging and Publishing results'){
 		// 	parallel 'Archiving artifact': {

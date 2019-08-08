@@ -10,6 +10,7 @@ node {
 //        checkout([$class: 'GitSCM', branches: [[name: "*/$STUDENT"]], userRemoteConfigs: [[url: ' https://github.com/MNT-Lab/p192e-module']]])
     }
 
+
     stage('Creation metadata page'){
         sh label: '', script: '''builddate=$(date)
         cat << EOF > helloworld-ws/src/main/webapp/metadata.html
@@ -21,9 +22,10 @@ node {
 
     }
 
+
     stage ('Buildingcode') {
         withMaven(
-                jdk: 'JDK9', maven: "$MV_V") {
+                jdk: 'JDK9', maven: 'Maven 3.6.1') {
             sh 'mvn clean package -f helloworld-ws/pom.xml'
         }
     }
@@ -39,29 +41,30 @@ node {
     }
 
 
-    stage('Testing') {
-        parallel 'pre-integration-test': {
-                withMaven(globalMavenSettingsConfig: "$MV_CONF", jdk: 'JDK9', maven: "$MV_V") {
-                sh 'mvn pre-integration-test -f helloworld-ws/pom.xml'
-            }
-        },
-                'integration-test': {
-                    withMaven(globalMavenSettingsConfig: "$MV_CONF", jdk: 'JDK9', maven: "$MV_V") {
-                        sh 'mvn integration-test -f helloworld-ws/pom.xml'
-                    }
-                },
-                'post-integration-test': {
-                    withMaven(globalMavenSettingsConfig: "$MV_CONF", jdk: 'JDK9', maven: "$MV_V") {
-                        sh 'mvn post-integration-test -f helloworld-ws/pom.xml'
-                    }
-                }
+//    stage('Testing') {
+//        parallel 'pre-integration-test': {
+//                withMaven(globalMavenSettingsConfig: "$MV_CONF", jdk: 'JDK9', maven: "$MV_V") {
+//                sh 'mvn pre-integration-test -f helloworld-ws/pom.xml'
+//            }
+//        },
+//                'integration-test': {
+//                    withMaven(globalMavenSettingsConfig: "$MV_CONF", jdk: 'JDK9', maven: "$MV_V") {
+//                        sh 'mvn integration-test -f helloworld-ws/pom.xml'
+//                    }
+//                },
+//                'post-integration-test': {
+//                    withMaven(globalMavenSettingsConfig: "$MV_CONF", jdk: 'JDK9', maven: "$MV_V") {
+//                        sh 'mvn post-integration-test -f helloworld-ws/pom.xml'
+//                    }
+//                }
+//
+//    }
 
-    }
 
     stage('Triggering job and fetching artefact after finishing'){
-         build job: "MNTLAB-${STUDENT}-child1-build-job", parameters: [string(name: 'BRANCH_NAME', value: "${STUDENT}")], wait: true
-         copyArtifacts filter: "output.txt", fingerprintArtifacts: true, projectName: "MNTLAB-${STUDENT}-child1-build-job", selector: lastSuccessful()
-}
+        build job: "MNTLAB-${STUDENT}-child1-build-job", parameters: [string(name: 'BRANCH_NAME', value: "${STUDENT}")], wait: true
+        copyArtifacts filter: "output.txt", fingerprintArtifacts: true, projectName: "MNTLAB-${STUDENT}-child1-build-job", selector: lastSuccessful()
+    }
 
 
 
@@ -82,12 +85,10 @@ node {
         )
 
     }
-    
-    
-        
-    
 
 
 
 
-    }
+
+
+}

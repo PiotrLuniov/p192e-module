@@ -9,7 +9,7 @@ def pushArtifact(repo){
 				mavenCoordinate: [artifactId: "${studentName}", groupId: 'pipeline', packaging: '.tar.gz', version: '${BUILD_NUMBER}']]
 		]
 	}
-	else if(repo == 'docker'){
+	if(repo == 'docker'){
 		withDockerRegistry(credentialsId: 'nexus', url: 'http://localhost:6566') {
 			sh "docker build -t localhost:6566/helloworld-${studentName}:${BUILD_NUMBER} -f config/Dockerfile ."
 			sh "docker push localhost:6566/helloworld-${studentName}:${BUILD_NUMBER}"

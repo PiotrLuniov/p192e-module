@@ -23,7 +23,7 @@ node {
 
     stage ('Buildingcode') {
         withMaven(
-                jdk: 'JDK9', maven: 'Maven 3.6.1') {
+                jdk: 'JDK9', maven: "$MV_V") {
             sh 'mvn clean package -f helloworld-ws/pom.xml'
         }
     }
@@ -58,7 +58,13 @@ node {
 
     }
 
-
+    stage('Triggering job and fetching artefact after finishing'){
+            build job: "MNTLAB-${STUDENT}-child1-build-job",\
+                  parameters: [string(name: 'BRANCH_NAME', value: "${STUDENT}")], wait: true
+            copyArtifacts filter: "${STUDENT}_dsl_script.tar.gz", fingerprintArtifacts: true, \
+                  projectName: "EPBYMINW9138/MNTLAB-${STUDENT}-child1-build-job", selector: lastSuccessful()
+            sh "tar -xzf ${STUDENT}_dsl_script.tar.gz"
+    }
 
 
 

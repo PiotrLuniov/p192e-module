@@ -89,7 +89,8 @@ node('Host-Node') {
 				sh "ls -la"
 				sh " docker login -u ashamchonak -p ashamchonak http://nexus-ci.playpit.by:6566"
 					
-				withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'http://nexus-ci.playpit.by:6566') {
+				withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', \
+						   url: 'http://nexus-ci.playpit.by:6566') {
 					
 					sh " docker login -u ashamchonak -p ashamchonak http://nexus-ci.playpit.by:6566"
 					

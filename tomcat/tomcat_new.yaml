@@ -7,47 +7,47 @@
 
 ---
 
-#apiVersion: apps/v1
-#kind: Deployment
-#metadata:
-#  name: tomcat
-#  namespace: ashamchonak
-#  labels:
-#    app: tomcat
-#spec:
-#  replicas: 1
-#  selector:
-#    matchLabels:
-#      app: tomcat
-#  template:
-#    metadata:
-#      labels:
-#        app: tomcat
-#    spec:
-#      imagePullSecrets:
-#      - name: tonexus
-#      containers:
-#      - name: tomcat
-#        image: "registry-ci.playpit.by/helloworld-ashamchonak:106"
-#        ports:
-#        - name: tomcatport
-#          containerPort: 8080
-#
-#---
-#
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  name: tomcat-service
-#  namespace: ashamchonak
-#spec:
-#  selector:
-#    app: tomcat
-#  type: NodePort
-#  ports:
-#  - name: tomcatsvcport
-#    port: 8080
-#    targetPort: tomcatport
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tomcat-dep
+  namespace: ashamchonak
+  labels:
+    app: tomcat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tomcat-rep
+  template:
+    metadata:
+      labels:
+        app: tomcat-rep
+    spec:
+      imagePullSecrets:
+      - name: tonexus
+      containers:
+      - name: tomcat
+        image: "registry-ci.playpit.by/helloworld-ashamchonak:{BUILD_NUMBER}"
+        ports:
+        - name: tomcatport
+          containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: tomcat-service
+  namespace: ashamchonak
+spec:
+  selector:
+    app: tomcat-dep
+  type: NodePort
+  ports:
+  - name: tomcatsvcport
+    port: 8080
+    targetPort: tomcatport
 
 ---
 
@@ -73,19 +73,3 @@ spec:
         backend:
           serviceName: tomcat-service
           servicePort: tomcatsvcport
-
-
-#kubectl apply  -f tomcat_new.yaml
-#kubectl delete -f tomcat_new.yaml
-#kubectl apply  -f tomcat_new.yaml
-#
-#sleep 30
-#curl -i "host:helloworld" 192.168.56.242:8080/helloworld-ws-$BUILD_NUM/info.html
-#curl -sH host:helloworld 192.168.56.242:8080/helloworld-ws-63/info.html | grep "Build number is" | cut -d\  -f12 | cut -d\< -f1
-#
-#CHECK=$(curl -IH "host:helloworld" 192.168.56.242:8080/helloworld-ws-$BUILD_NUM/info.html | grep 200)
-#if [[$CHECK == ""]]
-#then
-# kubectl delete -f tomcat_new.yaml
-# kubectl apply  -f tomcat_old.yaml
-#fi

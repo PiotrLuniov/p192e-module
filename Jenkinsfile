@@ -64,7 +64,7 @@ node('Host-Node') {
                         
                         docker.withRegistry('https://registry-ci.playpit.by', 'nexus') {
                                 def dockerfile = 'Dockerfile.webapp'
-                                def webappImage = docker.build(" registry-ci.playpit.by/helloworld-hkanonik:${BUILD_NUMBER}", "-f ./dockerfiles/${dockerfile} .")
+                                def webappImage = docker.build("registry-ci.playpit.by/helloworld-hkanonik:${BUILD_NUMBER}", "-f ./dockerfiles/${dockerfile} .")
                                 webappImage.push()
                         }  
                 }

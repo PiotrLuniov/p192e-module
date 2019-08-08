@@ -5,7 +5,7 @@ kind: Secret
 metadata:
   creationTimestamp: null
   name: my-secret
-  namespace: adalimayeu
+  namespace: _studentName_
 type: kubernetes.io/dockerconfigjson
 ---
 
@@ -13,7 +13,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: tomcat-dep
-  namespace: adalimayeu
+  namespace: _studentName_
 spec:
   replicas: 1
   template:
@@ -25,7 +25,7 @@ spec:
       - name: my-secret
       containers:
       - name: tomcat
-        image: nexus-ci.playpit.by:6566/helloworld-adalimayeu:66
+        image: nexus-ci.playpit.by:6566/helloworld-_studentName_:_buildNumber_
 
         ports:
         - name: tom-port
@@ -36,7 +36,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tomcat-svc
-  namespace: adalimayeu
+  namespace: _studentName_
 spec:
   selector:
     app: tomcat
@@ -50,12 +50,12 @@ spec:
 # kind: Ingress
 # metadata:
 #   name: my-ingress
-#   namespace: adalimayeu
+#   namespace: _studentName_
 #   annotations:
 #     nginx.ingress.kubernetes.io/rewrite-target: /
 # spec:
 #   rules:
-#   - host: adalimayeu-app.k8s.playpit.by
+#   - host: _studentName_-app.k8s.playpit.by
 #     http:
 #       paths:
 #       - path: /

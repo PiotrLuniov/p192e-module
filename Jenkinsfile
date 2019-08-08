@@ -104,7 +104,18 @@ node('Host-Node') {
                         } 
                         */
                 }
-/**                
+		
+		/*
+                stage ('8: Build') {
+                        sh '''
+                        kubectl apply -f ./k8s-webapp/webapp-service.yaml
+                        kubectl apply -f ./k8s-webapp/webapp-ingress.yaml
+                        kubectl apply -f ./k8s-webapp/webapp-deployment.yaml
+                        '''
+                }
+                */
+
+		/*                
 		// send e-mail
                 currentBuild.result = 'SUCCESS'
                 mail bcc: '', 
@@ -127,5 +138,5 @@ node('Host-Node') {
                 to: 'hleb_kanonik@epam.com',
 		mimeType: 'text/html'
         }
-**/	
+	*/	
 }

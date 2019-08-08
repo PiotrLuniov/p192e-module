@@ -1,9 +1,9 @@
 node('Host-Node'){
 	try {
 		def studentName = 'adalimayeu'
-		// stage('Preparation (Checking out)'){
-		// 	git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
-		// }
+		stage('Preparation (Checking out)'){
+			git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
+		}
 
 		// stage('Create health page'){
 		// 	sh 'sed -i "s/_version_/${BUILD_NUMBER}/g" config/test.html'
@@ -88,6 +88,7 @@ node('Host-Node'){
 
 	} 
 	catch (err) {
+		echo "There are errors"
 		echo "Caught: ${err}"
         currentBuild.result = 'FAILURE'
 				// emailext body: "$err.getMessage()", subject: 'Errors in the Pipeline ', to: 'alex.dalimaev@yandex.by'

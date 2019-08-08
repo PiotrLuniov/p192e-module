@@ -73,7 +73,11 @@ node('Host-Node'){
 	// }
 	stage('Deployment'){
 		node('HBLEDAI_kubectl'){
-			sh "kubectl get pods --all-namespaces"
+			sh "sed -i \"s/_studentName_/${BUILD_NUMBER}/g\" config/hello_k8s.yml"
+			sh 'sed -i "s/_buildNumber_/${BUILD_NUMBER}/g" config/hello_k8s.yml'
+
+
+			sh "cat config/hello_k8s.yml"
 		}
 	}
 }

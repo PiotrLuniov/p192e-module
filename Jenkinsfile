@@ -65,8 +65,8 @@ node('Host-Node') {
 //			projectName: "MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
 //	}
 //	
-	stage('Packaging and Publishing results'){
-		parallel (
+//	stage('Packaging and Publishing results'){
+//		parallel (
 //			'Archiving artifact': {
 //				copyArtifacts filter: "output.txt", fingerprintArtifacts: true, \
 //					projectName: "MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
@@ -84,30 +84,30 @@ node('Host-Node') {
 //							packaging: 'tar.gz', version: '${BUILD_NUMBER}'] \
 //					]]
 //			},
-				
-			'Creating Docker Image': {
-				//sh "ls -la"
-				//sh " docker login -u ashamchonak -p ashamchonak https://nexus-ci.playpit.by"
-					
-				withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', \
-						   url: 'https://nexus-ci.playpit.by') {
-					
-				//	sh " docker login -u ashamchonak -p ashamchonak https://nexus-ci.playpit.by"
-					
-					
-					sh "ls -la"
-					// sh "docker build -t helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
-					sh "docker build -t nexus-ci.playpit.by/helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
-					//sh "docker images"
-					sh "docker push nexus-ci.playpit.by/helloworld-${studentName}:${BUILD_NUMBER}"
-					sh "docker images"
-				}
-			}
-		)
-		echo "Packaging and Publishing results"
-	}
-
-
+//				
+//			'Creating Docker Image': {
+//				//sh "ls -la"
+//				//sh " docker login -u ashamchonak -p ashamchonak http://nexus-ci.playpit.by"
+//					
+//				withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', \
+//						   url: 'http://nexus-ci.playpit.by:6566') {
+//					
+//				//	sh " docker login -u ashamchonak -p ashamchonak https://nexus-ci.playpit.by"
+//					
+//					
+//					sh "ls -la"
+//					// sh "docker build -t helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
+//					sh "docker build -t nexus-ci.playpit.by/helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
+//					//sh "docker images"
+//					sh "docker push nexus-ci.playpit.by/helloworld-${studentName}:${BUILD_NUMBER}"
+//					sh "docker images"
+//				}
+//			}
+//		)
+//		echo "Packaging and Publishing results"
+//	}
+//
+//
 //		stage('Asking for manual approval'){
 //			timeout(time: 2, unit: 'MINUTES') {
 //				input(id: "Deployment artifact", \
@@ -115,13 +115,22 @@ node('Host-Node') {
 //				      ok: "I wouldn't mind.")
 //			}
 //	}
-
+}
 			
+node ('k8s-slave') { 	
+	def studentName = "ashamchonak"
 	
-//		echo "Asking for manual approval"
-//	}
-//	stage('Deployment'){
-//		echo "Deployment"
-//	}
+	stage('Preparation (Checking out)'){
+		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
+	}
+
+	stage('Deployment'){
+		sh 'kubectl apply -f tomcat/tomcat-ns.yml'
+		sh 'kubectl apply -f tomcat/tomcat-dep.yml'
+		sh 'kubectl apply -f tomcat/tomcat-svc.yml'
+                sh 'kubectl apply -f tomcat/tomcat-ing.yml'
+                //sh 'kubectl apply -f tomcat/tomcat.yml'
+		echo "Deployment"
+	}
 
 }

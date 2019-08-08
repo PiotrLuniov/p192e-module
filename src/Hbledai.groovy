@@ -1,5 +1,5 @@
 package  _	
-class K8s{
+class K8s implements Serializable{
 	def steps
 	def namesecret = ''
 	def url_docker_repo = ''

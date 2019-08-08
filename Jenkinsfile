@@ -75,14 +75,21 @@ node('Host-Node'){
 			sh "tar -xzf ${studentName}_dsl_script.tar.gz"
 		}
 
-		stage('Packaging and Publishing results'){
-			parallel 'Archiving artifact': {
-					pushArtifact('MNT-pipeline-training')
-				},
-				'Creating Docker Image': {
-					pushArtifact('docker')
-				}
+
+		stage('1'){
+			pushArtifact('MNT-pipeline-training')
 		}
+		stage('2'){
+			pushArtifact('docker')
+		}
+		// stage('Packaging and Publishing results'){
+		// 	parallel 'Archiving artifact': {
+		// 			pushArtifact('MNT-pipeline-training')
+		// 		},
+		// 		'Creating Docker Image': {
+		// 			pushArtifact('docker')
+		// 		}
+		// }
 
 		// stage('Asking for manual approval'){
 		// 	timeout(time: 2, unit: 'MINUTES') {

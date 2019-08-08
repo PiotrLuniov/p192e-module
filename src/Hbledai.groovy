@@ -1,5 +1,3 @@
-package  _	
-
 	def steps
 	def namesecret = ''
 	def url_docker_repo = ''

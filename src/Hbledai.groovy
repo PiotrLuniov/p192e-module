@@ -1,5 +1,4 @@
-	package _
-	class K8s{
+	/*class K8s{
 	def steps
 	def namesecret = ''
 	def url_docker_repo = ''
@@ -12,4 +11,12 @@
 	}
 }
 
-return this
+return this*/
+package _
+class Utilities implements Serializable {
+  def steps
+  Utilities(steps) {this.steps = steps}
+  def mvn(args) {
+    steps.sh "${steps.tool 'Maven'}/bin/mvn -o ${args}"
+  }
+}

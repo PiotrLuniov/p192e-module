@@ -86,13 +86,13 @@ node('Host-Node') {
 //			},
 				
 			'Creating Docker Image': {
-				sh "ls -la"
-				sh " docker login -u ashamchonak -p ashamchonak https://nexus-ci.playpit.by"
+				//sh "ls -la"
+				//sh " docker login -u ashamchonak -p ashamchonak https://nexus-ci.playpit.by"
 					
 				withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', \
 						   url: 'http://nexus-ci.playpit.by:6566') {
 					
-					sh " docker login -u ashamchonak -p ashamchonak https://nexus-ci.playpit.by"
+				//	sh " docker login -u ashamchonak -p ashamchonak https://nexus-ci.playpit.by"
 					
 					
 					sh "ls -la"

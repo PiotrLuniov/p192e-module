@@ -86,6 +86,19 @@ node {
 
     }
 
+   stage('Asking for manual approval'){
+    timeout(time: 5, unit: 'MINUTES') {
+        input(id: "Deploying artifacts", \
+              message: "Is it necessary to deploy helloworld-${STUDENT}:${env.BUILD_NUMBER}?", ok: "yes")
+    }
+}
+
+
+	stage('Deployment'){
+		echo "Deployment-stage"
+	}
+
+    
 
 
 

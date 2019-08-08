@@ -107,7 +107,7 @@ node('Host-Node'){
 
 			def now = new Date()
 			def body = "Pipeline has successfully done at: ${now}.format(\"HH:mm dd/MM/yy\", TimeZone.getTimeZone('UTC'))"
-			println ${body}
+			println body
 			emailext body: "${body}", recipientProviders: [developers()], subject: 'Pipeline errors!', to: 'alex.dalimaev@yandex.by'
 		}
 	}

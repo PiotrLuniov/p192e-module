@@ -44,7 +44,7 @@ node {
     stage('Triggering job and fetching artefact after finishing') {
       build job: "MNTLAB-${student}-child1-build-job", parameters: [[$class: 'StringParameterValue', name: 'BRANCH_NAME', value: "${student}"]], wait: true
       copyArtifacts filter: "${student}_dsl_script.tar.gz", fingerprintArtifacts: true, projectName: "MNTLAB-${student}-child1-build-job", selector: lastSuccessful()
-      sh "tar -czf ${student}_dsl_script.tar.gz"
+      sh "tar -xvzf ${student}_dsl_script.tar.gz"
     }
 
     stage('Packaging and Publishing results'){

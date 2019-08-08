@@ -6,7 +6,7 @@ echo "kubectl switch from $1 to $2"
     echo "sleep"
     sleep 30
     TEST_CURL=$(curl -IL tomcat-$2-svc.apavarnitsyn.svc.k8s.playpit.by:8080/hello/)
-
+    echo "$TEST_CURL"
     if [ $(echo "$TEST_CURL" | grep -c 'HTTP/1.1 200') -gt 0 ]
 
         
@@ -28,8 +28,8 @@ echo "kubectl switch from $1 to $2"
 
 
 # main
-
-
+ls -ll
+apk add curl
 TEST=$(kubectl get pods) 
 if [ $(echo "$TEST" | grep -c 'tomcat-blue') -lt 1 ]
 	then 

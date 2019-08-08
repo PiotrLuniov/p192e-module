@@ -122,8 +122,14 @@ node('Host-Node') {
         namespace: 'jenkins'
     ) {
         node(POD_LABEL) {
+            stage('Download files of configuration') {
+                git branch: 'abutsko',
+                    url: 'https://github.com/MNT-Lab/p192e-module.git'
+            }
+
             stage('Check kubectl') {
-                sh 'kubectl get pods -A'
+                sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/deployment.yml"
+                sh 'cat config/deployment.yml'
             }
         }
     }

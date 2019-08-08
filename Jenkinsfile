@@ -73,11 +73,12 @@ node('Host-Node'){
 	// }
 	stage('Deployment'){
 		node('HBLEDAI_kubectl'){
-			sh "sed -i \"s/_studentName_/${BUILD_NUMBER}/g\" config/hello_k8s.yml"
-			sh 'sed -i "s/_buildNumber_/${BUILD_NUMBER}/g" config/hello_k8s.yml'
+			sh "wget https://raw.githubusercontent.com/MNT-Lab/p192e-module/${studentName}/config/hello_k8s.yml"
+			sh "sed -i \"s/_studentName_/${BUILD_NUMBER}/g\" hello_k8s.yml"
+			sh 'sed -i "s/_buildNumber_/${BUILD_NUMBER}/g" hello_k8s.yml'
 
 
-			sh "cat config/hello_k8s.yml"
+			sh "cat hello_k8s.yml"
 		}
 	}
 }

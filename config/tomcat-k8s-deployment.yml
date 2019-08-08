@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tomcat-deployment
+  labels:
+    app: tomcat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tomcat
+  template:
+    metadata:
+      labels:
+        app: tomcat
+    spec:
+      containers:
+      - name: private-reg-container
+        image: nexus-ci.playpit.by:6566/helloworld-pluniov:3
+        ports:
+        - containerPort: 8080
+  # imagePullSecrets:
+  # - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tomcat-svc
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: tomcat
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: tomcat-ingress
+spec:
+  rules:
+  - host: pluniov-app.k8s.playpit.by
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: tomcat-svc
+          servicePort: 8080

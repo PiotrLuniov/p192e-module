@@ -51,7 +51,7 @@ node {
       parallel(
         'Archiving artifact': {
           sh "tar cvzf pipeline-${student}-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
-          nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "pipeline-${student}-\${BUILD_NUMBER}.tar.gz"]], mavenCoordinate: [artifactId: "${student}", groupId: 'pipeline', packaging: '.tar.gz', version: '${BUILD_NUMBER}']]]
+          nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "pipeline-${student}-\${BUILD_NUMBER}.tar.gz"]], mavenCoordinate: [artifactId: "${student}", groupId: 'pipeline', packaging: 'tar.gz', version: '${BUILD_NUMBER}']]]
         },
         'Creating Docker Image': {
           withDockerRegistry(credentialsId: 'nexus', url: 'http://localhost:6566') {
@@ -61,4 +61,11 @@ node {
         }
       )
     }
+
+    stage('Asking for manual approval'){
+        timeout(time: 1, unit: 'MINUTES') {
+             input(id: "Deployment of artifact", message: "Deploy to Kubernetes?", ok: "Deploy")
+        }
+    }
+
 }

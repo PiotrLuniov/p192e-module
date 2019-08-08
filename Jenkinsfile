@@ -9,6 +9,7 @@ node('Host-Node') {
         sh 'git log | head -n 3 >> config/help.html'
 
         sh 'cp config/help.html helloworld-ws/src/main/help.html'
+        sh 'ls helloworld-ws/src/main/'
 
         withMaven(
             maven: 'Maven 3.6.1',

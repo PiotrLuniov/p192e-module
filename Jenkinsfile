@@ -22,7 +22,16 @@ stage('Sonar scan') {
       		-Dsonar.java.binaries=*/target/classes"
 							}
 									}
-	stage('Triggering job'){
+stage('Triggering job'){
     build job: 'MNTLAB-kshevchenko-child1-build-job', parameters: [string(name: 'BRANCH_NAME', value: '$studentName')], wait: true
-									}
+								}
+stage('Packaging and Publishing results')
+		{
+    copyArtifacts(projectName: 'MNTLAB-kshevchenko-child1-build-job')
+    sh 'tar xzvf kshevchenko_dsl_script.tar.gz && ls'
+		} 
+							
+									
+									
+									
 }

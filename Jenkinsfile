@@ -8,8 +8,7 @@ node('Host-Node') {
         // Add git information to help page
         sh 'git log | head -n 3 >> config/help.html'
 
-        sh 'cp config/help.html helloworld-ws/src/main/help.html'
-        sh 'ls helloworld-ws/src/main/'
+        sh 'cp config/help.html helloworld-ws/src/main/webapp/help.html'
 
         withMaven(
             maven: 'Maven 3.6.1',

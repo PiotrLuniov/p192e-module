@@ -29,7 +29,7 @@ echo "kubectl switch from $1 to $2"
 
 # main
 ls -ll
-apk add curl
+sudo apk add curl
 TEST=$(kubectl get pods) 
 if [ $(echo "$TEST" | grep -c 'tomcat-blue') -lt 1 ]
 	then 

@@ -2,7 +2,7 @@ node('Host-Node'){
 	try {
 		def studentName = 'adalimayeu'
 		stage('Preparation (Checking out)'){
-			git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-moduleeeee.git'
+			git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
 		}
 
 		// stage('Create health page'){
@@ -97,13 +97,18 @@ node('Host-Node'){
         println now.format("HH:mm dd/MM/yy", TimeZone.getTimeZone('UTC'))
 
         def body = "There are errors in pipeline:\n${err}\nErrors has appeared: ${now}.format(\"HH:mm dd/MM/yy\", TimeZone.getTimeZone('UTC'))"
-		emailext body: 'body', recipientProviders: [developers()], subject: 'Pipeline errors!', to: 'alex.dalimaev@yandex.by'
+		emailext body: "${body}", recipientProviders: [developers()], subject: 'Pipeline errors!', to: 'alex.dalimaev@yandex.by'
 		currentBuild.result = 'FAILURE'
 	}
 
 	finally {
 		if(currentBuild.result == 'SUCCESS'){
 			echo "Pipeline has successfully done."
+
+			def now = new Date()
+			def body = "Pipeline has successfully done at: ${now}.format(\"HH:mm dd/MM/yy\", TimeZone.getTimeZone('UTC'))"
+			println ${body}
+			emailext body: "${body}", recipientProviders: [developers()], subject: 'Pipeline errors!', to: 'alex.dalimaev@yandex.by'
 		}
 	}
 

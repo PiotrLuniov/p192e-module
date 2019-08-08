@@ -8,13 +8,12 @@ node {
               }
       
      stage('Creation metadata page'){
-        sh builddate=$(date)
-        sh cat << EOF > helloworld-ws/src/main/webapp/metadata.html
-        build: $BUILD_NUMBER <br>
-        author: ymlechka <br>
-        build_url: $BUILD_URL <br>
-        buils_data: $builddate
-        EOF
+            cat << EOF > helloworld-project/helloworld-ws/src/main/webapp/metadata.html
+            build: $BUILD_NUMBER <br>
+            author: ymlechka <br>
+            build_url: $BUILD_URL <br>
+            buils_data: $builddate
+            EOF'''
     }
                 
       

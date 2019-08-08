@@ -60,7 +60,7 @@ node(){
 			input(id: 'Deployment of artifact', message: 'Deploying the current artifact?', ok: 'Continue')
 		}
 	}
-    	stage('Deployment') {
+		stage('Deployment') {
      		node('HBLEDAI_kubectl'){
 			sh "kubectl apply --namespace=kkaminski -f k8s-deployment.yml"
 		}

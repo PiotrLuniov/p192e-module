@@ -6,7 +6,7 @@ node('Host-Node') {
 
     stage('Build Project') {
          withMaven(maven: 'Maven 3.6.1') {
-            sh 'mvn -f helloworld-ws/pom.xml package'
+            sh 'mvn clean -f helloworld-ws/pom.xml package'
         }
     }
     stage('Sonar Scan') {

@@ -62,9 +62,9 @@ node('Host-Node') {
                                                          type: 'tar.gz']], credentialsId: 'nexus', groupId: 'pipeline', nexusUrl: 'nexus-ci.playpit.by', 
                                                          nexusVersion: 'nexus3', protocol: 'http', repository: 'MNT-pipeline-training/', version: '0.1'
                         
-                        docker.withRegistry('http://localhost:6566', 'nexus') {
+                        docker.withRegistry('https://registry-ci.playpit.by', 'nexus') {
                                 def dockerfile = 'Dockerfile.webapp'
-                                def webappImage = docker.build("localhost:6566/helloworld-hkanonik:${BUILD_NUMBER}", "-f ./dockerfiles/${dockerfile} .")
+                                def webappImage = docker.build(" registry-ci.playpit.by/helloworld-hkanonik:${BUILD_NUMBER}", "-f ./dockerfiles/${dockerfile} .")
                                 webappImage.push()
                         }  
                 }

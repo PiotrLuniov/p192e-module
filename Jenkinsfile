@@ -105,10 +105,10 @@ podTemplate(cloud: 'k8s_bledai')
 {
   node('K8S_HBLEDAI'){
     stage ('test'){
-    sh '''   
-    if [ ! $(kubectl get secret -n hbledai | grep -q regcred && echo $?) ]
+    sh """   
+    if [ ! \$(kubectl get secret | grep -q https && echo \$?) ]
     then
-    kubectl create secret docker-registry regcred --docker-server=nexus-ci.playpit.by:6566 --docker-username=admin --docker-password=admin123
+    kubectl create secret docker-registry https --docker-server=https://registry-ci.playpit.by --docker-username=admin --docker-password=admin123
     fi
     cat << EOF > hello.yaml
 apiVersion: extensions/v1beta1 
@@ -133,7 +133,7 @@ spec:
         ports:
         - containerPort: 8080
       imagePullSecrets:
-      - name: regcred
+      - name: https
 
 ---
 apiVersion: v1
@@ -167,7 +167,7 @@ spec:
           servicePort: 8080
 EOF
 kubectl apply -f hello.yaml
-    '''
+    """
 
         }       
     }

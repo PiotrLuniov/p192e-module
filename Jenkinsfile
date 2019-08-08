@@ -2,7 +2,7 @@ node('Host-Node'){
 	try {
 		def studentName = 'adalimayeu'
 		stage('Preparation (Checking out)'){
-			git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-moduleeee.git'
+			git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
 		}
 
 		// stage('Create health page'){
@@ -84,6 +84,7 @@ node('Host-Node'){
 		// 		sh "kubectl apply --namespace=${studentName} -f hello_k8s.yml"
 		// 	}
 		// }
+
 		currentBuild.result = 'SUCCESS'
 
 	}
@@ -91,8 +92,12 @@ node('Host-Node'){
 	catch (err) {
 		echo "There are errors"
 		echo "Caught: ${err}"
-        currentBuild.result = 'FAILURE'
-				// emailext body: "$err.getMessage()", subject: 'Errors in the Pipeline ', to: 'alex.dalimaev@yandex.by'
+        
+        def now = new Date()
+        println now.format("yyMMdd.HHmm", TimeZone.getTimeZone('UTC'))
+        def body = "There are errors in pipeline:\n${err}\nErrors has appeared: ${now}.format("yyMMdd.HHmm", TimeZone.getTimeZone('UTC'))"
+		// emailext body: 'body', recipientProviders: [developers()], subject: 'Pipeline errors!', to: 'alex.dalimaev@yandex.by'
+		currentBuild.result = 'FAILURE'
 	}
 
 	finally {

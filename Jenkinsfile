@@ -7,7 +7,7 @@ node('Host-Node') {
                 stage ('2: Build') {
                         withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
                         sh 'mvn clean package -f helloworld-ws/pom.xml'
-                }
+                	}
                 }
         
                 stage ('3: SonarQube') {
@@ -19,16 +19,6 @@ node('Host-Node') {
                                 '-Dsonar.sources=helloworld-ws/src/main/java ' +
                                 '-Dsonar.java.binaries=**/target/classes ' +
                                 '-Dsonar.language=java '
-                                        
-                                //sh '''
-                                //${scannerHome}/bin/sonar-scanner \
-                                //-Dsonar.projectKey= \
-                                //-Dsonar.projectName=hkanonik \
-                                //-Dsonar.sources=helloworld-ws/src/main/java \
-                                //-Dsonar.java.binaries=**/target/classes \
-                                //-Dsonar.language=java
-                                //'''
-                                
                         }
                 } 
         

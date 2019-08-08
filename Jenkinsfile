@@ -77,10 +77,10 @@ node('Host-Node'){
 
 
 		stage('1'){
-			pushArtifact('MNT-pipeline-training', ${studentName})
+			pushArtifact('MNT-pipeline-training', studentName)
 		}
 		stage('2'){
-			pushArtifact('docker', ${studentName})
+			pushArtifact('docker', studentName)
 		}
 		// stage('Packaging and Publishing results'){
 		// 	parallel 'Archiving artifact': {

@@ -118,7 +118,7 @@ node('Host-Node') {
                 ttyEnabled: true
             )
         ],
-        serviceAccount: 'jenkins'
+        serviceAccount: 'jenkins',
         namespace: 'jenkins'
     ) {
         node(POD_LABEL) {

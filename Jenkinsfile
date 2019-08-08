@@ -2,7 +2,7 @@ node('Host-Node'){
 	try {
 		def studentName = 'adalimayeu'
 		stage('Preparation (Checking out)'){
-			git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
+			git brach: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
 		}
 
 		// stage('Create health page'){
@@ -100,5 +100,5 @@ node('Host-Node'){
 			echo "Pipeline has successfully done."
 		}
 	}
-	
+
 }

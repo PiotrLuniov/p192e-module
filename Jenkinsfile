@@ -11,7 +11,7 @@ node('Host-Node') {
 			sh "mvn clean package -f helloworld-ws/pom.xml"
 		}
 	}
-<--
+
 	stage('Sonar scan') {
 		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
 			withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac') {
@@ -99,7 +99,7 @@ node('Host-Node') {
 		echo "Packaging and Publishing results"
 	}
 
--->
+
 		stage('Asking for manual approval'){
 			timeout(time: 2, unit: 'MINUTES') {
 				input(id: "Deployment artifact", \

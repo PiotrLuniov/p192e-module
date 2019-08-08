@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: abutsko-helloworld
-        image: nexus-ci.playpit.by:6566/helloworld-abutsko:PLACE_FOR_NEW_TAG
+        image: registry-ci.playpit.by/helloworld-abutsko:PLACE_FOR_NEW_TAG
         ports:
         - name: abutsko-app
           containerPort: 8080
@@ -31,8 +31,8 @@ spec:
           httpGet:
             path: /helloworld-ws
             port: 8080
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            successThreshold: 1
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
       imagePullSecrets:
       - name: docker-repo

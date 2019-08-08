@@ -62,7 +62,7 @@ node {
             build job: "MNTLAB-${STUDENT}-child1-build-job",\
                   parameters: [string(name: 'BRANCH_NAME', value: "${STUDENT}")], wait: true
             copyArtifacts filter: "${STUDENT}_dsl_script.tar.gz", fingerprintArtifacts: true, \
-                  projectName: "EPBYMINW9138/MNTLAB-${STUDENT}-child1-build-job", selector: lastSuccessful()
+                  projectName: "EPBYMINW9128/MNTLAB-${STUDENT}-child1-build-job", selector: lastSuccessful()
             sh "tar -xzf ${STUDENT}_dsl_script.tar.gz"
     }
 

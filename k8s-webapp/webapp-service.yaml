@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: HKwebapp-svc
+  name: hkwebapp-svc
   namespace: hkanonik
   labels:
     app: webapp
@@ -9,6 +9,6 @@ spec:
   selector:
     app: webapp
   ports:
-  - name: HKwebapp-svc-port
+  - name: hkwebapp-svcp
     port: 80
     targetPort: http-webapp

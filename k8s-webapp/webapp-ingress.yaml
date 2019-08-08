@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: HKwebapp-ing
+  name: hkwebapp-ing
   namespace: hkanonik
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
@@ -12,5 +12,5 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: HKwebapp-svc
-          servicePort: HKwebapp-svc-port
+          serviceName: hkwebapp-svc
+          servicePort: hkwebapp-svcp

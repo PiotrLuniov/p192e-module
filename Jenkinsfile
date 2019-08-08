@@ -98,15 +98,15 @@ node('Host-Node') {
         )
     }
 
-    stage('Asking for manual approval') {
-        timeout(time: 5, unit: 'MINUTES') {
-            input(
-                id: 'Deployment',
-                message: 'Do you want to deploy Docker image?',
-                ok: 'Deploy'
-            )
-        }
-    }
+    // stage('Asking for manual approval') {
+    //     timeout(time: 5, unit: 'MINUTES') {
+    //         input(
+    //             id: 'Deployment',
+    //             message: 'Do you want to deploy Docker image?',
+    //             ok: 'Deploy'
+    //         )
+    //     }
+    // }
 
     podTemplate(
         name: 'abutsko',

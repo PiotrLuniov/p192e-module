@@ -12,5 +12,25 @@ node {
     }
     }
 
-
+    stage('Sonar scan') {
+            def scannerHome = tool 'SonarQubeScanner'
+            withSonarQubeEnv('sonar-ci') {
+                sh "${scannerHome}/bin/sonar-scanner " +
+                        "-Dsonar.projectKey=helloworld-ws-$STUDENT "+
+                        '-Dsonar.language=java '+
+                        '-Dsonar.sources=helloworld-ws/src '+
+                        '-Dsonar.java.binaries=helloworld-ws/target'
+            }
+        }
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
 }

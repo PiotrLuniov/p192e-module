@@ -23,6 +23,6 @@ stage('Sonar scan') {
 							}
 									}
 	stage('Triggering job'){
-    build job: 'MNTLAB-$studentName-child1-build-job', parameters: [string(name: 'BRANCH_NAME', value: '$studentName')], wait: true
+    build job: 'MNTLAB-${studentName}-child1-build-job', parameters: [string(name: 'BRANCH_NAME', value: '$studentName')], wait: true
 									}
 }

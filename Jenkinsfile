@@ -1,5 +1,6 @@
 
 def pushArtifact(repo){
+	node('Host-Node'){
 	if (repo == 'MNT-pipeline-training'){
 		echo "test MNT-pipeline-training1"
 		sh "tar czf pipeline-${studentName}-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-ws/target/helloworld-ws.war"
@@ -19,6 +20,7 @@ def pushArtifact(repo){
 			sh "docker push localhost:6566/helloworld-${studentName}:${BUILD_NUMBER}"
 		}
 		echo "test docker2"
+	}
 	}
 }
 

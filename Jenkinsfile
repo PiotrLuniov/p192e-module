@@ -5,7 +5,19 @@ node {
         checkout scm
           //([$class: 'GitSCM', branches: [[name: "*/$STUDENT"]], \
         //userRemoteConfigs: [[url: ' https://github.com/MNT-Lab/p192e-module']]])
+              }
+      
+     stage('Creation metadata page'){
+        sh builddate=$(date)
+        sh cat << EOF > helloworld-ws/src/main/webapp/metadata.html
+        build: $BUILD_NUMBER <br>
+        author: ymlechka <br>
+        build_url: $BUILD_URL <br>
+        buils_data: $builddate
+        EOF
     }
+                
+      
     stage ('Building code'){
         withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
             sh 'mvn clean package -f helloworld-ws/pom.xml'

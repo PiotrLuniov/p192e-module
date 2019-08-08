@@ -11,3 +11,4 @@ node('Host-Node') {
 			sh "mvn clean package -f helloworld-ws/pom.xml"
 		}
 }
+}

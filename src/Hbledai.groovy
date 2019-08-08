@@ -1,5 +1,5 @@
 package  _	
-class K8s implements Serializable{
+
 	def steps
 	def namesecret = ''
 	def url_docker_repo = ''
@@ -8,8 +8,8 @@ class K8s implements Serializable{
 	K8s(steps) {this.steps = steps}
 	
 	def createSecret (){
-		steps.sh "kubectl create secret docker-registry ${name} --docker-server=${url} --docker-username=${username} --docker-password=${password}"
+		sh "kubectl create secret docker-registry ${name} --docker-server=${url} --docker-username=${username} --docker-password=${password}"
 	}
-}
+
 
 return this

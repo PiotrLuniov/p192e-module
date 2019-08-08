@@ -15,7 +15,7 @@ spec:
      maxSurge: 1
   selector:
     matchLabels:
-      app: abutsko-hellowolrd
+      app: abutsko-helloworld
   template:
     metadata:
       labels:

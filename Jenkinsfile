@@ -129,7 +129,8 @@ node('Host-Node') {
 
             stage('Check kubectl') {
                 sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/deployment.yml"
-                sh 'cat config/deployment.yml'
+                sh 'kubectl apply -f config/deployment.yml'
+
             }
         }
     }

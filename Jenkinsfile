@@ -33,16 +33,6 @@ node('Host-Node') {
         }
     }
 
-    stage('Quality Gate') {
-        timeout(time: 1, unit: 'HOURS') {
-            def qualityGate = waitForQualityGate()
-
-            if (qualityGate.status != 'OK') {
-                error "Pipeline aborted due to quality gate failure: ${qualityGate.status}"
-            }
-        }
-    }
-
     //stage('Integration Tests') {
     //    withMaven(
     //        maven: 'Maven 3.6.1',
@@ -120,32 +110,42 @@ node('Host-Node') {
     //         )
     //     }
     // }
+}
 
-    podTemplate(
-        name: 'abutsko',
-        cloud: 'Kubernetes',
-        containers: [
-            containerTemplate(
-                name: 'jnlp',
-                image: 'dranser/jenkins-jnlp-kubectl',
-                ttyEnabled: true
-            )
-        ],
-        serviceAccount: 'jenkins',
-        namespace: 'jenkins'
-    ) {
-        node(POD_LABEL) {
-            stage('Download files of configuration') {
-                git branch: 'abutsko',
-                    url: 'https://github.com/MNT-Lab/p192e-module.git'
-            }
+stage('Quality Gate') {
+    timeout(time: 1, unit: 'HOURS') {
+        def qualityGate = waitForQualityGate()
 
-            stage('Check kubectl') {
-                sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/deployment.yml"
-                sh 'kubectl apply -f config/deployment.yml'
-                sh 'kubectl apply -f config/service.yml'
-                sh 'kubectl apply -f config/ingress.yml'
-            }
+        if (qualityGate.status != 'OK') {
+            error "Pipeline aborted due to quality gate failure: ${qualityGate.status}"
+        }
+    }
+}
+
+podTemplate(
+    name: 'abutsko',
+    cloud: 'Kubernetes',
+    containers: [
+        containerTemplate(
+            name: 'jnlp',
+            image: 'dranser/jenkins-jnlp-kubectl',
+            ttyEnabled: true
+        )
+    ],
+    serviceAccount: 'jenkins',
+    namespace: 'jenkins'
+) {
+    node(POD_LABEL) {
+        stage('Download files of configuration') {
+            git branch: 'abutsko',
+                url: 'https://github.com/MNT-Lab/p192e-module.git'
+        }
+
+        stage('Check kubectl') {
+            sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/deployment.yml"
+            sh 'kubectl apply -f config/deployment.yml'
+            sh 'kubectl apply -f config/service.yml'
+            sh 'kubectl apply -f config/ingress.yml'
         }
     }
 }

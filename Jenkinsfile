@@ -21,17 +21,27 @@ node('Host-Node') {
         }
     }
     
-    //stage('Sonar Scanning') {
-    //    def scannerHome = tool 'SonarQubeScanner';
-    //    withSonarQubeEnv() {
-    //        sh "${scannerHome}/bin/sonar-scanner \
-    //           -Dsonar.projectName=abutsko-helloworld \
-    //           -Dsonar.projectKey=abutsko-helloworld \
-    //           -Dsonar.language=java \
-    //           -Dsonar.sources=helloworld-ws/src \
-    //           -Dsonar.java.binaries=**/target/classes"
-    //    }
-    //}
+    stage('Sonar Scanning') {
+        def scannerHome = tool 'SonarQubeScanner';
+        withSonarQubeEnv() {
+            sh "${scannerHome}/bin/sonar-scanner \
+               -Dsonar.projectName=abutsko-helloworld \
+               -Dsonar.projectKey=abutsko-helloworld \
+               -Dsonar.language=java \
+               -Dsonar.sources=helloworld-ws/src \
+               -Dsonar.java.binaries=**/target/classes"
+        }
+    }
+
+    stage('Quality Gate') {
+        timeout(time: 1, unit: 'HOURS') {
+            def qualityGate = waitForQualityGate()
+
+            if (qualityGate.status != 'OK') {
+                error "Pipeline aborted due to quality gate failure: ${qualityGate.status}"
+            }
+        }
+    }
 
     //stage('Integration Tests') {
     //    withMaven(

@@ -115,6 +115,7 @@ node('Host-Node'){
 	catch (err) {
         def now = new Date()
         def body = "There are errors in pipeline:\n${err}\nErrors has appeared: ${now}"
+        println body
 		emailext body: "${body}", recipientProviders: [developers()], subject: 'Pipeline errors!', to: 'alex.dalimaev@yandex.by'
 		currentBuild.result = 'FAILURE'
 	}

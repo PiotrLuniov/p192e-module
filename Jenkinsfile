@@ -140,20 +140,20 @@ Failed stage: "${STAGE}"
 }
 }
 
-node ('Host-Node') { 
+// node ('Host-Node') { 
 
-STAGE = 'Apavarnitsyn-Checkout';
-	stage ("${STAGE}") {
-    	git branch: "apavarnitsyn", url: 'https://github.com/MNT-Lab/p192e-module.git'
-	}
+// STAGE = 'Apavarnitsyn-Checkout';
+// 	stage ("${STAGE}") {
+//     	git branch: "apavarnitsyn", url: 'https://github.com/MNT-Lab/p192e-module.git'
+// 	}
 
-STAGE = 'Apavarnitsyn-Deployment';
-	stage ("${STAGE}") {
-sh """
-cd files/
-./script.sh ${env.BUILD_NUMBER}
-"""
-	}
-}
+// STAGE = 'Apavarnitsyn-Deployment';
+// 	stage ("${STAGE}") {
+// sh """
+// cd files/
+// ./script.sh ${env.BUILD_NUMBER}
+// """
+// 	}
+// }
 
 

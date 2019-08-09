@@ -171,7 +171,7 @@ podTemplate(
         )
     ],
     serviceAccount: 'jenkins',
-    namespace: 'jenkins'
+    namespace: 'abutsko'
 ) {
     node(POD_LABEL) {
 //        stage('Download files of configuration') {

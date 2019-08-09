@@ -3,6 +3,11 @@ kind: Deployment
 metadata:
   name: tomcat-green
 spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
   replicas: 1
   template:
     metadata:
@@ -14,6 +19,18 @@ spec:
           image: registry-ci.playpit.by/helloworld-apavarnitsyn:VERSION
           ports:
             - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /hello/
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /hello/
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3 
       imagePullSecrets:
         - name: regcred
         

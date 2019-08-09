@@ -16,7 +16,6 @@ echo "kubectl switch from $1 to $2"
     	else
     		echo "ALARM! Container is crashed"
     fi
-
     TEST_CURL=$(curl -IL tomcat-$2-svc.apavarnitsyn.svc.cluster.local:8080/)
     if [ $(echo "$TEST_CURL" | grep -c 'HTTP/1.1 200') -gt 0 ]
     	then
@@ -25,7 +24,6 @@ echo "kubectl switch from $1 to $2"
     	else
     		echo "ALARM! Tomcat is crashed"
    	fi
-
     TEST_HELLO=$(curl -IL tomcat-$2-svc.apavarnitsyn.svc.cluster.local:8080/hello/)
     if [ $(echo "$TEST_HELLO" | grep -c 'HTTP/1.1 200') -gt 0 ]
     	then
@@ -34,7 +32,6 @@ echo "kubectl switch from $1 to $2"
     	else
     		echo "ALARM! Container is crashed"
    	fi
-
     TEST_TEST=$(curl tomcat-$2-svc.apavarnitsyn.svc.cluster.local:8080/hello/test.html)
     if [ $(echo "$TEST_TEST" | grep -c "$3") -gt 0 ]
     	then
@@ -43,7 +40,6 @@ echo "kubectl switch from $1 to $2"
     	else
     		echo "ALARM! Health page is outdated"
     fi
-
     if [ $COUNT -eq 4 ]   
         then
             echo "Switch ingress"
@@ -57,7 +53,6 @@ echo "kubectl switch from $1 to $2"
             kubectl delete -f $2/deployment.yml --namespace=apavarnitsyn
             kubectl delete -f $2/service.yml --namespace=apavarnitsyn
     fi
-
 }
 
 

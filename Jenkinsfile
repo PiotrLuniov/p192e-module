@@ -5,44 +5,57 @@ try {
 	stage('Checking out'){
 		git branch: "kkaminski", url: 'https://github.com/MNT-Lab/p192e-module.git'
 	}
-	// stage('Building code'){
-	// 	withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1', mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac'){
-	// 		sh 'mvn clean package -f helloworld-ws/pom.xml' 
-	// 	}
-	// }
-	//  stage('Sonar scan') {
-	// 	withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
-	// 	withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac') {
-	// 		sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar -f helloworld-ws/pom.xml ' +
-	// 		'-Dsonar.projectKey=kkaminski ' +
-	// 		'-Dsonar.projectName=kkaminski '
-	// 		}
-	// 	}
-	// }
- //    stage('Testing') {
- //    	parallel(
- //    		'pre-integration-test': {
- //    			withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1', mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
- //    				sh 'mvn pre-integration-test -f helloworld-ws/pom.xml' 
- //    			}
- //    		},
- //     		'integration-test': {
- //    			withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1', mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
- //    				sh 'mvn integration-test -f helloworld-ws/pom.xml' 
- //     			}
- //    		},
- //    		'post-integration-test': {
- //    			withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1', mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
- //   				sh 'mvn post-integration-test -f helloworld-ws/pom.xml' 
- //    			}
- //   		}
- //    	)
-	// }
-	// stage('Triggering job and fetching artefact after finishing'){
-	// 	build job: "MNTLAB-kkaminski-child1-build-job", parameters: [string(name: 'BRANCH_NAME', value: "kkaminski")], wait: true
-	// 	copyArtifacts filter: "kkaminski_dsl_script.tar.gz", fingerprintArtifacts: true, projectName: "MNTLAB-kkaminski-child1-build-job", selector: lastSuccessful()
-	// 	sh "tar -xzf kkaminski_dsl_script.tar.gz && ls"
-	// 	}
+	stage('Building code'){
+		 sh """ 
+
+	cat << EOF > helloworld-ws/src/main/webapp/test.html
+	<!DOCTYPE html>
+	<html>
+	<body>
+	<h3>custom page</h3>
+	<p>version ${env.BUILD_NUMBER}</p>
+	<p>Author: kkaminski</p>
+	</body>
+	</html> 
+	EOF
+	 """	
+		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1', mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac'){
+			sh 'mvn clean package -f helloworld-ws/pom.xml' 
+		}
+	}
+	 stage('Sonar scan') {
+		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
+		withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac') {
+			sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar -f helloworld-ws/pom.xml ' +
+			'-Dsonar.projectKey=kkaminski ' +
+			'-Dsonar.projectName=kkaminski '
+			}
+		}
+	}
+    stage('Testing') {
+    	parallel(
+    		'pre-integration-test': {
+    			withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1', mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
+    				sh 'mvn pre-integration-test -f helloworld-ws/pom.xml' 
+    			}
+    		},
+     		'integration-test': {
+    			withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1', mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
+    				sh 'mvn integration-test -f helloworld-ws/pom.xml' 
+     			}
+    		},
+    		'post-integration-test': {
+    			withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1', mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac') {
+   				sh 'mvn post-integration-test -f helloworld-ws/pom.xml' 
+    			}
+   		}
+    	)
+	}
+	stage('Triggering job and fetching artefact after finishing'){
+		build job: "MNTLAB-kkaminski-child1-build-job", parameters: [string(name: 'BRANCH_NAME', value: "kkaminski")], wait: true
+		copyArtifacts filter: "kkaminski_dsl_script.tar.gz", fingerprintArtifacts: true, projectName: "MNTLAB-kkaminski-child1-build-job", selector: lastSuccessful()
+		sh "tar -xzf kkaminski_dsl_script.tar.gz && ls"
+		}
 	stage('Packaging and Publishing results') {
 		parallel(
 			'Create archieve': {
@@ -64,7 +77,7 @@ try {
 	}
 		stage('Deployment') {
 			sh '$HOME/kubectl apply -f k8s-deploy.yml'
-		}vasda
+		}
 	}
 
 	catch (err) {

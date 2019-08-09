@@ -1,0 +1,2 @@
+def pushDockerImage(String name) {
+}

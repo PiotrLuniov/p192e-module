@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: iyaruk-app
-        image: registry-ci.playpit.by/helloworld-iyaruk:22 
+        image: registry-ci.playpit.by/helloworld-iyaruk:${BUILD_NUMBER} 
         ports:
         - name: http-app
           containerPort: 8080

@@ -119,7 +119,9 @@ node('Host-Node') {
 
 
 	stage('Deployment'){
+		
 		sh '''
+ls -la
 sed -i "s/StudentName/${studentName}/g" tomcat/tomcat-ns.yaml
 $HOME/kubectl apply -f tomcat/tomcat-ns.yaml"
 		

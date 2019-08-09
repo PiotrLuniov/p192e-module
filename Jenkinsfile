@@ -200,7 +200,7 @@ podTemplate(
 
                 // set a new version for image
                 sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/sanity.yml"
-                sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/deployment."
+                sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/deployment.yml"
 
                 ansiblePlaybook(
                     playbook: 'config/provision.yml',

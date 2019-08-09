@@ -1,57 +1,11 @@
 
 def url = 'nexus-ci.playpit.by:6566'
-def health(String image){
-	sh """
-cat << EOF > test.yaml
-apiVersion: extensions/v1beta1 
-kind: Deployment
-metadata:
-  name: test-tomcat
-  labels:
-    app: test-tomcat
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: test-tomcat
-  template:
-    metadata:
-      labels:
-        app: test-tomcat
-    spec:
-      containers:
-      - name: test-tomcat
-        image: registry-ci.playpit.by/${image}
-        ports:
-        - containerPort: 8080   
-      imagePullSecrets:
-      - name: dockerrepo
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: test-tomcat-svc
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 8080
-      targetPort: 8080
-  selector:
-    app: test-tomcat
-EOF
-kubectl apply -f test.yaml
-for i in 1 2 3 4 5
-    do
-        curl test-tomcat-svc.hbledai.svc.cluster.local:8080/helloworld-ws/healthz.html 
-        sleep 5s
-    done
-"""
-}
-def deployFile ( def container_name, 
-				def creds = 'dockerrepo', 
-				def file_name = 'deploy_tomcat.yml', 
-				def app_name = 'helloworld-ws', 
-				def container_port = '8080'){
+def deployFile ( String container_name, 
+				String creds = 'dockerrepo', 
+				String file_name = 'deploy_tomcat.yml', 
+				String app_name = 'helloworld-ws', 
+				String container_port = '8080'
+){
 this.health(container_name)	
 
 sh """
@@ -59,9 +13,9 @@ cat << EOF > ${file_name}
 apiVersion: extensions/v1beta1 
 kind: Deployment
 metadata:
-  name: tomcat
+  name: ${name_app}
   labels:
-    app: tomcat
+    app: ${name_labels}
 spec:
   strategy:
     type: RollingUpdate
@@ -71,17 +25,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: tomcat
+      app: ${name_labels}
   template:
     metadata:
       labels:
-        app: tomcat
+        app: ${name_labels}
     spec:
       containers:
-      - name: tomcat
+      - name: ${name_app}
         image: registry-ci.playpit.by/${container_name}
         ports:
-        - containerPort: 8080
+        - containerPort: ${container_port}
         readinessProbe:
           httpGet:
             path: /${app_name}

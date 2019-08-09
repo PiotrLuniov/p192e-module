@@ -2,10 +2,15 @@
 def CONTAINER_NAME = "helloworld-hbledai:${env.BUILD_ID}"
 node ('Host-Node'){
     stage('preparation') {
+      try {
         git branch: 'hbledai', url: 'https://github.com/MNT-Lab/p192e-module.git'
         sh """
         sed -i "s/_image_/${CONTAINER_NAME}/" helloworld-ws/src/main/webapp/healthz.html
-        """
+        """}
+        catch (err) {
+            echo err.getMessage()
+            echo "Error detected, but we will continue."
+        }
     }
     stage('Building code'){
     
@@ -24,7 +29,8 @@ node ('Host-Node'){
             
         }
     }
- /*   stage('run-parallel-branches') {
+    stage('run-parallel-branches') {
+      try{
         parallel(
             'pre-integration-test': {
                 withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
@@ -42,7 +48,12 @@ node ('Host-Node'){
                     }
                 }
             )
-        }*/
+      }
+       catch (err) {
+            echo err.getMessage()
+            echo "Error detected, but we will continue."
+        }
+        }
     stage('Triggering job and fetching artefact after finishing'){
         build job: 'MNT-LAB-hbledai-child-1-build-job', parameters: [string(name: 'BRANCH', value: 'hbledai')], wait: true
     }
@@ -124,7 +135,11 @@ podTemplate(cloud: 'k8s_bledai',
     stage ('Deployment (rolling update, zero downtime)'){
       k8s.kubectl_apply (
         k8s.deployFile(
-          CONTAINER_NAME, 'dockerrepo', 'deploy_tomcat.yml', 'helloworld-ws', '8080'
+          container_name: CONTAINER_NAME, 
+          creds: 'dockerrepo', 
+          file_name: 'deploy_tomcat.yml', 
+          app_name: 'helloworld-ws', 
+          container_port: '8080'
           )
         )
 

@@ -116,10 +116,6 @@ podTemplate(cloud: 'k8s_bledai',
     node ('K8S_HBLEDAI'){
     stage ('test'){
     sh """   
-    if [ ! \$(kubectl get secret -n hbledai | grep -q dockerrepo && echo \$?) ]
-    then
-    kubectl create secret -n hbledai docker-registry dockerrepo --docker-server=https://registry-ci.playpit.by --docker-username=admin --docker-password=admin123
-    fi
     cat << EOF > hello.yaml
 apiVersion: extensions/v1beta1 
 kind: Deployment

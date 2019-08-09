@@ -59,13 +59,21 @@ node('Host-Node') {
 		'''
 		}
 
-		stage('Manual approval'){
-			timeout(time: 1, unit: 'MINUTES') {
-				input(id: "Deployment artifact", \
-				      message: "Do you mind to deploy helloworld-iyaruk:${env.BUILD_NUMBER}?", \
-				      ok: "Yes, I do.")
+	stage('Manual approval'){
+		timeout(time: 1, unit: 'MINUTES') {
+			input(id: "Deployment artifact", \
+			      message: "Do you mind to deploy helloworld-iyaruk:${env.BUILD_NUMBER}?", \
+			      ok: "Yes, I do.")
+				}
 			}
-	}
-	
+
+	stage('Kubernetes Deployment'){
+		sh '''
+		$HOME/kubectl apply -f k8-sett/'1 - dep.yml'
+		sleep 15
+		$HOME/kubectl apply -f k8-sett/'2 - svc.yml'
+		sleep 15
+		$HOME/kubectl apply -f k8-sett/'3 - ing.yml'
+		'''
 	}
 }

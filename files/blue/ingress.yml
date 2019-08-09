@@ -2,12 +2,14 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: tomcat-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/app-root: /hello/
 spec:
   rules:
   - host: apavarnitsyn-app.k8s.playpit.by
     http:
       paths:
-      - path: /hello/
+      - path: /
         backend:
           serviceName: tomcat-blue-svc
           servicePort: 8080

@@ -60,7 +60,9 @@ node ('Host-Node'){
 
     
     stage('Packaging and Publishing results'){
+       
          parallel(
+             try{ 
             'Archiving artifact':{
                 copyArtifacts(projectName: 'MNT-LAB-hbledai-child-1-build-job')
         sh '''
@@ -68,26 +70,33 @@ node ('Host-Node'){
         ls helloworld-ws/target/ 
         tar czvf pipeline-hbledai-${BUILD_NUMBER}.tar.gz Jenkinsfile output.txt helloworld-ws/target/helloworld-ws.war
             '''
-               /* def pom =readMavenPom file: 'helloworld-ws/pom.xml'
-                nexusPublisher nexusInstanceId: 'nexus', 
-                    nexusRepositoryId: 'MNT-pipeline-training', 
-                    packages: [
-                        [
-                            $class: 'MavenPackage', 
-                            mavenAssetList: [
-                                [
-                                    filePath: "pipeline-hbledai-${env.BUILD_NUMBER}.tar.gz"
-                                    ]
-                                    ], 
-                    mavenCoordinate: [
-                        artifactId: "hbledai", 
-                        groupId: 'pipeline', 
-                        packaging: '.tar.gz', 
-                        version: '${env.BUILD_NUMBER}']
+           
+                 nexusArtifactUploader(
+                        nexusVersion: 'nexus3',
+                        protocol: 'http',
+                        nexusUrl: 'localhost:8081',
+                        repository: 'MNT-pipeline-training',
+                        groupId: 'hbledai',
+                        version: "${env.BUILD_NUMBER}",
+                        credentialsId: 'nexus',
+                        artifacts: [
+                            [
+                                artifactId: 'hbledai',
+                                classifier: '',
+                                file: "pipeline-hbledai-${BUILD_NUMBER}.tar.gz",
+                                type: 'tar.gz'
+                            ]
                         ]
-                        ]
-*/},
+                    )
+            }
+                 catch (err) {
+            echo err.getMessage()
+            echo "Error detected, but we will continue."
+        }
+    }
+},
             'Creating Docker Image':{
+                try{
                        sh '''
 cat << EOF > $WORKSPACE/Dockerfile
 # Pull base image
@@ -111,6 +120,12 @@ EOF
                 }
             }
             )
+           }
+              catch (err) {
+            echo err.getMessage()
+            echo "Error detected, but we will continue."
+        }
+             
         }
 stage("Asking for manual approval") {
                 timeout(time: 300, unit: 'SECONDS') {                  
@@ -134,12 +149,8 @@ podTemplate(cloud: 'k8s_bledai',
     def k8s = new K8s()
     stage ('Deployment (rolling update, zero downtime)'){
       k8s.kubectl_apply (
-        k8s.deployFile(
-          container_name: CONTAINER_NAME, 
-          creds: 'dockerrepo', 
-          file_name: 'deploy_tomcat.yml', 
-          app_name: 'helloworld-ws', 
-          container_port: '8080'
+        k8s.deployFile( CONTAINER_NAME,  'dockerrepo',  'deploy_tomcat.yml',  'helloworld-ws', 
+ '8080'
           )
         )
 

@@ -140,6 +140,7 @@ ls -la
 
 else
 	kubectl delete -f tomcat-d-s-${BUILD_NUMBER}.yaml
+	ls -la
 fi
 ls -la
 ls -la tomcat

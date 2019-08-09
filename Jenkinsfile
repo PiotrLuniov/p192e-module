@@ -5,6 +5,12 @@ node {
      checkout scm
     }
 
+    stage('Create health page'){
+			sh 'sed -i "s/_buildnumber_/${BUILD_NUMBER}/g" config/main.html'
+			sh 'sed -i "s/_builddate_/$(date)/g" config/main.html'
+			sh 'cp config/main.html helloworld-ws/src/main/webapp/main.html'
+		}
+
     stage('Building code') {
       withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', maven: 'Maven 3.6.1') {
         sh 'mvn clean package -f helloworld-ws/pom.xml'

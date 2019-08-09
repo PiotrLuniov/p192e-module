@@ -131,7 +131,7 @@ catch (err) {
 				recipientProviders: [developers()], subject: "Build ${BUILD_NUMBER} success", \
 				to: "studen2devops@gmail.com"
 		}
-}
+
 	
 }	
 }

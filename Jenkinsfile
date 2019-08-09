@@ -94,10 +94,13 @@ node {
 
     stage('Deployment (rolling update, zero downtime') {
     	sh "${HOME}/kubectl apply -f app.yml"
-
-		def proc = "curl -X HEAD -I http://nexus-ci.playpit.by/repository/docker/v2/helloworld-mmarkova/manifests/${BUILD_NUMBER}"
-		           .execute()
-		echo ("${proc}")
+    	sh """
+			def proc = "curl -X HEAD -I http://nexus-ci.playpit.by/repository/docker/v2/helloworld-mmarkova/manifests/${BUILD_NUMBER}"
+			           .execute().text
+			cat << EOF > check.html
+			<h1>${proc}</h1>
+			EOF
+		"""
     }
 }
 

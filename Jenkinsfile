@@ -142,10 +142,13 @@ podTemplate(
         }
 
         stage('Check kubectl') {
-            sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/deployment.yml"
-            sh 'kubectl apply -f config/deployment.yml'
-            sh 'kubectl apply -f config/service.yml'
-            sh 'kubectl apply -f config/ingress.yml'
+            sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/sanity.yml"
+            sh 'kubectl apply -f config/sanity.html'
+            sh 'wget -qO - abutsko-sanity.abutsko.svc.cluster.local:8080/helloworld-ws'
+            sh 'kubectl delete -f config/sanity.html'
+            //sh 'kubectl apply -f config/deployment.yml'
+            //sh 'kubectl apply -f config/service.yml'
+            //sh 'kubectl apply -f config/ingress.yml'
         }
     }
 }

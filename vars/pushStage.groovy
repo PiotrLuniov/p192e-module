@@ -11,5 +11,5 @@ def call(String repository) {
                         def webappImage = docker.build("registry-ci.playpit.by/helloworld-hkanonik:${BUILD_NUMBER}", "-f ./dockerfiles/${dockerfile} .")
                         webappImage.push()
                 } 
-        { 
+        } 
 }

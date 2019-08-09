@@ -52,12 +52,12 @@ spec:
 """
 return file_name
 }
-def deployFileTemplate ( def container_name, 
+def deployFileTemplate ( def container_name, def template,
 				def creds = 'dockerrepo', 
 				def file_name = 'deploy_tomcat.yml', 
 				def app_name = 'helloworld-ws', 
 				def container_port = '8080'){
-def f = new File('deploy_tomcat.template')
+def f = new File(template)
 def engine = new groovy.text.GStringTemplateEngine()
 def template = engine.createTemplate(f).make(binding)
 return template.toString()

@@ -1,6 +1,6 @@
 node('Host-Node')
 {
-	
+try { 	
    stage('Preparation') 
 {
       git branch: 'kshevchenko', url: 'https://github.com/MNT-Lab/p192e-module.git'
@@ -127,5 +127,5 @@ catch (err) {
 	
 	
 	
-	
+}	
 }

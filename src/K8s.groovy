@@ -52,17 +52,17 @@ spec:
 """
 return file_name
 }
-def deployFileTemplate ( def container_name, def template,
+def deployFileTemplate ( def container_name, 
 				def creds = 'dockerrepo', 
 				def file_name = 'deploy_tomcat.yml', 
 				def app_name = 'helloworld-ws', 
 				def container_port = '8080'){
-def f = new File(template)
+def f = new File('deploy_tomcat.template')
 def engine = new groovy.text.GStringTemplateEngine()
-def template = engine.createTemplate(f).make(binding)
-return template.toString()
+def temp = engine.createTemplate(f).make(binding)
+return temp.toString()
 
-}
+
 def serviceFile(def file_name = 'service_tomcat.yaml',def name_service = 'tomcat-svc',  def port = '8080', def targetPort = '8080'){
 sh """
 cat << EOF > ${file_name}

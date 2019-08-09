@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1 
+kind: Deployment
+metadata:
+  name: tomcat
+  labels:
+    app: tomcat
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tomcat
+  template:
+    metadata:
+      labels:
+        app: tomcat
+    spec:
+      containers:
+      - name: tomcat
+        image: registry-ci.playpit.by/${container_name}
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /${app_name}
+            port: ${container_port}
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        livenessProbe:
+          httpGet:
+            path: /${app_name}
+            port: ${container_port}
+          initialDelaySeconds: 3
+          periodSeconds: 3      
+
+      imagePullSecrets:
+      - name: ${creds}
+

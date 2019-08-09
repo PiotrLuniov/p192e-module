@@ -114,8 +114,7 @@ node ('k8s-slave') {
  	
 sh '''
 cd files/
-./script.sh ${env.BUILD_NUMBER}
-
+./script.sh
 '''
 	}
 }

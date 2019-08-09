@@ -129,18 +129,19 @@ spec:
 EOF
 			"""
                 }
-	
+		/*
   		stage ('9: Sanity check') {
       			def response_value = 'HelloWorldService?wsdl'
        			try {
             			sh "curl http://hkanonik-app.k8s.playpit.by/ | grep ${response_value}"
-            		//	return true
+            			return true
       			} catch (resp) {
         			echo "${response_value} NOT FOUND!"
         			currentBuild.result = 'FAILURE'
         			
 			}
     		} 
+		*/
 
 		/*                
 		// send e-mail

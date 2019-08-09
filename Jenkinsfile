@@ -1,3 +1,5 @@
+@Library('hbledai-share-libs') _
+
 node ('Host-Node'){
     stage('preparation') {
         git branch: 'hbledai', url: 'https://github.com/MNT-Lab/p192e-module.git'
@@ -114,8 +116,14 @@ podTemplate(cloud: 'k8s_bledai',
                 namespace: 'hbledai', )
 {
     node ('K8S_HBLEDAI'){
+    def k8s = new K8s()
     stage ('test'){
-    sh """   
+     k8s.kubectl_apply (k8s.deployFile(container_name: CONTAINER_NAME,
+        creds: 'dockerrepo', 
+        file_name: 'deploy_tomcat.yml', 
+        app_name: 'helloworld-ws', 
+        container_port: '8080'))
+    /*sh """   
     cat << EOF > hello.yaml
 apiVersion: extensions/v1beta1 
 kind: Deployment
@@ -185,7 +193,7 @@ spec:
           servicePort: 8080
 EOF
 kubectl apply -f hello.yaml
-    """
+    """*/
 
         }       
     }

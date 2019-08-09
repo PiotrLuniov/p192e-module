@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: tomcat-service
+  name: tomcat-service-BUILD_NUMBER
   namespace: ashamchonak
 spec:
   selector:
-    app: tomcat-app
+    app: tomcat-app-BUILD_NUMBER
   type: ClusterIP
   ports:
   - name: tomcatsvcport

@@ -4,8 +4,14 @@ node {
 	def STUDENT = 'mmarkova'
 
 	stage('Preparation') {
-		checkout([$class: 'GitSCM', branches: [[name: "*/${STUDENT}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/MNT-Lab/p192e-module']]])
+		try {
+			checkout([$class: 'GitSCM', branches: [[name: "*/${STUDENT}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/MNT-Lab/p192e-module']]])
+		}
+		catch(all) {
+			echo ("something goes wrong")
+		}
 	}
+
 	stage('Building code') {
 		git branch: "$STUDENT", url: 'https://github.com/MNT-Lab/p192e-module'
  
@@ -15,15 +21,22 @@ node {
 	      		sh "mvn -f helloworld-ws/pom.xml package"
 			}
 	}
+
 	stage('Sonar scan') {
-		def sqScannerHome = tool 'SonarQubeScanner'
-		 withSonarQubeEnv() { 
-      		sh "${sqScannerHome}/bin/sonar-scanner -X \
-      		-Dsonar.projectKey=helloworld-ws:${STUDENT} \
-      		-Dsonar.language=java \
-      		-Dsonar.java.binaries=*/target/classes"
+		try {
+			def sqScannerHome = tool 'SonarQubeScanner'
+			 withSonarQubeEnv() { 
+	      		sh "${sqScannerHome}/bin/sonar-scanner -X \
+	      		-Dsonar.projectKey=helloworld-ws:${STUDENT} \
+	      		-Dsonar.language=java \
+	      		-Dsonar.java.binaries=*/target/classes"
+	      	}
+      	}
+      	catch(all) {
+      		echo ("something goes wrong")
       	}
 	}
+
 	stage('Testing') {
         parallel (
             'pre-integration test': {
@@ -37,10 +50,17 @@ node {
             }
         )
     }
+
     stage('Triggering job and fetching artefact after finishing') {
-    	build job: "MNTLAB-${STUDENT}-child1-build-job", parameters: [string(name: 'BRANCH_NAME', value: "${STUDENT}")], wait: true
-    	copyArtifacts filter: 'jobs.groovy', projectName: "MNTLAB-${STUDENT}-child1-build-job"
+    	try {
+	    	build job: "MNTLAB-${STUDENT}-child1-build-job", parameters: [string(name: 'BRANCH_NAME', value: "${STUDENT}")], wait: true
+	    	copyArtifacts filter: 'jobs.groovy', projectName: "MNTLAB-${STUDENT}-child1-build-job"
+    	}
+    	catch(all) {
+    		echo ("something goes wrong")
+    	}
     }
+
     stage('Packaging and Publishing results') {
     	parallel (
     		'archive': {
@@ -65,14 +85,16 @@ node {
     		}
     	)
     }
+
     stage('Asking for manual approval') {
 		timeout(time: 1, unit: 'MINUTES') {
 		input(id: 'Deployment of artifact', message: 'I wonder if you would like to continue?', ok: 'Yes')
 }
     }
- //    stage('Deployment (rolling update, zero downtime') {
 
- //    }
+    stage('Deployment (rolling update, zero downtime') {
+    	sh "${HOME}/kubectl apply -f app.yml"
+    }
 }
 
 def test(command) {
@@ -81,9 +103,9 @@ def test(command) {
     	withMaven(
 	        maven: "${MAVEN_VERSION}",
 	        globalMavenSettingsConfig: "${MAVEN_CONFIG}") {
-    			// dir('helloworld-ws') {
-	      			sh "cd helloworld-ws && mvn ${command}"
-	      	//}
+    			dir('helloworld-ws') {
+	      			sh "mvn ${command}"
+	      	}
 		}
 	}
 	catch(all) {

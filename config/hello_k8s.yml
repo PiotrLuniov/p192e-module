@@ -25,8 +25,10 @@ spec:
         readinessProbe:
           exec:
             command:
-          #  - "V=$(curl -s localhost:8080/helloworld-ws/test.html|head -n1|cut -d' ' -f2); if [[ ${V} != '_buildNumber_' ]];then exit 1; fi;"
-            - "v=$( curl -s localhost:8080/helloworld-ws/test.html|head -n1|cut -d' ' -f2 );if [ $v -ne '_buildNumber_' ]; then exit 1; fi"
+            - v=$( curl -s localhost:8080/helloworld-ws/test.html|head -n1|cut -d' ' -f2 )
+            - if [ $v -ne '_buildNumber_' ]; then exit 1; fi
+          # - "v=$( curl -s localhost:8080/helloworld-ws/test.html|head -n1|cut -d' ' -f2 );if [ $v -ne '_buildNumber_' ]; then exit 1; fi"
+          
           # httpGet:
           #   path: /helloworld-ws
           #   port: tom-port

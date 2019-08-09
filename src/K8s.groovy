@@ -33,15 +33,7 @@ spec:
         image: ${container_name}
         ports:
         - containerPort: 8080
-        livenessProbe:
-          httpGet:
-          path: /helloworld-ws
-          port: 8080
-            httpHeaders:
-            - name: Custom-Header
-              value: 'helloworld-ws Quickstart'
-          initialDelaySeconds: 3
-          periodSeconds: 3      
+
         readinessProbe:
           httpGet:
             path: /${app_name}
@@ -49,6 +41,17 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 5
           successThreshold: 1
+          
+        livenessProbe:
+          httpGet:
+          path: /helloworld-ws
+          port: 8080
+            httpHeaders:
+            - name: Custom-Header
+              value: helloworld-ws Quickstart
+          initialDelaySeconds: 3
+          periodSeconds: 3      
+
       imagePullSecrets:
       - name: ${creds}
 

@@ -1,6 +1,7 @@
 function kubeswitch {
 echo "kubectl switch from $1 to $2"
     echo "$2 install"
+    sed -i "s/VERSION/\$3/g" $2/deployment.yml
     kubectl apply -f $2/deployment.yml --namespace=apavarnitsyn
     kubectl apply -f $2/service.yml --namespace=apavarnitsyn
     echo "sleep"
@@ -35,7 +36,7 @@ echo "kubectl switch from $1 to $2"
    	fi
 
     TEST_TEST=$(curl tomcat-$2-svc.apavarnitsyn.svc.cluster.local:8080/hello/test.html)
-    if [ $(echo "TEST_TEST" | grep -c "147") -gt 0 ]
+    if [ $(echo "TEST_TEST" | grep -c "$3") -gt 0 ]
     	then
     		echo "Page is ready"
     		COUNT=$(( $COUNT+1 ))

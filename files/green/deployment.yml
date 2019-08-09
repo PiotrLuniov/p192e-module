@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
         - name: tomcat-green
-          image: registry-ci.playpit.by/helloworld-apavarnitsyn:14
+          image: registry-ci.playpit.by/helloworld-apavarnitsyn:VERSION
           ports:
             - containerPort: 8080
       imagePullSecrets:

@@ -20,7 +20,7 @@ metadata:
   name: tomcat-ingress
   namespace: STUDENT_NAME
   annotations:
-    ingress.kubernetes.io/rewrite-target: /helloworld-ws/$1
+    ingress.kubernetes.io/rewrite-target: /helloworld-ws/ #$1
     kubernetes.io/ingress.class: nginx
     certmanager.k8s.io/cluster-issuer: letsencrypt-prod
 spec:
@@ -32,7 +32,7 @@ spec:
   - host: STUDENT_NAME-app.k8s.playpit.by
     http:
       paths:
-      - path: /(.*)
+      - path: / #(.*)
         backend:
           serviceName: tomcat-service
           servicePort: tomcatsvcport

@@ -121,7 +121,7 @@ podTemplate(cloud: 'k8s_bledai',
 {
     node ('K8S_HBLEDAI'){
     def k8s = new K8s()
-    stage ('test'){
+    stage ('Deployment (rolling update, zero downtime)'){
       k8s.kubectl_apply (
         k8s.deployFile(
           CONTAINER_NAME, 'dockerrepo', 'deploy_tomcat.yml', 'helloworld-ws', '8080'

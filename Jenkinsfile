@@ -7,7 +7,7 @@ URL: ${env.BUILD_URL}
 Failed stage: ${stage}
         """,
         to: 'anton.butsko@gmail.com',
-        from: 'jenkins_is_failed@epam.com'
+        from: 'anton.butsko@gmail.com'
     )
 }
 

@@ -84,7 +84,7 @@ node('Host-Node') {
                     credentialsId: 'nexus',
                     artifacts: [
                         [
-                            artifactId: archive,
+                            artifactId: abutsko,
                             classifier: '',
                             file: "${archive}.tar.gz",
                             type: 'tar.gz'

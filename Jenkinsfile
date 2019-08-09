@@ -116,7 +116,7 @@ $HOME/kubectl apply -f tomcat/tomcat-ns.yaml
 sed "s/BUILD_NUMBER/${BUILD_NUMBER}/g" tomcat/tomcat-dep.yaml > tomcat-dep.yaml
 sed -i "s/STUDENT_NAME/${studentName}/g" tomcat-dep.yaml
 $HOME/kubectl apply -f tomcat-dep.yaml
-sleep 30
+sleep 15
 
 sed "s/STUDENT_NAME/${studentName}/g" tomcat/tomcat-s-i.yaml > tomcat-s-i.yaml
 $HOME/kubectl apply -f tomcat-s-i.yaml

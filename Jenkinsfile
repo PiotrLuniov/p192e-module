@@ -117,18 +117,13 @@ node('Host-Node') {
 //	}
 }
 			
-node ('k8s-slave') { 	
-	def studentName = "ashamchonak"
-	
-	stage('Preparation (Checking out)'){
-		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
-	}
+
 
 	stage('Deployment'){
-		sh 'kubectl apply -f tomcat/tomcat-ns.yaml'
-		sh 'kubectl apply -f tomcat/tomcat-dep.yaml'
-		sh 'kubectl apply -f tomcat/tomcat-svc.yaml'
-                sh 'kubectl apply -f tomcat/tomcat-ing.yaml'
+		sh '$HOME/kubectl apply -f tomcat/tomcat-ns.yaml'
+		sh '$HOME/kubectl apply -f tomcat/tomcat-dep.yaml'
+		sh '$HOME/kubectl apply -f tomcat/tomcat-svc.yaml'
+                sh '$HOME/kubectl apply -f tomcat/tomcat-ing.yaml'
                 //sh 'kubectl apply -f tomcat/tomcat.yaml'
 		echo "Deployment"
 	}

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tomcat-dep
+  namespace: STUDENT_NAME
+  labels:
+    app: tomcat-dep
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tomcat-app
+  template:
+    metadata:
+      labels:
+        app: tomcat-app
+    spec:
+      containers:
+      - name: tomcat
+        image: "registry-ci.playpit.by/helloworld-STUDENT_NAME:BUILD_NUMBER"
+        ports:
+        - name: tomcatport
+          containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          exec:
+          command:
+            - /bin/sh
+            - -c
+            - if $(/usr/bin/curl -s localhost:8080/helloworld-ws/version.html | grep "Build:BUILD_NUMBER"); else exit 1; fi
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          successThreshold: 1
+        

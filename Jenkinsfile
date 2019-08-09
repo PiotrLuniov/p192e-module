@@ -4,7 +4,7 @@ node('Host-Node') {
 	def studentName = "ashamchonak"
 	
 	stage('Preparation (Checking out)'){
-		git branch: "${studentName}", url: 'https:github.com/MNT-Lab/p192e-module.git'
+		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
 	}
 
 	stage('Building code'){
@@ -33,7 +33,7 @@ node('Host-Node') {
 
 	stage('Testing') {
 		parallel (
-			'pre-integration-test': { 
+			'pre-integration-test': {
 				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
 					jdk: 'JDK9', maven: 'Maven 3.6.1') {
 					sh "mvn pre-integration-test -f helloworld-ws/pom.xml"
@@ -41,7 +41,7 @@ node('Host-Node') {
 
 			},
 
-			'integration-test': { 
+			'integration-test': {
 				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
 					jdk: 'JDK9', maven: 'Maven 3.6.1') {
 					sh "mvn integration-test -f helloworld-ws/pom.xml"
@@ -49,7 +49,7 @@ node('Host-Node') {
 
 			},
 
-			'post-integration-test': { 
+			'post-integration-test': {
 				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
 					jdk: 'JDK9', maven: 'Maven 3.6.1') {
 					sh "mvn post-integration-test -f helloworld-ws/pom.xml"
@@ -58,15 +58,15 @@ node('Host-Node') {
 			}
 		)
 	}
-	
-	stage('Triggering job and fetching artefact after finishing'){		
+
+	stage('Triggering job and fetching artefact after finishing'){
 		build job: "MNTLAB-${studentName}-child1-build-job", \
 			parameters: [string(name: 'BRANCH_NAME', value: "${studentName}")], \
-			wait: true, propagate: true		
+			wait: true, propagate: true
 		copyArtifacts filter: "output.txt", fingerprintArtifacts: true, \
 			projectName: "MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
 	}
-	
+
 	stage('Packaging and Publishing results'){
 		parallel (
 			'Archiving artifact': {
@@ -74,10 +74,10 @@ node('Host-Node') {
 					projectName: "MNTLAB-${studentName}-child1-build-job", selector: lastSuccessful()
 				sh "rm -rf pipeline-${studentName}-*.tar.gz"
 				sh "cp -f helloworld-ws/target/helloworld-ws.war helloworld-ws.war"
-				
+
 				sh "tar -czvf pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz \
 					output.txt Jenkinsfile helloworld-ws.war"
-				
+
 				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', \
 					packages: [[$class: 'MavenPackage', \
 						mavenAssetList: [[classifier: '', extension: '', \
@@ -86,38 +86,38 @@ node('Host-Node') {
 							packaging: 'tar.gz', version: '${BUILD_NUMBER}'] \
 					]]
 			},
-				
+
 			'Creating Docker Image': {
-				sh "ls -la"
-				sh " docker login -u ashamchonak -p ashamchonak http: by"
-					
+				//sh "ls -la"
+				//sh " docker login -u ashamchonak -p ashamchonak http:// by"
+
 				withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', \
-						   url: 'http:nexus-ci.playpit.by:6566') {
-					
-					sh " docker login -u ashamchonak -p ashamchonak https:nexus-ci.playpit.by"
-					
-					
+						   url: 'http://nexus-ci.playpit.by:6566') {
+
+				//	sh " docker login -u ashamchonak -p ashamchonak https://nexus-ci.playpit.by"
+
+
 					sh "ls -la"
-					 sh "docker build -t helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
+					// sh "docker build -t helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
 					sh "docker build -t nexus-ci.playpit.by/helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
-					sh "docker images"
+					//sh "docker images"
 					sh "docker push nexus-ci.playpit.by/helloworld-${studentName}:${BUILD_NUMBER}"
 					sh "docker images"
 				}
 			}
 		)
-		echo "Packaging and Publishing results"
+    	echo "Packaging and Publishing results"
 	}
 
 
 		stage('Asking for manual approval'){
-			timeout(time: 2, unit: 'MINUTES') {
+    		timeout(time: 2, unit: 'MINUTES') {
 				input(id: "Deployment artifact", \
 				      message: "Wouldn't you mind to deploy helloworld-${studentName}:${env.BUILD_NUMBER}?", \
 				      ok: "I wouldn't mind.")
 			}
 	}
 
-
-
+	
+	
 }

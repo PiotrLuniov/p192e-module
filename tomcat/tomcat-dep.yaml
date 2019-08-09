@@ -29,7 +29,9 @@ spec:
         readinessProbe:
           httpGet:
             path: /helloworld-ws/version.html
-            httpHeaders: Build:BUILD_NUMBER
+            httpHeaders:
+              - name: Host
+                value: "Build:BUILD_NUMBER"
             port: 8080
           exec:
 #            command:

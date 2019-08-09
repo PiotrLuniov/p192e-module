@@ -24,7 +24,7 @@ stage('Sonar scan') {
 							}
 		}
 									
-	stage('Testing') {
+//	stage('Testing') {
 //		parallel (
 //			'pre-integration-test': { 
 //				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \

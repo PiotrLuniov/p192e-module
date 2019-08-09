@@ -126,7 +126,7 @@ node('Host-Node') {
 //                        def appImage = docker.build("registry-ci.playpit.by/helloworld-abutsko:${env.BUILD_NUMBER}", '-f config/Dockerfile .')
 //                        appImage.push()
 //                    }
-                    pushDockerImage(
+                    abutsko.pushDockerImage(
                         nameImage: "helloworld-abutsko:${env.BUILD_NUMBER}",
                         nameRepo: 'registry-ci.playpit.by',
                         credentialId: 'nexus',

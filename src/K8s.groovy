@@ -1,7 +1,7 @@
 def url = 'nexus-ci.playpit.by:6566'
 def deployFile ( def container_name, 
 				def creds = 'dockerrepo', 
-				def file_name = 'deploy_tomcat.yaml', 
+				def file_name = 'deploy_tomcat.yml', 
 				def app_name = 'helloworld-ws', 
 				def container_port = '8080'){
 

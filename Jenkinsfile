@@ -101,14 +101,25 @@ stage("Asking for manual approval") {
                 }
             }
             def CONTAINER_NAME = "hbledai:${env.BUILD_ID}"
-podTemplate(cloud: 'k8s_bledai')
+            
+podTemplate(cloud: 'Kubernetes', 
+            containers: [
+                containerTemplate(
+                  image: 'hbledai/jenkins-slave:ansible-kubectl', 
+                  livenessProbe: 
+                    name: 'jnlp', 
+                    ttyEnabled: true
+                    )], 
+                label: 'K8S_HBLEDAI', 
+                name: 'jenkins-slave', 
+                namespace: 'hbledai', )
 {
-  node('K8S_HBLEDAI'){
+    node (K8S_HBLEDAI){
     stage ('test'){
     sh """   
-    if [ ! \$(kubectl get secret | grep -q https && echo \$?) ]
+    if [ ! \$(kubectl get secret -n hbledai | grep -q dockerrepo && echo \$?) ]
     then
-    kubectl create secret -n hbledai docker-registry https --docker-server=https://registry-ci.playpit.by --docker-username=admin --docker-password=admin123
+    kubectl create secret -n hbledai docker-registry dockerrepo --docker-server=https://registry-ci.playpit.by --docker-username=admin --docker-password=admin123
     fi
     cat << EOF > hello.yaml
 apiVersion: extensions/v1beta1 
@@ -133,7 +144,7 @@ spec:
         ports:
         - containerPort: 8080
       imagePullSecrets:
-      - name: https
+      - name: dockerrepo
 
 ---
 apiVersion: v1

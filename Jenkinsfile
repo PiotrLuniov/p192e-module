@@ -53,9 +53,9 @@ node('Host-Node') {
 	stage('Creating Docker Image') {
 		withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'http://nexus-ci.playpit.by:6566') {
 		sh '''
-		docker login -u iyaruk -p iyaruk1234 http://nexus-ci.playpit.by:6566
-		docker build -t http://nexus-ci.playpit.by:6566/helloworld-iyaruk:${BUILD_NUMBER} -f Dockerfile .
-		docker push http://nexus-ci.playpit.by:6566/helloworld-iyaruk:${BUILD_NUMBER}
+		docker login -u iyaruk -p iyaruk1234 nexus-ci.playpit.by:6566
+		docker build -t nexus-ci.playpit.by:6566/helloworld-iyaruk:${BUILD_NUMBER} -f Dockerfile .
+		docker push nexus-ci.playpit.by:6566/helloworld-iyaruk:${BUILD_NUMBER}
 		'''
 		}
 	}

@@ -119,7 +119,8 @@ EOF
                 /* Push the container to the custom Registry */
                 customImage.push()
                 }
-                    catch (err) {
+            }
+                 catch (err) {
             echo err.getMessage()
             echo "Error detected, but we will continue."
                    }

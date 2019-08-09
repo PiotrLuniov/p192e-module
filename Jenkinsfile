@@ -130,7 +130,7 @@ $HOME/kubectl apply -f tomcat-d-s-${BUILD_NUMBER}.yaml
 sleep 15 
 
 #if [[curl -s  http://tomcat-service-${BUILD_NUMBER}.${studentName}.svc.cluster.local:8080]]
-if [[ curl -i http://tomcat-service.ashamchonak.svc.cluster.local:8080 ]]
+if curl -i http://tomcat-service.ashamchonak.svc.cluster.local:8080
 
 then  
 	sed "s/STUDENT_NAME/${studentName}/g" tomcat/tomcat-ing.yaml > tomcat-ing-${BUILD_NUMBER}.yaml

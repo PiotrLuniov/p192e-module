@@ -6,7 +6,7 @@ cat << EOF > test.yaml
 apiVersion: extensions/v1beta1 
 kind: Deployment
 metadata:
-  name: test_tomcat
+  name: test-tomcat
   labels:
     app: test-tomcat
 spec:

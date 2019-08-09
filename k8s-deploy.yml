@@ -57,7 +57,7 @@ spec:
   - host: kkaminski-app.k8s.playpit.by
     http:
       paths:
-      - path: /helloworld-ws
+      - path: /
         backend:
           serviceName: tomcat-service
           servicePort: tomcatsvcport

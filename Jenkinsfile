@@ -1,6 +1,7 @@
 
 node(){
-			
+		
+try {			
 	stage('Checking out'){
 		git branch: "kkaminski", url: 'https://github.com/MNT-Lab/p192e-module.git'
 	}
@@ -64,5 +65,18 @@ node(){
 		stage('Deployment') {
 			sh '$HOME/kubectl apply -f k8s-deploy.yml'
 		}
+ catch (err) {
+ 	echo "Some errors in pipeline:\n{err}"
+ }
+ 
+ finally {
+    echo "Pipeline is done"
+  }
+
 }
+}
+
+
+
+
 

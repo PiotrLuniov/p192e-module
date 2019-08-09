@@ -88,6 +88,6 @@ EOF
 	return file_name
 }
 def kubectl_apply (def file, def namespace = 'hbledai'){
-sh "kubectl apply -n ${namespace} ${file}"
+sh "kubectl apply -n ${namespace} -f ${file}"
 }
 return this 

@@ -95,15 +95,13 @@ node('Host-Node') {
                         */
                 }
 		
-		/*
-                stage ('8: Build') {
+		stage ('8: Deployment') {
                         sh '''
-                        kubectl apply -f ./k8s-webapp/webapp-service.yaml
-                        kubectl apply -f ./k8s-webapp/webapp-ingress.yaml
-                        kubectl apply -f ./k8s-webapp/webapp-deployment.yaml
+                        $HOME/kubectl apply -f ./k8s-webapp/webapp-service.yaml
+                        $HOME/kubectl apply -f ./k8s-webapp/webapp-ingress.yaml
+                        $HOME/kubectl apply -f ./k8s-webapp/webapp-deployment.yaml
                         '''
                 }
-                */
 
 		/*                
 		// send e-mail

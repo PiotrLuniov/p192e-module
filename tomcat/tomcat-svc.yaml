@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tomcat-service-BUILD_NUMBER
-  namespace: ashamchonak
+  namespace: StudentName
 spec:
   selector:
     app: tomcat-app-BUILD_NUMBER

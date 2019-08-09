@@ -41,11 +41,11 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 5
           successThreshold: 1
-          
+
         livenessProbe:
           httpGet:
-          path: /helloworld-ws
-          port: 8080
+            path: /helloworld-ws
+            port: 8080
             httpHeaders:
             - name: Custom-Header
               value: helloworld-ws Quickstart

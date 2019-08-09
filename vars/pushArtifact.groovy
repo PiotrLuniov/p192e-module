@@ -8,9 +8,9 @@ def call(String repo, String studentName){
 		]
 	}
 	if(repo == 'docker'){
-		withDockerRegistry(url: 'https://registry-ci.playpit.by') {
-			sh "docker build -t registry-ci.playpit.by/helloworld-${studentName}:${BUILD_NUMBER} -f config/Dockerfile ."
-			sh "docker push registry-ci.playpit.by/helloworld-${studentName}:${BUILD_NUMBER}"
+		withDockerRegistry(url: 'http://nexus-ci.playpit.by:6566') {
+			sh "docker build -t nexus-ci.playpit.by:6566/helloworld-${studentName}:${BUILD_NUMBER} -f config/Dockerfile ."
+			sh "docker push nexus-ci.playpit.by:6566/helloworld-${studentName}:${BUILD_NUMBER}"
 		}
 	}
 }

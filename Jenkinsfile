@@ -11,9 +11,25 @@ node('Host-Node') {
 	stage('BuildNumber page'){
 		sh """
 cat << EOF > helloworld-ws/src/main/webapp/version.html
-<html><body><header><h1>
-Build:${BUILD_NUMBER}
-</h1></header></body></html>
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <title>Build:${BUILD_NUMBER}</title>
+ </head> 
+ <body>
+  <header>
+    <h1>Персональный сайт ${studentName}</h1>
+  </header>
+  <article>
+    <h2>Добро пожаловать!</h2>
+    <p>Рада приветствовать вас на своем сайте.</p>
+  </article>
+  <footer>
+    Copyright ${studentName}
+  </footer>
+ </body> 
+</html>
 EOF
 		"""
 	}

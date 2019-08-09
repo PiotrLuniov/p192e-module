@@ -142,14 +142,14 @@ spec:
       - name: tomcat
         image: registry-ci.playpit.by/${CONTAINER_NAME}
         ports:
+        - containerPort: 8080
         readinessProbe:
           httpGet:
             path: /helloworld-ws
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
-          successThreshold: 1
-        - containerPort: 8080
+          successThreshold: 1        
       imagePullSecrets:
       - name: dockerrepo
 

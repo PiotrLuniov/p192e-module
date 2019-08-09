@@ -102,7 +102,7 @@ stage("Asking for manual approval") {
             }
             def CONTAINER_NAME = "helloworld-hbledai:${env.BUILD_ID}"
 
-podTemplate(cloud: 'Kubernetes', 
+podTemplate(cloud: 'k8s_bledai', 
             containers: [
                 containerTemplate(
                   image: 'hbledai/jenkins-slave:ansible-kubectl', 

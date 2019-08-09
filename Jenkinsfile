@@ -140,7 +140,7 @@ Failed stage: "${STAGE}"
 }
 }
 
-node ('k8s-slave') { 
+node () { 
 
 STAGE = 'Apavarnitsyn-Checkout';
 	stage ("${STAGE}") {

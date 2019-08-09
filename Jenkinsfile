@@ -204,3 +204,15 @@ podTemplate(
         }
     }
 }
+
+//node('Host-Node') {
+//    emailext(
+//        subject: "[Jenkins] SUCCESS!",
+//        body: """
+//Job: ${env.JOB_NAME}
+//URL: ${env.BUILD_URL}
+//        """,
+//        to: 'anton.butsko@gmail.com',
+//        from: 'anton.butsko@gmail.com'
+//    )
+//}

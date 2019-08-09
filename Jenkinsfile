@@ -139,7 +139,7 @@ spec:
     spec:
       containers:
       - name: tomcat
-        image: ${CONTAINER_NAME}
+        image: registry-ci.playpit.by/${CONTAINER_NAME}
         ports:
         - containerPort: 8080
       imagePullSecrets:

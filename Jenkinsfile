@@ -8,7 +8,7 @@ node ('Host-Node'){
         """
     }
     stage('Building code'){
-      sh 
+    
         withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
             sh 'mvn clean package -f helloworld-ws/pom.xml '
         }

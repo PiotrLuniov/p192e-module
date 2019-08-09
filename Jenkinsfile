@@ -1,6 +1,6 @@
 node('Host-Node'){
    stage('Preparation') {
-      git branch: 'kshevchenko', url: 'https://github.com/MNT-Lab/build-t00ls.git'
+      git branch: 'kshevchenko', url: 'https://github.com/MNT-Lab/p192e-module.git'
 }
    sh "ls -laR"
   stage('Building code'){

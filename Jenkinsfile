@@ -8,6 +8,14 @@ node('Host-Node') {
 		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
 	}
 
+	stage('BuildNumber page'){
+		sh "
+cat << EOF > helloworld-ws/src/main/webapp/version.html
+Build:${BUILD_NUMBER}
+EOF
+		"
+	}
+	    
 	stage('Building code'){
 		withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
 			jdk: 'JDK9', maven: 'Maven 3.6.1') {
@@ -32,33 +40,33 @@ node('Host-Node') {
 	    	}
 	}
 
-	stage('Testing') {
-		parallel (
-			'pre-integration-test': {
-				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
-					jdk: 'JDK9', maven: 'Maven 3.6.1') {
-					sh "mvn pre-integration-test -f helloworld-ws/pom.xml"
-				}
-
-			},
-
-			'integration-test': {
-				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
-					jdk: 'JDK9', maven: 'Maven 3.6.1') {
-					sh "mvn integration-test -f helloworld-ws/pom.xml"
-				}
-
-			},
-
-			'post-integration-test': {
-				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
-					jdk: 'JDK9', maven: 'Maven 3.6.1') {
-					sh "mvn post-integration-test -f helloworld-ws/pom.xml"
-				}
-
-			}
-		)
-	}
+//	stage('Testing') {
+//		parallel (
+//			'pre-integration-test': {
+//				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
+//					jdk: 'JDK9', maven: 'Maven 3.6.1') {
+//					sh "mvn pre-integration-test -f helloworld-ws/pom.xml"
+//				}
+//
+//			},
+//
+//			'integration-test': {
+//				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
+//					jdk: 'JDK9', maven: 'Maven 3.6.1') {
+//					sh "mvn integration-test -f helloworld-ws/pom.xml"
+//				}
+//
+//			},
+//
+//			'post-integration-test': {
+//				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
+//					jdk: 'JDK9', maven: 'Maven 3.6.1') {
+//					sh "mvn post-integration-test -f helloworld-ws/pom.xml"
+//				}
+//
+//			}
+//		)
+//	}
 
 	stage('Triggering job and fetching artefact after finishing'){
 		build job: "MNTLAB-${studentName}-child1-build-job", \
@@ -95,12 +103,34 @@ node('Host-Node') {
 	stage('Asking for manual approval'){
 	timeout(time: 2, unit: 'MINUTES') {
 			input(id: "Deployment artifact", \
-			      message: "Wouldn't you mind to deploy helloworld-${studentName}:${env.BUILD_NUMBER}?", \
-			      ok: "I wouldn't mind.")
+			      message: "Wouldn\'t you mind to deploy helloworld-${studentName}:${BUILD_NUMBER}?", \
+			      ok: "I wouldn\'t mind.")
 		}
 	}
 
     }
+	
+
+	stage('Deployment'){
+
+		sh """
+sed -i "s/STUDENT_NAME/${studentName}/g" tomcat/tomcat-ns.yaml
+$HOME/kubectl apply -f tomcat/tomcat-ns.yaml
+
+sed "s/BUILD_NUMBER/${BUILD_NUMBER}/g" tomcat/tomcat-dep.yaml > tomcat-dep.yaml
+sed -i "s/STUDENT_NAME/${studentName}/g" tomcat-dep.yaml
+$HOME/kubectl apply -f tomcat-dep.yaml
+sleep 30
+
+sed "s/STUDENT_NAME/${studentName}/g" tomcat/tomcat-s-i.yaml > tomcat-s-i.yaml
+$HOME/kubectl apply -f tomcat-s-i.yaml
+
+ls -la
+ls -la tomcat
+
+echo "Deployment  END"
+		"""
+	}
 
 	catch (err) {
 		println "The build ${BUILD_NUMBER} has failed with error:\n${err}"

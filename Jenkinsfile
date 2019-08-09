@@ -120,11 +120,7 @@ podTemplate(cloud: 'k8s_bledai',
     stage ('test'){
       k8s.kubectl_apply (
         k8s.deployFile(
-          container_name: CONTAINER_NAME,
-          creds: 'dockerrepo', 
-          file_name: 'deploy_tomcat.yml', 
-          app_name: 'helloworld-ws', 
-          container_port: '8080'
+          CONTAINER_NAME, 'dockerrepo', 'deploy_tomcat.yml', 'helloworld-ws', '8080'
           )
         )
 
@@ -138,10 +134,7 @@ podTemplate(cloud: 'k8s_bledai',
         )
       k8s.kubectl_apply (
         k8s.ingressFile(
-          file_name: 'ingress_tomcat.yaml', 
-          ingress_name: 'tomcat-ingress', 
-          name_service: 'tomcat-svc', 
-          port: '8080'
+          'ingress_tomcat.yaml', 'tomcat-ingress', 'tomcat-svc', '8080'
           )
         )
    

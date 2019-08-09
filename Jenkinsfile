@@ -20,3 +20,4 @@ stage('Sonar scan'){
 }
 }
 }
+}

@@ -40,7 +40,8 @@ spec:
             httpHeaders:
             - name: Custom-Header
               value: 'helloworld-ws Quickstart'
-          periodSeconds: 5        
+          initialDelaySeconds: 3
+          periodSeconds: 3      
         readinessProbe:
           httpGet:
             path: /${app_name}

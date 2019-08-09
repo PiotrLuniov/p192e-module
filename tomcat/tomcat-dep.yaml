@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tomcat-dep
+  name: tomcat-dep-BUILD_NUMBER
   namespace: ashamchonak
   labels:
-    app: tomcat-dep
+    app: tomcat-dep-BUILD_NUMBER
 spec:
   replicas: 1
   selector:

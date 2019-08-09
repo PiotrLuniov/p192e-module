@@ -87,7 +87,7 @@ node('Host-Node') {
 //				
 //			'Creating Docker Image': {
 //				//sh "ls -la"
-//				//sh " docker login -u ashamchonak -p ashamchonak http://nexus-ci.playpit.by"
+//				//sh " docker login -u ashamchonak -p ashamchonak http:// by"
 //					
 //				withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', \
 //						   url: 'http://nexus-ci.playpit.by:6566') {
@@ -115,17 +115,36 @@ node('Host-Node') {
 //				      ok: "I wouldn't mind.")
 //			}
 //	}
-
-			
+//
 
 
 	stage('Deployment'){
 		sh '$HOME/kubectl apply -f tomcat/tomcat-ns.yaml'
+		
+		sh 'sed -i "s/_buildNumber_/${BUILD_NUMBER}/g" tomcat-dep.yml'	
+		
 		sh '$HOME/kubectl apply -f tomcat/tomcat-dep.yaml'
+		
+	
+
 		sh '$HOME/kubectl apply -f tomcat/tomcat-svc.yaml'
-                sh '$HOME/kubectl apply -f tomcat/tomcat-ing.yaml'
+		
+		sh ''sleep 15 
+		if [[curl -s  http://tomcat-service-${BUILD_NUMBER}.tomcat.svc.cluster.local:8080\
+			/helloworld-ws-${BUILD_NUMBER}/deploy.html   |   grep   "Build   number   is]]
+		then  
+			$HOME/kubectl apply -f tomcat/tomcat-ing.yaml
+		else
+			kubectl delete -f 
+	
+              
+		
+		
                 //sh 'kubectl apply -f tomcat/tomcat.yaml'
 		echo "Deployment"
 	}
 
+	
+	
+	
 }

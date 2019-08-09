@@ -130,19 +130,17 @@ $HOME/kubectl apply -f tomcat-d-s-${BUILD_NUMBER}.yaml
 sleep 15 
 
 if [[curl -s  http://tomcat-service-${BUILD_NUMBER}.${studentName}.svc.cluster.local:8080]]
-	#/helloworld-ws/info.html | grep "Build number is ${BUILD_NUMBER}"]]
 then  
 	sed "s/STUDENT_NAME/${studentName}/g" tomcat/tomcat-ing.yaml > tomcat-ing-${BUILD_NUMBER}.yaml
 	$HOME/kubectl apply -f tomcat-ing-${BUILD_NUMBER}.yaml
 	cat tomcat-ing-${BUILD_NUMBER}.yaml
-	
 ls -la
-
 else
-	echo 
+	echo Rollback
 	$HOME/kubectl delete -f tomcat-d-s-${BUILD_NUMBER}.yaml
 	ls -la
 fi
+
 ls -la
 ls -la tomcat
 #//sh 'kubectl apply -f tomcat/tomcat.yaml'

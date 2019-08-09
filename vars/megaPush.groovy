@@ -1,4 +1,4 @@
-def megaPush(String artifactType, String studentName){
+def call(String artifactType, String studentName){
 
   if (artifactType == "maven"){
 				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', \

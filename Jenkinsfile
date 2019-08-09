@@ -136,10 +136,12 @@ then
 	cat tomcat-ing-${BUILD_NUMBER}.yaml
 ls -la
 else
-	echo Rollback
+	echo "Rollback"
 	$HOME/kubectl delete -f tomcat-d-s-${BUILD_NUMBER}.yaml
+	rm tomcat-d-s-${BUILD_NUMBER}.yaml
 	ls -la
 fi
+
 
 ls -la
 ls -la tomcat

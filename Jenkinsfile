@@ -97,7 +97,7 @@ node('Host-Node'){
 
 			def now = new Date()
 			def body = "Pipeline has successfully done at: ${now}"
-			emailext body: "${body}", recipientProviders: [developers()], subject: 'Pipeline errors!', to: 'alex.dalimaev@yandex.by'
+			emailext body: "${body}", recipientProviders: [developers()], subject: 'Pipeline SUCCESS!', to: 'alex.dalimaev@yandex.by'
 		}
 	}
 

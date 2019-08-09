@@ -57,9 +57,6 @@ node('Host-Node') {
 		docker build -t nexus-ci.playpit.by/helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile .
 		docker push nexus-ci.playpit.by/helloworld-iyaruk:${BUILD_NUMBER}
 		'''
-			}
-			}
+		}
 	}
-
-
 }

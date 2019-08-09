@@ -99,15 +99,35 @@ stage('Packaging and Publishing results') {
 		}
 		)
 }
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 }	
+
+	
+stage('Asking for manual approval'){
+	timeout(time: 2, unit: 'MINUTES') {
+			input(id: "Deployment artifact", \
+			      message: "Wouldn\'t you mind to deploy helloworld-${studentName}:${BUILD_NUMBER}?", \
+			      ok: "I wouldn\'t mind.")
+		}
+}	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

@@ -141,7 +141,7 @@ podTemplate(
                 url: 'https://github.com/MNT-Lab/p192e-module.git'
         }
 
-        stage('Sanity Test') {
+        stage('Deploying a new application version') {
             // set git hash for sanity check
             def gitHash = sh(returnStdout: true,
                              script: 'git log -n 1 --pretty=format:"%H"'.trim()

@@ -119,32 +119,29 @@ node('Host-Node') {
 
 
 	stage('Deployment'){
-		sh '$HOME/kubectl apply -f tomcat/tomcat-ns.yaml'
+		sh '''
+sed -i "s/StudentName/${studentName}/g" tomcat/tomcat-ns.yaml
+$HOME/kubectl apply -f tomcat/tomcat-ns.yaml"
 		
-		sh 'sed -i "s/_buildNumber_/${BUILD_NUMBER}/g" tomcat-dep.yml'	
-		
-		sh '$HOME/kubectl apply -f tomcat/tomcat-dep.yaml'
-		
-	
+sed "s/BUILD_NUMBER/${BUILD_NUMBER}/g" tomcat/tomcat-d-s.yaml > tomcat-d-s-${BUILD_NUMBER}.yaml
+$HOME/kubectl apply -f tomcat-d-s-${BUILD_NUMBER}.yaml
+sleep 15 
 
-		sh '$HOME/kubectl apply -f tomcat/tomcat-svc.yaml'
-		
-		sh ''sleep 15 
-		if [[curl -s  http://tomcat-service-${BUILD_NUMBER}.tomcat.svc.cluster.local:8080\
-			/helloworld-ws-${BUILD_NUMBER}/deploy.html   |   grep   "Build   number   is]]
-		then  
-			$HOME/kubectl apply -f tomcat/tomcat-ing.yaml
-		else
-			kubectl delete -f 
-	
-              
-		
-		
-                //sh 'kubectl apply -f tomcat/tomcat.yaml'
-		echo "Deployment"
+if [[curl -s  http://tomcat-service-${BUILD_NUMBER}.${studentName}.svc.cluster.local:8080]]
+	#/helloworld-ws/info.html | grep "Build number is ${BUILD_NUMBER}"]]
+then  
+	sed "s/StudentName/${studentName}/g" tomcat/tomcat-ing.yaml > tomcat-ing-${BUILD_NUMBER}.yaml
+	$HOME/kubectl apply -f tomcat/tomcat-ing-${BUILD_NUMBER}.yaml
+else
+	kubectl delete -f tomcat-d-s-${BUILD_NUMBER}.yaml
+
+ls -la
+ls -la tomcat
+#//sh 'kubectl apply -f tomcat/tomcat.yaml'
+echo "Deployment  END"
+		'''
 	}
 
-	
 	
 	
 }

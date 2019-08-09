@@ -48,7 +48,7 @@ spec:
             port: 8080
             httpHeaders:
             - name: Custom-Header
-              value: helloworld-ws Quickstart
+              value: Error
           initialDelaySeconds: 3
           periodSeconds: 3      
 

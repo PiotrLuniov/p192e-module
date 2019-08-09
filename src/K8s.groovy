@@ -99,7 +99,7 @@ kind: Ingress
 metadata:
   name: ${ingress_name}
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /helloworld-ws/\$1 
+    nginx.ingress.kubernetes.io/rewrite-target: /helloworld-ws/\\\$1 
 
 spec:
   rules:

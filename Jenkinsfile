@@ -104,26 +104,26 @@ node('Host-Node') {
                         $HOME/kubectl apply -f ./k8s-webapp/webapp-service.yaml
                         $HOME/kubectl apply -f ./k8s-webapp/webapp-ingress.yaml
                         cat << EOF | $HOME/kubectl apply -f -
-                        apiVersion: extensions/v1beta1
-                        kind: Deployment
-                        metadata:
-                          name: hkwebapp-dep
-                          namespace: hkanonik
-                        spec:
-                          replicas: 1
-                          template:
-                            metadata:
-                              labels:
-                                app: webapp
-                            spec:
-                              containers:
-                              - name: hk-webapp
-                                image: registry-ci.playpit.by/helloworld-hkanonik:${BUILD_NUMBER}
-                                ports:
-                                - name: http-webapp
-                                  containerPort: 8080
-                        EOF
-                        """
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+    name: hkwebapp-dep
+    namespace: hkanonik
+spec:
+    replicas: 1
+    template:
+        metadata:
+            labels:
+                app: webapp
+        spec:
+            containers:
+            - name: hk-webapp
+              image: registry-ci.playpit.by/helloworld-hkanonik:${BUILD_NUMBER}
+              ports:
+              - name: http-webapp
+                containerPort: 8080
+EOF
+		"""
                 }
 
 		/*                

@@ -112,9 +112,9 @@ node ('k8s-slave') {
 
   stage ('Apavarnitsyn-CD-Kubectl - Build') {
  	
-sh '''
+sh """
 cd files/
-./script.sh
-'''
+./script.sh ${env.BUILD_NUMBER}
+"""
 	}
 }

@@ -1,10 +1,14 @@
 @Library('hbledai-share-libs') _
-
+def CONTAINER_NAME = "helloworld-hbledai:${env.BUILD_ID}"
 node ('Host-Node'){
     stage('preparation') {
         git branch: 'hbledai', url: 'https://github.com/MNT-Lab/p192e-module.git'
+        sh """
+        sed -i "s/_image_/${CONTAINER_NAME}/" helloworld-ws/src/main/webapp/healthz.html
+        """
     }
     stage('Building code'){
+      sh 
         withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
             sh 'mvn clean package -f helloworld-ws/pom.xml '
         }
@@ -102,7 +106,7 @@ stage("Asking for manual approval") {
                        def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next'  
                 }
             }
-            def CONTAINER_NAME = "helloworld-hbledai:${env.BUILD_ID}"
+            
 
 podTemplate(cloud: 'k8s_bledai', 
             containers: [
@@ -126,10 +130,7 @@ podTemplate(cloud: 'k8s_bledai',
 
       k8s.kubectl_apply (
         k8s.serviceFile(
-          /*file_name: 'service_tomcat.yaml',
-          name_service: 'tomcat-svc', 
-          port: '8080', 
-          targetPort: '8080'*/
+          'service_tomcat.yaml', 'tomcat-svc', '8080', '8080'
           )
         )
       k8s.kubectl_apply (

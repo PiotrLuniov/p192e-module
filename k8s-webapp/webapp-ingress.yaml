@@ -4,7 +4,7 @@ metadata:
   name: hkwebapp-ing
   namespace: hkanonik
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /helloworld-ws/
 spec:
   rules:
   - host: hkanonik-app.k8s.playpit.by

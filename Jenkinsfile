@@ -79,8 +79,8 @@ node('Host-Node') {
                     protocol: 'http',
                     nexusUrl: 'localhost:8081',
                     repository: 'MNT-pipeline-training',
-                    groupId: pom.groupId,
-                    version: pom.version,
+                    groupId: 'pipeline',
+                    version: "${env.BUILD_NUMBER}",
                     credentialsId: 'nexus',
                     artifacts: [
                         [

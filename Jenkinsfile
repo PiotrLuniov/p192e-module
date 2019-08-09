@@ -79,6 +79,8 @@ try {
 		}
 	}
 		stage('Deployment') {
+
+			sh 'sed -i "s/BUILD/${BUILD_NUMBER}/g" k8s-deploy.yml'
 			sh '$HOME/kubectl apply -f k8s-deploy.yml'
 		}
 	}

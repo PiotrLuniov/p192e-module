@@ -1,9 +1,11 @@
 node('Host-Node') {
 //        try {
-                stage ("1: Git") {
+		// This stage in 'Pipeline script from SCM'
+		/*
+		stage ("1: Git") {
                         git branch: 'hkanonik', url: 'https://github.com/MNT-Lab/p192e-module.git'
                 }
-        
+        	*/
                 stage ('2: Build') {
                         withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
                         sh 'mvn clean package -f helloworld-ws/pom.xml'

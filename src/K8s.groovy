@@ -1,6 +1,6 @@
 
 def url = 'nexus-ci.playpit.by:6566'
-def health(String image){
+def health(String){
 
 }
 def deployFile ( def container_name, 
@@ -8,14 +8,6 @@ def deployFile ( def container_name,
 				def file_name = 'deploy_tomcat.yml', 
 				def app_name = 'helloworld-ws', 
 				def container_port = '8080'){
-
-
-
-
-
-
-
-
 
 sh """
 cat << EOF > ${file_name}
@@ -52,10 +44,9 @@ spec:
           initialDelaySeconds: 3
           periodSeconds: 3
         livenessProbe:
-          exec:
-            command:
-            - grep -q registry-ci.playpit.by/${container_name} /usr/local/tomcat/webapps/helloworld-ws/healthz.html
-
+          httpGet:
+            path: /${app_name}
+            port: ${container_port}
           initialDelaySeconds: 3
           periodSeconds: 3      
 

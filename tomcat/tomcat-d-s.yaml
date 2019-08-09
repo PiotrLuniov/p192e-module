@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tomcat-dep-BUILD_NUMBER
-  namespace: ashamchonak
+  namespace: STUDENT_NAME
   labels:
     app: tomcat-dep-BUILD_NUMBER
 spec:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: tomcat
-        image: "registry-ci.playpit.by/helloworld-ashamchonak:BUILD_NUMBER"
+        image: "registry-ci.playpit.by/helloworld-STUDENT_NAME:BUILD_NUMBER"
         ports:
         - name: tomcatport
           containerPort: 8080
@@ -28,7 +28,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tomcat-service-BUILD_NUMBER
-  namespace: ashamchonak
+  namespace: STUDENT_NAME
 spec:
   selector:
     app: tomcat-app-BUILD_NUMBER

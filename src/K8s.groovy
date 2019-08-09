@@ -99,14 +99,14 @@ kind: Ingress
 metadata:
   name: ${ingress_name}
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /helloworld-ws/\$1 
 
 spec:
   rules:
   - host: hbledai.k8s.playpit.by
     http:
       paths:
-      - path: /
+      - path: /(.*)
         backend:
           serviceName: ${name_service}
           servicePort: ${port}

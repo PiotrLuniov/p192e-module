@@ -38,6 +38,9 @@ spec:
           httpGet:
             path: /${app_name}
             port: ${container_port}
+            exec:
+          command:
+          - 'curl tomcat-svc.hbledai..svc.cluster.local/helloworld-ws | grep -q "helloworld-ws Quickstart"'  
           initialDelaySeconds: 5
           periodSeconds: 5
           successThreshold: 1

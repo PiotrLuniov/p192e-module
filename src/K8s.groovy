@@ -63,7 +63,6 @@ def engine = new groovy.text.GStringTemplateEngine()
 def temp = engine.createTemplate(f).make(binding)
 return temp.toString()*/
 
-package htmltemplates
 
 import ( "deploy_tomcat.template" )
 

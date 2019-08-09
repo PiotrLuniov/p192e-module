@@ -4,7 +4,7 @@ metadata:
   name: tomcat-ingress
 spec:
   rules:
-  - host: apavarnitsyn.k8s.playpit.by
+  - host: apavarnitsyn-app.k8s.playpit.by
     http:
       paths:
       - path: /

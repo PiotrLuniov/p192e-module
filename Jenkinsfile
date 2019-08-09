@@ -1,5 +1,4 @@
 
-/*
 node ('Host-Node') { 
 
 	stage ('Apavarnitsyn-Checkout') {
@@ -108,7 +107,7 @@ EOF
 		}
 }
 }
-*/
+
 node ('k8s-slave') { 
 	stage ('Apavarnitsyn-Checkout') {
     git branch: "apavarnitsyn", url: 'https://github.com/MNT-Lab/p192e-module.git'

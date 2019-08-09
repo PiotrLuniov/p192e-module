@@ -33,25 +33,16 @@ spec:
         image: registry-ci.playpit.by/${container_name}
         ports:
         - containerPort: 8080
-
         readinessProbe:
-        - httpGet:
+          httpGet:
             path: /${app_name}
             port: ${container_port}
-        - exec:
-            command:
-            - 'curl tomcat-svc.hbledai..svc.cluster.local/helloworld-ws | grep -q "helloworld-ws Quickstart"'  
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          successThreshold: 1
-
+          initialDelaySeconds: 3
+          periodSeconds: 3
         livenessProbe:
           httpGet:
-            path: /helloworld-ws
-            port: 8080
-            httpHeaders:
-            - name: Custom-Header
-              value: Error
+            path: /${app_name}
+            port: ${container_port}
           initialDelaySeconds: 3
           periodSeconds: 3      
 
@@ -60,6 +51,17 @@ spec:
 
 """
 return file_name
+}
+def deployFileTemplate ( def container_name, 
+				def creds = 'dockerrepo', 
+				def file_name = 'deploy_tomcat.yml', 
+				def app_name = 'helloworld-ws', 
+				def container_port = '8080'){
+def f = new File('deploy_tomcat.template')
+def engine = new groovy.text.GStringTemplateEngine()
+def template = engine.createTemplate(f).make(binding)
+return template.toString()
+
 }
 def serviceFile(def file_name = 'service_tomcat.yaml',def name_service = 'tomcat-svc',  def port = '8080', def targetPort = '8080'){
 sh """

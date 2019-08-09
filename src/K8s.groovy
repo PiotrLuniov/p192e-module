@@ -5,8 +5,8 @@ def deployFile ( def container_name,
 				def app_name = 'helloworld-ws', 
 				def container_port = '8080'){
 
-	sh """
-	cat << EOF > ${file_name}
+sh """
+cat << EOF > ${file_name}
 apiVersion: extensions/v1beta1 
 kind: Deployment
 metadata:
@@ -43,11 +43,11 @@ spec:
       imagePullSecrets:
       - name: ${creds}
 
-	"""
-	return file_name
+"""
+return file_name
 }
 def serviceFile(def file_name = 'service_tomcat.yaml',def name_service = 'tomcat-svc',  def port = '8080', def targetPort = '8080'){
-	sh """
+sh """
 cat << EOF > ${file_name}
 apiVersion: v1
 kind: Service
@@ -61,7 +61,7 @@ spec:
   selector:
     app: tomcat
 EOF
-	"""
+"""
 return file_name
 }
 def ingressFile ( def file_name = 'ingress_tomcat.yaml', def ingress_name = 'tomcat-ingress', def name_service = 'tomcat-svc', def port = '8080' ) {

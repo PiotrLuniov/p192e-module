@@ -15,6 +15,8 @@ Failed stage: ${stage}
 
 node('Host-Node') {
     stage('Build Project') {
+        git branch: 'abutsko',
+            url: 'https://github.com/MNT-Lab/p192e-module.git'
         // Add git information to help page
         // I want to cute output in web-browser
         try {

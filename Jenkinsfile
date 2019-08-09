@@ -133,7 +133,7 @@ stage("Asking for manual approval") {
                 }
             }
             
-    try {
+try {
 podTemplate(cloud: 'k8s_bledai', 
             containers: [
                 containerTemplate(
@@ -147,9 +147,10 @@ podTemplate(cloud: 'k8s_bledai',
 { 
     try{
     node ('K8S_HBLEDAI'){
-        try{
+        
     def k8s = new K8s()
     stage ('Deployment (rolling update, zero downtime)'){
+        try{
       k8s.kubectl_apply (
         k8s.deployFile( CONTAINER_NAME,  'dockerrepo',  'deploy_tomcat.yml',  'helloworld-ws', 
  '8080'
@@ -166,21 +167,19 @@ podTemplate(cloud: 'k8s_bledai',
           'ingress_tomcat.yaml', 'tomcat-ingress', 'tomcat-svc', '8080'
           )
         )
-    } catch (err) {
+     } 
+         catch (err) {
             echo err.getMessage()
             echo "Error detected, but we will continue."
-        }
-
+            }
         }       
     }
 } catch (err) {
             echo err.getMessage()
             echo "Error detected, but we will continue."
-        }
-    
-}
+        }  
     }
-         catch (err) {
+} catch (err) {
             echo err.getMessage()
             echo "Error detected, but we will continue."
         }

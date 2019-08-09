@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: tomcat
-        image: "registry-ci.playpit.by/helloworld-kkaminski:47"
+        image: "registry-ci.playpit.by/helloworld-kkaminski:75"
         ports:
         - name: tomcatport
           containerPort: 8080

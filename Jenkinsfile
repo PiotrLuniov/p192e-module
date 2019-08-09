@@ -6,6 +6,34 @@ node('Host-Node')
       git branch: 'kshevchenko', url: 'https://github.com/MNT-Lab/p192e-module.git'
 }
   
+stage('BuildNumber page'){
+		sh """
+cat << EOF > helloworld-ws/src/main/webapp/deploy.html
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <title>Build:${BUILD_NUMBER}</title>
+ </head> 
+ <body>
+  <header>
+    <h1>Maintainer "Kirill Shevchenko"</h1>
+  </header>
+  <article>
+    <h2>WELCO!</h2>
+    <p>Build:${BUILD_NUMBER}</p>
+  </article>
+  <footer>
+    Copyright Kirill Shevchenko
+  </footer>
+ </body> 
+</html>
+EOF
+		"""
+	}
+	
+	
+	
   stage('Building code')
 {
 			withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') 
@@ -19,35 +47,33 @@ stage('Sonar scan'){
 }
 }
 }
-}
+	// stage('Testing') {
+	// 	parallel (
+	// 		'pre-integration-test': {
+	// 			withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
+	// 				jdk: 'JDK9', maven: 'Maven 3.6.1') {
+	// 				sh "mvn pre-integration-test -f helloworld-ws/pom.xml"
+	// 			}
 
-	stage('Testing') {
-		parallel (
-			'pre-integration-test': {
-				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
-					jdk: 'JDK9', maven: 'Maven 3.6.1') {
-					sh "mvn pre-integration-test -f helloworld-ws/pom.xml"
-				}
+	// 		},
 
-			},
+	// 		'integration-test': {
+	// 			withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
+	// 				jdk: 'JDK9', maven: 'Maven 3.6.1') {
+	// 				sh "mvn integration-test -f helloworld-ws/pom.xml"
+	// 			}
 
-			'integration-test': {
-				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
-					jdk: 'JDK9', maven: 'Maven 3.6.1') {
-					sh "mvn integration-test -f helloworld-ws/pom.xml"
-				}
+	// 		},
 
-			},
+	// 		'post-integration-test': {
+	// 			withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
+	// 				jdk: 'JDK9', maven: 'Maven 3.6.1') {
+	// 				sh "mvn post-integration-test -f helloworld-ws/pom.xml"
+	// 			}
 
-			'post-integration-test': {
-				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
-					jdk: 'JDK9', maven: 'Maven 3.6.1') {
-					sh "mvn post-integration-test -f helloworld-ws/pom.xml"
-				}
-
-			}
-		)
-	}
+	// 		}
+	// 	)
+	// }
 	
 	
 	

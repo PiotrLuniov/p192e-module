@@ -35,15 +35,35 @@
       fail:
         msg: It is the same content.
       failed_when: new_helloworld.content == old_helloworld.content
-    always:
-    - name: Undeploying a sanity pod
-      shell: |
-        kubectl delete -f sanity.yml
 
-  - name: Deploying a new deployment
-    shell: |
-      kubectl apply -f "{{ item }}"
-    with_items:
-    - deployment.yml
-    - service.yml
-    - ingress.yml
+  - block:
+    - name: Change ingress to santy pod (for zero downtime)
+      replace:
+        path: ingress.yml
+        regexp: abutsko-helloworld
+        replace: abutsko-sanity
+    
+    - name: Change ingress to santy pod
+      shell: |
+        kubectl apply -f ingress.yml
+
+    - name: Deploying a new deployment
+      shell: |
+        kubectl apply -f "{{ item }}"
+      with_items:
+      - deployment.yml
+      - service.yml
+
+    - name: Wait for port 8080 to become open
+      wait_for:
+        timeout: 10
+
+    - name: Return ingress
+      replace:
+        path: ingress.yml
+        regexp: abutsko-sanity
+        replace: abutsko-helloworld
+    
+    - name: Return ingress
+      shell: |
+        kubectl apply -f ingress.yml

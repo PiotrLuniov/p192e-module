@@ -1,9 +1,10 @@
-def sendEmail() {
+def sendEmail(String stage) {
     emailext(
         subject: "[Jenkins] FAILED!",
         body: """
 Job: ${env.JOB_NAME}
 URL: ${env.BUILD_URL}
+Failed stage: ${stage}
         """,
         to: 'anton.butsko@gmail.com',
         from: 'jenkins_is_failed@epam.com'
@@ -16,7 +17,7 @@ node('Host-Node') {
         git branch: 'abutsko',
             url: 'https://github.com/MNT-Lab/p192e-module.git'
         } catch(all) {
-            sendEmail()
+            sendEmail('Checkout GitHub Repository')
         }
     }
 
@@ -37,7 +38,7 @@ node('Host-Node') {
                 sh 'mvn -f helloworld-ws/pom.xml package'
             }
         } catch(all) {
-            sendEmail()
+            sendEmail('Build Project')
         }
     }
     
@@ -53,7 +54,7 @@ node('Host-Node') {
                    -Dsonar.java.binaries=**/target/classes"
             }
         } catch(all) {
-            sendEmail()
+            sendEmail('Sonar Scanning')
         }
     }
 
@@ -76,7 +77,7 @@ node('Host-Node') {
                 )
             }
         } catch(all) {
-            sendEmail()
+            sendEmail('Integration Tests')
         }
     }
     
@@ -95,7 +96,7 @@ node('Host-Node') {
             copyArtifacts projectName: "${triggeredJob}",
                           filter: 'output.txt'
         } catch(all) {
-            sendEmail()
+            sendEmail("Trigger ${triggeredJob}")
         }
     }
 
@@ -133,7 +134,7 @@ node('Host-Node') {
                 }
             )
         } catch(all) {
-            sendEmail()
+            sendEmail('Packaging and Publishing results')
         }
     }
 
@@ -147,7 +148,7 @@ node('Host-Node') {
                 )
             }
         } catch(all) {
-            sendEmail()
+            sendEmail('Asking for manual approval')
         }
      }
 }
@@ -162,7 +163,7 @@ stage('Quality Gate') {
             }
         }
     } catch(all) {
-        sendEmail()
+        sendEmail('Quality Gate')
     }
 }
 
@@ -185,7 +186,7 @@ podTemplate(
                 git branch: 'abutsko',
                     url: 'https://github.com/MNT-Lab/p192e-module.git'
             } catch(all) {
-                sendEmail()
+                sendEmail('Download files of configuration')
             }
         }
 
@@ -206,12 +207,8 @@ podTemplate(
                     extras: '-v'
                 )
             } catch(all) {
-                sendEmail()
+                sendEmail('Deploying a new application version')
             }
         }
     }
-}
-
-node('Host-Node') {
-    sendEmail()
 }

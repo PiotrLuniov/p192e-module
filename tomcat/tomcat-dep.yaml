@@ -28,7 +28,7 @@ spec:
           containerPort: 8080
         readinessProbe:
           httpGet:
-            path: /
+            path: /helloworld-ws/version.html
             httpHeaders: Build:BUILD_NUMBER
             port: 8080
           exec:

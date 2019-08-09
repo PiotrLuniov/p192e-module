@@ -108,7 +108,7 @@ podTemplate(cloud: 'k8s_bledai')
     sh """   
     if [ ! \$(kubectl get secret | grep -q https && echo \$?) ]
     then
-    kubectl create secret docker-registry https --docker-server=https://registry-ci.playpit.by --docker-username=admin --docker-password=admin123
+    kubectl create secret -n hbledai docker-registry https --docker-server=https://registry-ci.playpit.by --docker-username=admin --docker-password=admin123
     fi
     cat << EOF > hello.yaml
 apiVersion: extensions/v1beta1 

@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: tomcat
-        image: ${container_name}
+        image: registry-ci.playpit.by/${container_name}
         ports:
         - containerPort: 8080
 

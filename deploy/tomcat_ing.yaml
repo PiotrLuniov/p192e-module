@@ -1,0 +1,19 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: tomcat-ingress
+  namespace: tomcat
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: nginx
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+spec:
+  rules:
+  - host: kschevchenko.k8s.playpit.by
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: tomcat-service-$LAST_BUILD_NUM
+          servicePort: tomcatsvcport

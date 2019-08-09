@@ -4,14 +4,13 @@ node ('Host-Node') {
 	stage ('Apavarnitsyn-Maven-Build') {
  			
 sh """ 
-
 cat << EOF > helloworld-ws/src/main/webapp/test.html
  <!DOCTYPE html>
 <html>
 <body>
 <h3>Healt page</h3>
 <p>Author: Andrey Pavarnitsyn</p>
-<p>version "${env.BUILD_NUMBER}" </p>
+<p>version \${env.BUILD_NUMBER}</p>
 <p>Build Time: $(date) </p>
 </body>
 </html> 

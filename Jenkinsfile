@@ -61,8 +61,7 @@ node(){
 		}
 	}
 		stage('Deployment') {
-		node('HBLEDAI_kubectl'){
-			sh "kubectl apply --namespace=kkaminski -f k8s-deploy.yml"
+			sh '$HOME/kubectl apply -f k8s-deploy.yml'
 		}
-	}
 }
+

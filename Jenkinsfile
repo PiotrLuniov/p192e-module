@@ -1,4 +1,5 @@
 node('Host-Node'){
+	def
    stage('Preparation') {
       git branch: 'kshevchenko', url: 'https://github.com/MNT-Lab/p192e-module.git'
 }
@@ -8,4 +9,14 @@ node('Host-Node'){
 				sh 'mvn clean package -f helloworld-ws/pom.xml'
 			}
 }
+	stage('Sonar scan') {
+		def sqScannerHome = tool 'SonarQubeScanner'
+		 withSonarQubeEnv() 
+		 { 
+      		sh "${sqScannerHome}/bin/sonar-scanner -X \
+      		-Dsonar.projectKey=helloworld-ws:'kshevchenko' \
+      		-Dsonar.language=java \
+      		-Dsonar.java.binaries=*/target/classes"
+							}
+		}
 }

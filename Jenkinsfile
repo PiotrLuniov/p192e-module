@@ -129,7 +129,7 @@ podTemplate(cloud: 'k8s_bledai',
         )
       k8s.kubectl_apply (
         k8s.serviceFile(
-          file_name:'service_tomcat.yaml',
+          file_name: 'service_tomcat.yaml',
           name_service: 'tomcat-svc', 
           port: '8080', 
           targetPort: '8080'

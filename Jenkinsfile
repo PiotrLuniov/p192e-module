@@ -123,7 +123,14 @@ catch (err) {
 			to: "studen2devops@gmail.com"
 		currentBuild.result = 'FAILURE'
 	}
-
+finally {
+		if(currentBuild.result == 'SUCCESS'){
+			echo "The build ${BUILD_NUMBER} has done successfully"
+			emailext body: "The build ${BUILD_NUMBER} has done successfully", \
+				recipientProviders: [developers()], subject: "Build ${BUILD_NUMBER} success", \
+				to: "studen2devops@gmail.com"
+		}
+}
 	
 	
 	

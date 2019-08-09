@@ -69,7 +69,7 @@ STAGE = 'run-parallel-Testing';
         
     }
 }
-catch {
+catch(all) {
 
 STAGE = 'run-raw-Testing';
 	stage("${STAGE}") {
@@ -116,7 +116,7 @@ STAGE = 'Packaging and Publishing results';
 	// 	}
  // 	}
 }
-catch (all) {
+catch(all) {
         def now = new Date()
         def body = "There are errors in pipeline:\n${err}\nBuild: ${env.BUILD_NUMBER}\nErrors has appeared: ${now}"
         println body

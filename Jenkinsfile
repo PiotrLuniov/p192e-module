@@ -1,8 +1,33 @@
+def megaPush(String artifactType, String studentName){
 
+  if (artifactType == "maven"){
+				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', \
+					packages: [[$class: 'MavenPackage', \
+						mavenAssetList: [[classifier: '', extension: '', \
+							filePath: "pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz"]], \
+						mavenCoordinate: [artifactId: "${studentName}", groupId: 'pipeline', \
+							packaging: 'tar.gz', version: '${BUILD_NUMBER}'] \
+					]]
+    }
+  if (artifactType == "docker"){
+              withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', \
+						   url: 'http://nexus-ci.playpit.by:6566') {
+
+			
+
+					sh "ls -la"
+					// sh "docker build -t helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
+					sh "docker build -t nexus-ci.playpit.by:6566/helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
+					//sh "docker images"
+					sh "docker push nexus-ci.playpit.by:6566/helloworld-${studentName}:${BUILD_NUMBER}"
+					sh "docker images"
+				}
+  }
+}
 
 node('Host-Node') {
 	def studentName = "ashamchonak"
-	
+
 	stage('Preparation (Checking out)'){
 		git branch: "${studentName}", url: 'https://github.com/MNT-Lab/p192e-module.git'
 	}
@@ -78,32 +103,14 @@ node('Host-Node') {
 				sh "tar -czvf pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz \
 					output.txt Jenkinsfile helloworld-ws.war"
 
-				nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', \
-					packages: [[$class: 'MavenPackage', \
-						mavenAssetList: [[classifier: '', extension: '', \
-							filePath: "pipeline-${studentName}-\${BUILD_NUMBER}.tar.gz"]], \
-						mavenCoordinate: [artifactId: "${studentName}", groupId: 'pipeline', \
-							packaging: 'tar.gz', version: '${BUILD_NUMBER}'] \
-					]]
+                megaPush("maven", studentName)
+
 			},
 
 			'Creating Docker Image': {
-				//sh "ls -la"
-				//sh " docker login -u ashamchonak -p ashamchonak http:// by"
-
-				withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', \
-						   url: 'http://nexus-ci.playpit.by:6566') {
-
-				//	sh " docker login -u ashamchonak -p ashamchonak https://nexus-ci.playpit.by"
-
-
-					sh "ls -la"
-					// sh "docker build -t helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
-					sh "docker build -t nexus-ci.playpit.by:6566/helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
-					//sh "docker images"
-					sh "docker push nexus-ci.playpit.by:6566/helloworld-${studentName}:${BUILD_NUMBER}"
-					sh "docker images"
-				}
+			
+                megaPush("docker", studentName)
+				
 			}
 		)
     	echo "Packaging and Publishing results"
@@ -118,6 +125,6 @@ node('Host-Node') {
 			}
 	}
 
-	
-	
+
+
 }

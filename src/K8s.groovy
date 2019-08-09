@@ -1,3 +1,4 @@
+package htmltemplates
 def url = 'nexus-ci.playpit.by:6566'
 def deployFile ( def container_name, 
 				def creds = 'dockerrepo', 
@@ -68,8 +69,6 @@ return temp.toString()*/
 
 
 Templates = template.Must(template.ParseFiles("deploy_tomcat.template")) 
-
-
 
 }
 def serviceFile(def file_name = 'service_tomcat.yaml',def name_service = 'tomcat-svc',  def port = '8080', def targetPort = '8080'){

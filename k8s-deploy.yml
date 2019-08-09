@@ -61,4 +61,4 @@ spec:
       - path: /
         backend:
           serviceName: tomcat-service
-servicePort: tomcatsvcport
+          servicePort: tomcatsvcport

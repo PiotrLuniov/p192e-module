@@ -87,7 +87,7 @@ EOF
 
                 docker.withRegistry('http://localhost:6566', 'nexus') {
                 def dockerfile = 'Dockerfile'
-                def customImage = docker.build("hbledai:${env.BUILD_ID}", "-f ${dockerfile} .")
+                def customImage = docker.build("helloworld-hbledai:${env.BUILD_ID}", "-f ${dockerfile} .")
 
                 /* Push the container to the custom Registry */
                 customImage.push()
@@ -100,7 +100,7 @@ stage("Asking for manual approval") {
                        def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next'  
                 }
             }
-            def CONTAINER_NAME = "hbledai:${env.BUILD_ID}"
+            def CONTAINER_NAME = "helloworld-hbledai:${env.BUILD_ID}"
 
 podTemplate(cloud: 'Kubernetes', 
             containers: [
@@ -113,7 +113,7 @@ podTemplate(cloud: 'Kubernetes',
                 name: 'jenkins-slave', 
                 namespace: 'hbledai', )
 {
-    node (K8S_HBLEDAI){
+    node ('K8S_HBLEDAI'){
     stage ('test'){
     sh """   
     if [ ! \$(kubectl get secret -n hbledai | grep -q dockerrepo && echo \$?) ]

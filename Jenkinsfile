@@ -64,11 +64,11 @@ try {
 	}
 		stage('Deployment') {
 			sh '$HOME/kubectl apply -f k8s-deploy.yml'
-		}
+		}fsdfsd
 	}
 
 	catch (err) {
-	echo "Some errors in pipeline:\n{err}"
+	echo "Some errors in pipeline:${err}"
  }
  
  	finally {

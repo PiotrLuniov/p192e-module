@@ -69,11 +69,11 @@ try {
 	echo "Some errors in pipeline:\n{err}"
  }
  
- finally {
- 	echo "Pipeline is done"
+ 	finally {
+ 		echo "Pipeline is done"
 	}
 
-}
+	}
 }
 
 

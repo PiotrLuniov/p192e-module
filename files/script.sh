@@ -8,7 +8,7 @@ echo "kubectl switch from $1 to $2"
     echo "Running tests"
     COUNT=0
     TEST_KUBE=$(kubectl get pods --namespace=apavarnitsyn)
-    if [ $(echo "$TEST_KUBE" | grep 'tomcat-$2' | grep -c "Running") -gt 0 ]
+    if [ $(echo "$TEST_KUBE" | grep "tomcat-$2" | grep -c "Running") -gt 0 ]
     	then
     		echo "Container is running"
     		COUNT=$(( $COUNT+1 ))
@@ -35,12 +35,12 @@ echo "kubectl switch from $1 to $2"
    	fi
 
     TEST_TEST=$(curl tomcat-$2-svc.apavarnitsyn.svc.cluster.local:8080/hello/test.html)
-    if [ $(echo "TEST_TEST" | grep -c "$3") -gt 0 ]
+    if [ $(echo "TEST_TEST" | grep -c "147") -gt 0 ]
     	then
     		echo "Page is ready"
     		COUNT=$(( $COUNT+1 ))
     	else
-    		echo "ALARM! Container is crashed"
+    		echo "ALARM! Health page is outdated"
     fi
 
     if [ $COUNT -eq 4 ]   

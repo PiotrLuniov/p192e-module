@@ -7,7 +7,7 @@
   - block:
     - name: Deploying a sanity pod
       shell: |
-        kubectl apply -f config/sanity.yml
+        kubectl apply -f sanity.yml
 
     - name: Wait for port 8080 to become open
       wait_for:
@@ -26,12 +26,12 @@
     always:
     - name: Undeploying a sanity pod
       shell: |
-        kubectl delete -f config/sanity.yml
+        kubectl delete -f sanity.yml
 
   - name: Deploying a new deployment
     shell: |
       kubectl apply -f "{{ item }}"
     with_items:
-    - config/deployment.yml
-    - config/service.yml
-    - config/ingress.yml
+    - deployment.yml
+    - service.yml
+    - ingress.yml

@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: tomcat
-        image: "registry-ci.playpit.by/helloworld-STUDENT_NAME:100" #BUILD_NUMBER"
+        image: "registry-ci.playpit.by/helloworld-STUDENT_NAME:BUILD_NUMBER"
         ports:
         - name: tomcatport
           containerPort: 8080
@@ -31,13 +31,9 @@ spec:
             path: /helloworld-ws/version.html
             httpHeaders:
               - name: Host
-                value: "Build:BUILD_NUMBER"
+                value: "Build:100" #BUILD_NUMBER"
             port: 8080
           exec:
-#            command:
-#            - /bin/sh
-#            - -c
-#            - if [$(/usr/bin/curl -s localhost:8080/helloworld-ws/version.html | grep "Build:BUILD_NUMBER")]; then echo ok; else exit 1; fi;
           initialDelaySeconds: 30
           periodSeconds: 5
           successThreshold: 1

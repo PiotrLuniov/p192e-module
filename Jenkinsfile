@@ -81,9 +81,9 @@ def test(command) {
     	withMaven(
 	        maven: "${MAVEN_VERSION}",
 	        globalMavenSettingsConfig: "${MAVEN_CONFIG}") {
-    			dir('helloworld-ws') {
-	      			sh "mvn ${command}"
-	      	}
+    			// dir('helloworld-ws') {
+	      			sh "cd helloworld-ws && mvn ${command}"
+	      	//}
 		}
 	}
 	catch(all) {

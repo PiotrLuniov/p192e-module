@@ -27,12 +27,7 @@ spec:
             command:
             - /bin/sh
             - -c
-            - if [ $(/usr/bin/curl -s localhost:8080/helloworld-ws/test.html | head -n1 | cut -d' ' -f2 ) -ne '_buildNumber_' ]; then exit 1; fi;
-          # - "v=$( curl -s localhost:8080/helloworld-ws/test.html|head -n1|cut -d' ' -f2 );if [ $v -ne '_buildNumber_' ]; then exit 1; fi"
-          
-          # httpGet:
-          #   path: /helloworld-ws
-          #   port: tom-port
+            - if [ $(/usr/bin/curl -s localhost:8080/helloworld-ws/test.html | head -n1 | cut -d' ' -f2 ) -ne '_COMMIT_' ]; then exit 1; fi;
           initialDelaySeconds: 60
           periodSeconds: 5
           successThreshold: 2

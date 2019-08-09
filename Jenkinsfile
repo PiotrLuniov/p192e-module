@@ -140,7 +140,7 @@ Failed stage: "${STAGE}"
 }
 }
 
-node () { 
+node ('Host-Node') { 
 
 STAGE = 'Apavarnitsyn-Checkout';
 	stage ("${STAGE}") {

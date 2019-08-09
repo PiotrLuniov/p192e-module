@@ -1,13 +1,58 @@
 
 def url = 'nexus-ci.playpit.by:6566'
-def health(String){
-
+def health(String image){
+	sh """
+cat << EOF > test.yaml
+apiVersion: extensions/v1beta1 
+kind: Deployment
+metadata:
+  name: test_tomcat
+  labels:
+    app: test-tomcat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-tomcat
+  template:
+    metadata:
+      labels:
+        app: test-tomcat
+    spec:
+      containers:
+      - name: test-tomcat
+        image: registry-ci.playpit.by/${image}
+        ports:
+        - containerPort: 8080   
+      imagePullSecrets:
+      - name: ${creds}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-tomcat-svc
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: test-tomcat
+EOF
+kubectl apply -f test.yaml
+for i in 1 2 3 4 5
+    do
+        curl test-tomcat-svc.hbledai.svc.cluster.local:8080/helloworld-ws/healthz.html 
+        sleep 5s
+    done
+"""
 }
 def deployFile ( def container_name, 
 				def creds = 'dockerrepo', 
 				def file_name = 'deploy_tomcat.yml', 
 				def app_name = 'helloworld-ws', 
 				def container_port = '8080'){
+health (container_name)	
 
 sh """
 cat << EOF > ${file_name}
@@ -52,7 +97,7 @@ spec:
 
       imagePullSecrets:
       - name: ${creds}
-
+EOF
 """
 return file_name
 }

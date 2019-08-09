@@ -89,11 +89,11 @@ node ('Host-Node'){
                             ]
                         ]
                     )
-                }}
-                 catch (err) {
+                } catch (err) {
             echo err.getMessage()
             echo "Error detected, but we will continue."
         }
+                
     
 },
             'Creating Docker Image': {

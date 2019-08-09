@@ -19,3 +19,15 @@ kubectl label namespace kube-system certmanager.k8s.io/disable-validation="true"
 helm repo add jetstack https://charts.jetstack.io
 helm install --name cert-manager --namespace kube-system jetstack/cert-manager --version v0.8.0
 kubectl apply -f cert/staging_issuer.yaml
+
+
+#Get kubectl
+mkdir -p $HOME/.kube
+cat << EOF > $HOME/.kube/config
+-------------------------------------
+content file: k8s-su-super-admin-conf
+-------------------------------------
+EOF
+curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+cp kubectl $HOME

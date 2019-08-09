@@ -1,4 +1,5 @@
 node {
+  try {
     def student = 'pluniov'
     stage('Preparation') {
      checkout scm
@@ -71,5 +72,12 @@ node {
     stage('Deployment') {
       sh '$HOME/kubectl apply -f config/tomcat-k8s-deployment.yml'
     }
+  }
+  catch (err) {
+    echo "Errors in pipeline:\n${err}"
+  }
+  finally {
+    echo "Pipeline is finished"
+  }
 
 }

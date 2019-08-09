@@ -1,6 +1,6 @@
 node {
    stage('Preparation') {
-      git branch: 'akuznetsova', url: 'https://github.com/MNT-Lab/build-t00ls.git'
+      git branch: 'kshevchenko', url: 'https://github.com/MNT-Lab/build-t00ls.git'
 
 }
 

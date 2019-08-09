@@ -7,18 +7,18 @@ try {
 	}
 
 	stage('Test page'){
-		sh """ 
-		cat << EOF > helloworld-ws/src/main/webapp/test.html
-		<!DOCTYPE html>
-		<html>
-		<body>
-		<h3>custom page</h3>
-		<p>version \${BUILD_NUMBER}</p>
-		<p>Author: kkaminski</p>
-		</body>
-		</html> 
-		EOF
-		"""
+sh """ 
+cat << EOF > helloworld-ws/src/main/webapp/test.html
+<!DOCTYPE html>
+<html>
+<body>
+<h3>custom page</h3>
+<p>version \${BUILD_NUMBER}</p>
+<p>Author: kkaminski</p>
+</body>
+</html> 
+EOF
+"""
 	}
 	stage('Building code'){
 		

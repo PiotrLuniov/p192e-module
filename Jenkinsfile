@@ -58,5 +58,14 @@ node('Host-Node') {
 		docker push registry-ci.playpit.by/helloworld-iyaruk:${BUILD_NUMBER}
 		'''
 		}
+
+		stage('Manual approval'){
+			timeout(time: 1, unit: 'MINUTES') {
+				input(id: "Deployment artifact", \
+				      message: "Do you mind to deploy helloworld-iyaruk:${env.BUILD_NUMBER}?", \
+				      ok: "Yes, I do.")
+			}
+	}
+	
 	}
 }

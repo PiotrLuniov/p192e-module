@@ -16,13 +16,24 @@
         delay: 10
         timeout: 80
 
-    - name: Santiy checking
+    - name: Get old page
+      uri:
+        url: http://abutsko-helloworld.abutsko.svc.cluster.local:8080/helloworld-ws
+        status_code: 200
+        return_content: yes
+      register: old_helloworld
+
+    - name: Get new page
       uri:
         url: http://abutsko-sanity.abutsko.svc.cluster.local:8080/helloworld-ws
         status_code: 200
         return_content: yes
-      register: helloworld
-      failed_when: "'PLACE_FOR_GIT_HASH' not in helloworld.content"
+      register: new_helloworld
+      #register: helloworld
+      #failed_when: "'PLACE_FOR_GIT_HASH' not in helloworld.content"
+      fail:
+        msg: It is the same content.
+      failed_when: "new_helloworld in old_helloworld"
     always:
     - name: Undeploying a sanity pod
       shell: |

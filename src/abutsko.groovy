@@ -1,2 +1,6 @@
-def pushDockerImage(String name) {
+def pushDockerImage(String nameImage, String nameRepo, String credentialId, String Dockerfile) {
+    docker.withRegistry("https://${nameRepo}", "${credentialId}") {
+        def appImage = docker.build("${nameRepo}/${nameImage}", "-f ${Dockerfile} .")
+        appImage.push()
+    }
 }

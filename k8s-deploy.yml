@@ -45,7 +45,7 @@ metadata:
   name: tomcat-ingress
   namespace: kkaminski
   annotations:
-    ingress.kubernetes.io/rewrite-target: /helloworld-ws
+    ingress.kubernetes.io/rewrite-target: /helloworld-ws/
     kubernetes.io/ingress.class: nginx
     certmanager.k8s.io/cluster-issuer: letsencrypt-prod
 spec:

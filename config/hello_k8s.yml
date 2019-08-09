@@ -15,8 +15,6 @@ spec:
       labels:
         app: tomcat
     spec:
-      imagePullSecrets:
-      - name: my-secret
       containers:
       - name: tomcat
         image: registry-ci.playpit.by/helloworld-_studentName_:_buildNumber_

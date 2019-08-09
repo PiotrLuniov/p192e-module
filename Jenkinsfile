@@ -126,6 +126,10 @@ ls -la
 echo 2
 sed -i "s/STUDENT_NAME/${studentName}/g" tomcat/tomcat-ns.yaml
 echo 3
+echo $HOME
+ls -la $HOME
+
+echo 32
 $HOME/kubectl apply -f tomcat/tomcat-ns.yaml"
 echo 4
 cat 	tomcat/tomcat-ns.yaml

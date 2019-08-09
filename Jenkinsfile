@@ -131,14 +131,16 @@ EOF
                 }
 	
   		stage ('9: Sanity check') {
-      			def response_value = 'HelloWorldService?wsdl'
-       			try {
-            			sh "curl -m 10 http://hkanonik-app.k8s.playpit.by/ | grep ${response_value}"
-            			return true
-      			} catch (resp) {
-        			echo "${response_value} NOT FOUND!"
-        			currentBuild.result = 'FAILURE'
-        		}
+			timeout(time: 20, unit: 'SECONDS') {
+      				def response_value = 'HelloWorldService?wsdl'
+       				try {
+            				sh "curl -m 10 http://hkanonik-app.k8s.playpit.by/ | grep ${response_value}"
+            				return true
+      				} catch (resp) {
+        				echo "${response_value} NOT FOUND!"
+        				currentBuild.result = 'FAILURE'
+        			}
+			}
     		} 
 
 		/*                

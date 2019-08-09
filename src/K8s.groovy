@@ -36,7 +36,7 @@ spec:
         readinessProbe:
           httpGet:
             path: /${app_name}
-            port: ${container_name}
+            port: ${container_port}
           initialDelaySeconds: 5
           periodSeconds: 5
           successThreshold: 1

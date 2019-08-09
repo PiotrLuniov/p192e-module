@@ -17,13 +17,12 @@ spec:
     spec:
       containers:
       - name: tomcat
-        image: "registry-ci.playpit.by/helloworld-kkaminski:40"
+        image: "registry-ci.playpit.by/helloworld-kkaminski:47"
         ports:
         - name: tomcatport
           containerPort: 8080
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -31,7 +30,7 @@ metadata:
   namespace: kkaminski
 spec:
   selector:
-    app: tomcat-app
+    app: tomcat
   type: ClusterIP
   ports:
   - name: tomcatsvcport

@@ -131,19 +131,19 @@ node('Host-Node') {
         }
     }
 
-    stage('Asking for manual approval') {
-        try {
-            timeout(time: 5, unit: 'MINUTES') {
-                input(
-                    id: 'Deployment',
-                    message: 'Do you want to deploy Docker image?',
-                    ok: 'Deploy'
-                )
-            }
-        } catch(all) {
-            sendEmail('Asking for manual approval')
-        }
-     }
+//    stage('Asking for manual approval') {
+//        try {
+//            timeout(time: 5, unit: 'MINUTES') {
+//                input(
+//                    id: 'Deployment',
+//                    message: 'Do you want to deploy Docker image?',
+//                    ok: 'Deploy'
+//                )
+//            }
+//        } catch(all) {
+//            sendEmail('Asking for manual approval')
+//        }
+//     }
 }
 
 stage('Quality Gate') {

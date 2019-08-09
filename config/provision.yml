@@ -1,0 +1,37 @@
+- name: Deploying a new application version
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+  - block:
+    - name: Deploying a sanity pod
+      shell: |
+        kubectl apply -f config/sanity.yml
+
+    - name: Wait for port 8080 to become open
+      wait_for:
+        host: abutsko-sanity.abutsko.svc.cluster.local
+        port: 8080
+        delay: 10
+        timeout: 80
+
+    - name: Santiy checking
+      uri:
+        url: http://abutsko-sanity.abutsko.svc.cluster.local:8080/helloworld-ws
+        status_code: 200
+        return_content: yes
+      register: helloworld-ws
+      failed_when: "'PLACE_FOR_GIT_HASH' not in tomcat.content"
+    always:
+    - name: Undeploying a sanity pod
+      shell: |
+        kubectl delete -f config/sanity.yml
+
+  - name: Deploying a new deployment
+    shell: |
+      kubectl apply -f "{{ item }}"
+    with_items:
+    - config/deployment.yml
+    - config/service.yml
+    - config/ingress.yml

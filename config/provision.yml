@@ -34,7 +34,7 @@
     - name: Testing new content
       fail:
         msg: It is the same content.
-      failed_when: "new_helloworld in old_helloworld"
+      failed_when: "{{ new_helloworld }}" == "{{ old_helloworld }}"
     always:
     - name: Undeploying a sanity pod
       shell: |

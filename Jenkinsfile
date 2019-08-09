@@ -21,17 +21,17 @@ node('Host-Node') {
         }
     }
     
-    stage('Sonar Scanning') {
-        def scannerHome = tool 'SonarQubeScanner';
-        withSonarQubeEnv() {
-            sh "${scannerHome}/bin/sonar-scanner \
-               -Dsonar.projectName=abutsko-helloworld \
-               -Dsonar.projectKey=abutsko-helloworld \
-               -Dsonar.language=java \
-               -Dsonar.sources=helloworld-ws/src \
-               -Dsonar.java.binaries=**/target/classes"
-        }
-    }
+    //stage('Sonar Scanning') {
+    //    def scannerHome = tool 'SonarQubeScanner';
+    //    withSonarQubeEnv() {
+    //        sh "${scannerHome}/bin/sonar-scanner \
+    //           -Dsonar.projectName=abutsko-helloworld \
+    //           -Dsonar.projectKey=abutsko-helloworld \
+    //           -Dsonar.language=java \
+    //           -Dsonar.sources=helloworld-ws/src \
+    //           -Dsonar.java.binaries=**/target/classes"
+    //    }
+    //}
 
     //stage('Integration Tests') {
     //    withMaven(
@@ -112,15 +112,15 @@ node('Host-Node') {
     // }
 }
 
-stage('Quality Gate') {
-    timeout(time: 1, unit: 'HOURS') {
-        def qualityGate = waitForQualityGate()
-
-        if (qualityGate.status != 'OK') {
-            error "Pipeline aborted due to quality gate failure: ${qualityGate.status}"
-        }
-    }
-}
+//stage('Quality Gate') {
+//    timeout(time: 1, unit: 'HOURS') {
+//        def qualityGate = waitForQualityGate()
+//
+//        if (qualityGate.status != 'OK') {
+//            error "Pipeline aborted due to quality gate failure: ${qualityGate.status}"
+//        }
+//    }
+//}
 
 podTemplate(
     name: 'abutsko',
@@ -128,7 +128,7 @@ podTemplate(
     containers: [
         containerTemplate(
             name: 'jnlp',
-            image: 'dranser/jenkins-jnlp-kubectl',
+            image: 'dranser/jenkins-jnlp-kubectl-ansible',
             ttyEnabled: true
         )
     ],
@@ -141,14 +141,19 @@ podTemplate(
                 url: 'https://github.com/MNT-Lab/p192e-module.git'
         }
 
-        stage('Check kubectl') {
+        stage('Sanity Test') {
+            // set git hash for sanity check
+            def gitHash = sh "git log | head -n 1 | awk '{print \$NF}'"
+            sh "sed -i 's/PLACE_FOR_GIT_HASH/${gitHash}/' config/provision.yml"
+
+            // set a new version for image
             sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/sanity.yml"
-            sh 'kubectl apply -f config/sanity.html'
-            sh 'wget -qO - abutsko-sanity.abutsko.svc.cluster.local:8080/helloworld-ws'
-            sh 'kubectl delete -f config/sanity.html'
-            //sh 'kubectl apply -f config/deployment.yml'
-            //sh 'kubectl apply -f config/service.yml'
-            //sh 'kubectl apply -f config/ingress.yml'
+            sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/deployment.yml"
+
+            ansiblePlaybook(
+                playbook: 'config/provision.yml',
+                extras: '-v'
+            )
         }
     }
 }

@@ -132,7 +132,7 @@ echo "Deployment  END"
 		"""
 	}
 
-	catch (err) {
+	catch(err) {
 		println "The build ${BUILD_NUMBER} has failed with error:\n${err}"
 		emailext body: "The build ${BUILD_NUMBER} has failed with error:\n${err}", \
 			recipientProviders: [developers()], subject: "Build ${BUILD_NUMBER} failed", \

@@ -1,3 +1,15 @@
+def sendEmail() {
+    emailext(
+        subject: "[Jenkins] FAILED!"
+        body: """
+Job: ${env.JOB_NAME}
+URL: ${env.BUILD_URL}
+        """
+        to: 'anton.butsko@gmail.com'
+        from: 'jenkins_is_failed@epam.com'
+    )
+}
+
 node('Host-Node') {
     stage('Checkout GitHub Repository') {
         git branch: 'abutsko',
@@ -158,4 +170,8 @@ podTemplate(
             )
         }
     }
+}
+
+node('Host-Node') {
+    sendEmail()
 }

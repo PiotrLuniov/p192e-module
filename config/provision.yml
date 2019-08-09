@@ -22,7 +22,7 @@
         status_code: 200
         return_content: yes
       register: helloworld-ws
-      failed_when: "'PLACE_FOR_GIT_HASH' not in tomcat.content"
+      failed_when: "'PLACE_FOR_GIT_HASH' not in helloworld-ws.content"
     always:
     - name: Undeploying a sanity pod
       shell: |

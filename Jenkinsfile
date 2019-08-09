@@ -40,7 +40,7 @@ EOF
        '-Dsonar.projectKey=apavarnitsyn ' +
        '-Dsonar.language=java ' +
        '-Dsonar.sources=helloworld-ws/src/main/java  '+
-       '-Dsonar.java.binaries=**\/target/classes'
+       '-Dsonar.java.binaries=**/target/classes'
     }
   } 
 

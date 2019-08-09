@@ -62,8 +62,9 @@ node ('Host-Node'){
     stage('Packaging and Publishing results'){
        
          parallel(
-             try{ 
+             
             'Archiving artifact':{
+                try{ 
                 copyArtifacts(projectName: 'MNT-LAB-hbledai-child-1-build-job')
         sh '''
         tar xzvf hbledai_dsl_script.tar.gz
@@ -95,7 +96,7 @@ node ('Host-Node'){
         }
     }
 },
-            'Creating Docker Image':{
+            'Creating Docker Image': {
                 try{
                        sh '''
 cat << EOF > $WORKSPACE/Dockerfile

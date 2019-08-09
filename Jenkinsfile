@@ -21,36 +21,36 @@ node('Host-Node') {
         }
     }
     
-    //stage('Sonar Scanning') {
-    //    def scannerHome = tool 'SonarQubeScanner';
-    //    withSonarQubeEnv() {
-    //        sh "${scannerHome}/bin/sonar-scanner \
-    //           -Dsonar.projectName=abutsko-helloworld \
-    //           -Dsonar.projectKey=abutsko-helloworld \
-    //           -Dsonar.language=java \
-    //           -Dsonar.sources=helloworld-ws/src \
-    //           -Dsonar.java.binaries=**/target/classes"
-    //    }
-    //}
+    stage('Sonar Scanning') {
+        def scannerHome = tool 'SonarQubeScanner';
+        withSonarQubeEnv() {
+            sh "${scannerHome}/bin/sonar-scanner \
+               -Dsonar.projectName=abutsko-helloworld \
+               -Dsonar.projectKey=abutsko-helloworld \
+               -Dsonar.language=java \
+               -Dsonar.sources=helloworld-ws/src \
+               -Dsonar.java.binaries=**/target/classes"
+        }
+    }
 
-    //stage('Integration Tests') {
-    //    withMaven(
-    //        maven: 'Maven 3.6.1',
-    //        mavenSettingsConfig: 'Maven2-Nexus-Repos'
-    //    ) {
-    //        parallel (
-    //            'Pre-Integration Test': {
-    //                sh 'mvn -f helloworld-ws/pom.xml pre-integration-test'
-    //            },
-    //            'Integration Test': {
-    //                sh 'mvn -f helloworld-ws/pom.xml integration-test'
-    //            },
-    //            'Post-Integration Test': {
-    //                sh 'mvn -f helloworld-ws/pom.xml post-integration-test'
-    //            }
-    //        )
-    //    }
-    //}
+    stage('Integration Tests') {
+        withMaven(
+            maven: 'Maven 3.6.1',
+            mavenSettingsConfig: 'Maven2-Nexus-Repos'
+        ) {
+            parallel (
+                'Pre-Integration Test': {
+                    echo 'mvn -f helloworld-ws/pom.xml pre-integration-test'
+                },
+                'Integration Test': {
+                    echo 'mvn -f helloworld-ws/pom.xml integration-test'
+                },
+                'Post-Integration Test': {
+                    echo 'mvn -f helloworld-ws/pom.xml post-integration-test'
+                }
+            )
+        }
+    }
     
     def triggeredJob = 'MNTLAB-abutsko-child1-build-job'
     stage("Trigger ${triggeredJob}") {
@@ -101,26 +101,26 @@ node('Host-Node') {
         )
     }
 
-    // stage('Asking for manual approval') {
-    //     timeout(time: 5, unit: 'MINUTES') {
-    //         input(
-    //             id: 'Deployment',
-    //             message: 'Do you want to deploy Docker image?',
-    //             ok: 'Deploy'
-    //         )
-    //     }
-    // }
+     stage('Asking for manual approval') {
+         timeout(time: 5, unit: 'MINUTES') {
+             input(
+                 id: 'Deployment',
+                 message: 'Do you want to deploy Docker image?',
+                 ok: 'Deploy'
+             )
+         }
+     }
 }
 
-//stage('Quality Gate') {
-//    timeout(time: 1, unit: 'HOURS') {
-//        def qualityGate = waitForQualityGate()
-//
-//        if (qualityGate.status != 'OK') {
-//            error "Pipeline aborted due to quality gate failure: ${qualityGate.status}"
-//        }
-//    }
-//}
+stage('Quality Gate') {
+    timeout(time: 1, unit: 'HOURS') {
+        def qualityGate = waitForQualityGate()
+
+        if (qualityGate.status != 'OK') {
+            error "Pipeline aborted due to quality gate failure: ${qualityGate.status}"
+        }
+    }
+}
 
 podTemplate(
     name: 'abutsko',
@@ -146,8 +146,6 @@ podTemplate(
             def gitHash = sh(returnStdout: true,
                              script: 'git log -n 1 --pretty=format:"%H"'.trim()
                           )
-            //sh "sed -i 's/PLACE_FOR_GIT_HASH/${gitHash}/' config/provision.yml"
-            // special error
             sh "sed -i 's/PLACE_FOR_GIT_HASH/${gitHash}/' config/provision.yml"
 
             // set a new version for image

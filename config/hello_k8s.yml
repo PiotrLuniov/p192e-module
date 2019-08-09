@@ -39,7 +39,7 @@ spec:
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
-          sucessThreshold: 2
+          successThreshold: 2
 
         ports:
         - name: tom-port

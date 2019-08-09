@@ -1,4 +1,4 @@
-package htmltemplates
+
 def url = 'nexus-ci.playpit.by:6566'
 def deployFile ( def container_name, 
 				def creds = 'dockerrepo', 

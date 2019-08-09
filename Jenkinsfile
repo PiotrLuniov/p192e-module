@@ -9,11 +9,11 @@ node('Host-Node') {
 	}
 
 	stage('BuildNumber page'){
-		sh "
+		sh """
 cat << EOF > helloworld-ws/src/main/webapp/version.html
 Build:${BUILD_NUMBER}
 EOF
-		"
+		"""
 	}
 	    
 	stage('Building code'){

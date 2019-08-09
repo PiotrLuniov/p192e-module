@@ -34,7 +34,7 @@ spec:
             command:
             - /bin/sh
             - -c
-            - if [$(/usr/bin/curl -s localhost:8080/helloworld-ws/version.html | grep "Build:BUILD_NUMBER")]; else exit 1; fi
+            - if [$(/usr/bin/curl -s localhost:8080/helloworld-ws/version.html | grep "Build:BUILD_NUMBER")]; then echo ok; else exit 1; fi;
           initialDelaySeconds: 30
           periodSeconds: 5
           successThreshold: 1

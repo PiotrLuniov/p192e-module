@@ -118,82 +118,32 @@ podTemplate(cloud: 'k8s_bledai',
     node ('K8S_HBLEDAI'){
     def k8s = new K8s()
     stage ('test'){
-     k8s.kubectl_apply (k8s.deployFile(container_name: CONTAINER_NAME,
-        creds: 'dockerrepo', 
-        file_name: 'deploy_tomcat.yml', 
-        app_name: 'helloworld-ws', 
-        container_port: '8080'))
-    /*sh """   
-    cat << EOF > hello.yaml
-apiVersion: extensions/v1beta1 
-kind: Deployment
-metadata:
-  name: tomcat
-  labels:
-    app: tomcat
-spec:
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 0
-      maxSurge: 1
-  replicas: 1
-  selector:
-    matchLabels:
-      app: tomcat
-  template:
-    metadata:
-      labels:
-        app: tomcat
-    spec:
-      containers:
-      - name: tomcat
-        image: registry-ci.playpit.by/${CONTAINER_NAME}
-        ports:
-        - containerPort: 8080
-        readinessProbe:
-          httpGet:
-            path: /helloworld-ws
-            port: 8080
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          successThreshold: 1        
-      imagePullSecrets:
-      - name: dockerrepo
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: tomcat-svc
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 8080
-      targetPort: 8080
-      name: tomcat-svc-p
-  selector:
-    app: tomcat
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: tomcat-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-
-spec:
-  rules:
-  - host: hbledai.k8s.playpit.by
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: tomcat-svc
-          servicePort: 8080
-EOF
-kubectl apply -f hello.yaml
-    """*/
+      k8s.kubectl_apply (
+        k8s.deployFile(
+          container_name: CONTAINER_NAME,
+          creds: 'dockerrepo', 
+          file_name: 'deploy_tomcat.yml', 
+          app_name: 'helloworld-ws', 
+          container_port: '8080'
+          )
+        )
+      k8s.kubectl_apply (
+        k8s.serviceFile(
+          file_name:'service_tomcat.yaml',
+          name_service: 'tomcat-svc', 
+          port: '8080', 
+          targetPort: '8080'
+          )
+        )
+      k8s.kubectl_apply (
+        k8s.ingressFile(
+          file_name: 'ingress_tomcat.yaml', 
+          ingress_name: 'tomcat-ingress', 
+          name_service: 'tomcat-svc', 
+          port: '8080'
+          )
+        )
+   
 
         }       
     }

@@ -174,14 +174,14 @@ podTemplate(
     namespace: 'abutsko'
 ) {
     node(POD_LABEL) {
-//        stage('Download files of configuration') {
-//            try {
-//                git branch: 'abutsko',
-//                    url: 'https://github.com/MNT-Lab/p192e-module.git'
-//            } catch(all) {
-//                sendEmail('Download files of configuration')
-//            }
-//        }
+        stage('Download files of configuration') {
+            try {
+                git branch: 'abutsko',
+                    url: 'https://github.com/MNT-Lab/p192e-module.git'
+            } catch(all) {
+                sendEmail('Download files of configuration')
+            }
+        }
 
         stage('Deploying a new application version') {
             try {

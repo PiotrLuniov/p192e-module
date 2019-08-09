@@ -99,9 +99,9 @@ node('Host-Node') {
 
 					sh "ls -la"
 					// sh "docker build -t helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
-					sh "docker build -t nexus-ci.playpit.by/helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
+					sh "docker build -t nexus-ci.playpit.by:6566/helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile ."
 					//sh "docker images"
-					sh "docker push nexus-ci.playpit.by/helloworld-${studentName}:${BUILD_NUMBER}"
+					sh "docker push nexus-ci.playpit.by:6566/helloworld-${studentName}:${BUILD_NUMBER}"
 					sh "docker images"
 				}
 			}

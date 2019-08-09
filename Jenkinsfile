@@ -121,9 +121,13 @@ node('Host-Node') {
 	stage('Deployment'){
 		
 		sh """
+
 ls -la
+echo 2
 sed -i "s/STUDENT_NAME/${studentName}/g" tomcat/tomcat-ns.yaml
+echo 3
 $HOME/kubectl apply -f tomcat/tomcat-ns.yaml"
+echo 4
 cat 	tomcat/tomcat-ns.yaml
 
 sed "s/BUILD_NUMBER/${BUILD_NUMBER}/g" tomcat/tomcat-d-s.yaml > tomcat-d-s-${BUILD_NUMBER}.yaml

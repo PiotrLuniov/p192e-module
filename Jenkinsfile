@@ -124,6 +124,11 @@ metadata:
   labels:
     app: tomcat
 spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
   replicas: 1
   selector:
     matchLabels:
@@ -137,6 +142,13 @@ spec:
       - name: tomcat
         image: registry-ci.playpit.by/${CONTAINER_NAME}
         ports:
+        readinessProbe:
+          httpGet:
+            path: /helloworld-ws
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
         - containerPort: 8080
       imagePullSecrets:
       - name: dockerrepo

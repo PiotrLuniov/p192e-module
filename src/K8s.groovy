@@ -57,11 +57,21 @@ def deployFileTemplate ( def container_name,
 				def file_name = 'deploy_tomcat.yml', 
 				def app_name = 'helloworld-ws', 
 				def container_port = '8080'){
-def f = new File('deploy_tomcat.template')
+
+/*def f = new File('deploy_tomcat.template')
 def engine = new groovy.text.GStringTemplateEngine()
 def temp = engine.createTemplate(f).make(binding)
-return temp.toString()
+return temp.toString()*/
 
+package htmltemplates
+
+import ( "deploy_tomcat.template" )
+
+
+Templates = template.Must(template.ParseFiles("deploy_tomcat.template")) 
+
+
+}
 }
 def serviceFile(def file_name = 'service_tomcat.yaml',def name_service = 'tomcat-svc',  def port = '8080', def targetPort = '8080'){
 sh """

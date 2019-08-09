@@ -116,35 +116,7 @@ stage('Asking for manual approval'){
 	
 	
 	
-catch (err) {
-		println "The build ${BUILD_NUMBER} has failed with error:\n${err}"
-		emailext body: "The build ${BUILD_NUMBER} has failed with error:\n${err}", \
-			recipientProviders: [developers()], subject: "Build ${BUILD_NUMBER} failed", \
-			to: "workaccmsq@gmail.com"
-		currentBuild.result = 'FAILURE'
-	}
-
-	finally {
-		if(currentBuild.result == 'SUCCESS'){
-			echo "The build ${BUILD_NUMBER} has done successfully"
-			emailext body: "The build ${BUILD_NUMBER} has done successfully", \
-				recipientProviders: [developers()], subject: "Build ${BUILD_NUMBER} success", \
-				to: "workaccmsq@gmail.com"
-		}
-}	
-}	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-}	
 	
 	
 }

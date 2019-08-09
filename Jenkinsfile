@@ -122,16 +122,16 @@ node('Host-Node') {
                     )
                 },
                 'Building And Pushing Docker Image': {
-//                    docker.withRegistry('http://registry-ci.playpit.by', 'nexus') {
-//                        def appImage = docker.build("registry-ci.playpit.by/helloworld-abutsko:${env.BUILD_NUMBER}", '-f config/Dockerfile .')
-//                        appImage.push()
-//                    }
-                    abutsko.pushDockerImage(
-                        nameImage: "helloworld-abutsko:${env.BUILD_NUMBER}",
-                        nameRepo: 'registry-ci.playpit.by',
-                        credentialId: 'nexus',
-                        Dockerfile: 'config/Dockerfile'
-                    )
+                    docker.withRegistry('http://registry-ci.playpit.by', 'nexus') {
+                        def appImage = docker.build("registry-ci.playpit.by/helloworld-abutsko:${env.BUILD_NUMBER}", '-f config/Dockerfile .')
+                        appImage.push()
+                    }
+//                    abutsko.pushDockerImage(
+//                        nameImage: "helloworld-abutsko:${env.BUILD_NUMBER}",
+//                        nameRepo: 'registry-ci.playpit.by',
+//                        credentialId: 'nexus',
+//                        Dockerfile: 'config/Dockerfile'
+//                    )
                 }
             )
         } catch(all) {

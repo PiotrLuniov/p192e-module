@@ -13,23 +13,14 @@ node('Host-Node') {
                 stage ('3: SonarQube') {
                         def scannerHome = tool 'SonarQubeScanner';
                         withSonarQubeEnv() {
-				// WORKING
-				sh "${scannerHome}/bin/sonar-scanner " +
-                                '-Dsonar.projectKey=hkanonik ' +
-                                '-Dsonar.projectName=hkanonik ' +
-                                '-Dsonar.sources=helloworld-ws/src/main/java ' +
-                                '-Dsonar.java.binaries=**/target/classes ' +
-                                '-Dsonar.language=java '
-				
-				// NOT WORKING
-				//sh """
-                                //${scannerHome}/bin/sonar-scanner \
-                                //-Dsonar.projectKey= \
-                                //-Dsonar.projectName=hkanonik \
-                                //-Dsonar.sources=helloworld-ws/src/main/java \
-                                //-Dsonar.java.binaries=**/target/classes \
-                                //-Dsonar.language=java
-                                //"""
+				sh """
+                                ${scannerHome}/bin/sonar-scanner \
+                                -Dsonar.projectKey=hkanonik \
+                                -Dsonar.projectName=hkanonik \
+                                -Dsonar.sources=helloworld-ws/src/main/java \
+                                -Dsonar.java.binaries=**/target/classes \
+                                -Dsonar.language=java
+                                """				
                         }
                 } 
         

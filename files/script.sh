@@ -5,15 +5,41 @@ echo "kubectl switch from $1 to $2"
     kubectl apply -f $2/service.yml --namespace=apavarnitsyn
     echo "sleep"
     sleep 30
-    TEST_CURL=$(curl -IL tomcat-$2-svc.apavarnitsyn.svc.cluster.local:8080/hello/)
-    echo "$TEST_CURL"
-    if [ $(echo "$TEST_CURL" | grep -c 'HTTP/1.1 200') -gt 0 ]
+    echo "Running tests"
+    COUNT=0
+    TEST_KUBE=$(kubectl get pods --namespace=apavarnitsyn)
+    if [ $(echo "$TEST_KUBE" | grep 'tomcat-$2' | grep -c "Running") -gt 0 ]
+    	then
+    		echo "Container is running"
+    		COUNT=$COUNT+1
+    fi
 
-        
+    TEST_CURL=$(curl -IL tomcat-$2-svc.apavarnitsyn.svc.cluster.local:8080/)
+    if [ $(echo "$TEST_CURL" | grep -c 'HTTP/1.1 200') -gt 0 ]
+    	then
+    		echo "Tomcat is running"
+    		COUNT=$COUNT+1
+   	fi
+
+    TEST_HELLO=$(curl -IL tomcat-$2-svc.apavarnitsyn.svc.cluster.local:8080/hello/)
+    if [ $(echo "$TEST_HELLO" | grep -c 'HTTP/1.1 200') -gt 0 ]
+    	then
+    		echo "helloworld is running"
+    		COUNT=$COUNT+1
+   	fi
+
+    TEST_TEST=$(curl tomcat-$2-svc.apavarnitsyn.svc.cluster.local:8080/hello/test.html)
+    if [ $(echo "TEST_TEST" | grep -c "$3") -gt 0 ]
+    	then
+    		echo "Page is ready"
+    		COUNT=$COUNT+1
+    fi
+
+    if [ $COUNT -eq 4 ]   
         then
-            echo "heath-page checked"
+            echo "Switch ingress"
             kubectl apply -f $2/ingress.yml --namespace=apavarnitsyn
-            echo "Everything is OK. Clean up"
+            echo "Clean up"
             kubectl delete -f $1/deployment.yml --namespace=apavarnitsyn
             kubectl delete -f $1/service.yml  --namespace=apavarnitsyn
             echo "Tomcat $2 installed succesfully"    
@@ -23,17 +49,16 @@ echo "kubectl switch from $1 to $2"
             kubectl delete -f $2/service.yml --namespace=apavarnitsyn
     fi
 
-
 }
 
 
 # main
-ls -ll
+
 apk add curl
 TEST=$(kubectl get pods --namespace=apavarnitsyn) 
 if [ $(echo "$TEST" | grep -c 'tomcat-blue') -lt 1 ]
 	then 
-    kubeswitch green blue 
+    kubeswitch green blue $1
 else
-	kubeswitch blue green
+	kubeswitch blue green $1
 fi 

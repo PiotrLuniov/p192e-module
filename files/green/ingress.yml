@@ -7,7 +7,7 @@ spec:
   - host: apavarnitsyn-app.k8s.playpit.by
     http:
       paths:
-      - path: /
+      - path: /hello/
         backend:
           serviceName: tomcat-green-svc
           servicePort: 8080

@@ -1,3 +1,4 @@
+@Library('abutsko-library')
 def sendEmail(String stage) {
     emailext(
         subject: "[Jenkins] FAILED!",
@@ -12,15 +13,6 @@ Failed stage: ${stage}
 }
 
 node('Host-Node') {
-    stage('Checkout GitHub Repository') {
-        try {
-        git branch: 'abutsko',
-            url: 'https://github.com/MNT-Lab/p192e-module.git'
-        } catch(all) {
-            sendEmail('Checkout GitHub Repository')
-        }
-    }
-
     stage('Build Project') {
         // Add git information to help page
         // I want to cute output in web-browser

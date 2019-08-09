@@ -13,6 +13,7 @@ spec:
    rollingUpdate:
      maxUnavailable: 0
      maxSurge: 1
+  revisionHistoryLimit: 0
   selector:
     matchLabels:
       app: abutsko-helloworld

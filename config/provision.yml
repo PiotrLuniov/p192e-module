@@ -21,8 +21,8 @@
         url: http://abutsko-sanity.abutsko.svc.cluster.local:8080/helloworld-ws
         status_code: 200
         return_content: yes
-      register: helloworld-ws
-      failed_when: "'PLACE_FOR_GIT_HASH' not in helloworld-ws.content"
+      register: helloworld
+      failed_when: "'PLACE_FOR_GIT_HASH' not in helloworld.content"
     always:
     - name: Undeploying a sanity pod
       shell: |

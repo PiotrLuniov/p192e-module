@@ -64,7 +64,7 @@ try {
 	}
 		stage('Deployment') {
 			sh '$HOME/kubectl apply -f k8s-deploy.yml'
-		}
+		}vasda
 	}
 
 	catch (err) {

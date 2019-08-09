@@ -103,6 +103,20 @@ stage('Packaging and Publishing results') {
 	
 }	
 
+ up("maven", studentName)
+
+			},
+
+			'Creating Docker Image': {
+
+                up("docker", studentName)
+
+			}
+		)
+    	echo "Packaging and Publishing results"
+}	
+	
+	
 	
 stage('Asking for manual approval'){
 	timeout(time: 2, unit: 'MINUTES') {

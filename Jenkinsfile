@@ -119,15 +119,13 @@ EOF
                 /* Push the container to the custom Registry */
                 customImage.push()
                 }
-            }
-            )
-           }
-              catch (err) {
+                    catch (err) {
             echo err.getMessage()
             echo "Error detected, but we will continue."
-        }
-             
-        }
+                   }
+            }
+      )
+}
 stage("Asking for manual approval") {
                 timeout(time: 300, unit: 'SECONDS') {                  
                        def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next'  

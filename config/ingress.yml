@@ -5,7 +5,8 @@ metadata:
   name: helloworld
   namespace: abutsko
   annotations:
-    nginx.ingress.kubernetes.io/app-root: /helloworld-ws
+    #nginx.ingress.kubernetes.io/app-root: /helloworld-ws
+    nginx.ingress.kubernetes.io/rewrite-target: /helloworld-ws/$1
     certmanager.k8s.io/cluster-issuer: letsencrypt-prod
     #nginx.ingress.kubernetes.io/ssl-passthrough: "true"
     #nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
@@ -18,7 +19,7 @@ spec:
   - host: abutsko-app.k8s.playpit.by
     http:
       paths:
-      - path: /
+      - path: /(.*)
         backend:
           serviceName: abutsko-helloworld
           servicePort: abutsko-svc

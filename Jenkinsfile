@@ -76,7 +76,7 @@ node('Host-Node'){
 				sh "sed -i \"s/_studentName_/${studentName}/g\" hello_k8s.yml"
 				sh 'sed -i "s/_buildNumber_/${BUILD_NUMBER}/g" hello_k8s.yml'
 
-				sh "kubectl apply --namespace=${studentName} -f hello_k8s.yml"
+				sh "$HOME/kubectl apply --namespace=${studentName} -f hello_k8s.yml"
 			// }
 		}
 

@@ -71,13 +71,13 @@ node('Host-Node'){
 		// }
 
 		stage('Deployment'){
-			node('HBLEDAI_kubectl'){
+			// node('HBLEDAI_kubectl'){
 				sh "wget https://raw.githubusercontent.com/MNT-Lab/p192e-module/${studentName}/config/hello_k8s.yml"
 				sh "sed -i \"s/_studentName_/${studentName}/g\" hello_k8s.yml"
 				sh 'sed -i "s/_buildNumber_/${BUILD_NUMBER}/g" hello_k8s.yml'
 
 				sh "kubectl apply --namespace=${studentName} -f hello_k8s.yml"
-			}
+			// }
 		}
 
 		currentBuild.result = 'SUCCESS'

@@ -30,7 +30,7 @@ spec:
       - name: my-secret
       containers:
       - name: tomcat
-        image: nexus-ci.playpit.by:6566/helloworld-_studentName_:_buildNumber_
+        image: registry-ci.playpit.by/helloworld-_studentName_:_buildNumber_
         imagePullPolicy: Always
 
         readinessProbe:

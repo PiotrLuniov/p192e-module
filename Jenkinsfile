@@ -129,7 +129,7 @@ spec:
 EOF
 			"""
                 }
-		/*
+		
   		stage ('9: Sanity check') {
       			def response_value = 'HelloWorldService?wsdl'
        			try {
@@ -141,7 +141,6 @@ EOF
         			
 			}
     		} 
-		*/
 
 		/*                
 		// send e-mail

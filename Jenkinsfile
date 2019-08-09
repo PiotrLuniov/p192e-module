@@ -65,7 +65,7 @@ try {
 		stage('Deployment') {
 			sh '$HOME/kubectl apply -f k8s-deploy.yml'
 		}
-	}fsdfs
+	}
 
 	catch (err) {
 	echo "Some errors in pipeline:${err}"

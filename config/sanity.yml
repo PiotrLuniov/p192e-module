@@ -1,0 +1,38 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sanity-pod
+  namespace: abutsko
+  labels:
+    app: sanity
+spec:
+  containers:
+  - name: abutsko-helloworld
+    image: registry-ci.playpit.by/helloworld-abutsko:PLACE_FOR_NEW_TAG
+    ports:
+    - name: abutsko-sanity
+      containerPort: 8080
+    readinessProbe:
+      httpGet:
+        path: /helloworld-ws
+        port: 8080
+  imagePullSecrets:
+  - name: docker-repo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: abutsko-sanity
+  namespace: abutsko
+  labels:
+    app: sanity
+spec:
+  selector:
+    app: sanity
+  type: ClusterIP
+  ports:
+  - name: sanity-svc
+    protocol: TCP
+    port: 8080
+    targetPort: abutsko-sanity

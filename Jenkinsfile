@@ -69,7 +69,7 @@ node {
     }
 
     stage('Deployment') {
-      kubectl apply -f config/k8s-deploy.yml
+      sh '$HOME/kubectl apply -f config/k8s-deploy.yml'
     }
 
 }

@@ -31,7 +31,7 @@ spec:
             path: /
             port: 8080
           exec:
-          command:
+            command:
             - /bin/sh
             - -c
             - if $(/usr/bin/curl -s localhost:8080/helloworld-ws/version.html | grep "Build:BUILD_NUMBER"); else exit 1; fi

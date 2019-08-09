@@ -9,6 +9,14 @@ def deployFile ( def container_name,
 				def app_name = 'helloworld-ws', 
 				def container_port = '8080'){
 
+
+
+
+
+
+
+
+
 sh """
 cat << EOF > ${file_name}
 apiVersion: extensions/v1beta1 
@@ -45,7 +53,7 @@ spec:
           periodSeconds: 3
         livenessProbe:
           exec:
-            command: |
+            command: 
             - cat 
             - /usr/local/tomcat/webapps/helloworld-ws/healthz.html 
             - |

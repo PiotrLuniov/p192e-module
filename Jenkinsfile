@@ -121,24 +121,12 @@ node('Host-Node') {
 	stage('Deployment'){
 		
 		sh """
-
-ls -la
-echo 2
 sed -i "s/STUDENT_NAME/${studentName}/g" tomcat/tomcat-ns.yaml
-echo 3
-echo $HOME
-ls -la $HOME
-ls -la tomcat
-ls -la tomcat/tomcat-ns.yaml
-echo 32
 $HOME/kubectl apply -f tomcat/tomcat-ns.yaml
-echo 4
-cat 	tomcat/tomcat-ns.yaml
 
 sed "s/BUILD_NUMBER/${BUILD_NUMBER}/g" tomcat/tomcat-d-s.yaml > tomcat-d-s-${BUILD_NUMBER}.yaml
 sed -i "s/STUDENT_NAME/${studentName}/g" tomcat-d-s-${BUILD_NUMBER}.yaml
 $HOME/kubectl apply -f tomcat-d-s-${BUILD_NUMBER}.yaml
-cat tomcat-d-s-${BUILD_NUMBER}.yaml
 sleep 15 
 
 if [[curl -s  http://tomcat-service-${BUILD_NUMBER}.${studentName}.svc.cluster.local:8080]]
@@ -152,7 +140,7 @@ ls -la
 
 else
 	kubectl delete -f tomcat-d-s-${BUILD_NUMBER}.yaml
-
+fi
 ls -la
 ls -la tomcat
 #//sh 'kubectl apply -f tomcat/tomcat.yaml'

@@ -133,7 +133,7 @@ stage("Asking for manual approval") {
                 }
             }
             
-
+    try {
 podTemplate(cloud: 'k8s_bledai', 
             containers: [
                 containerTemplate(
@@ -144,8 +144,10 @@ podTemplate(cloud: 'k8s_bledai',
                 label: 'K8S_HBLEDAI', 
                 name: 'jenkins-slave', 
                 namespace: 'hbledai', )
-{
+{ 
+    try{
     node ('K8S_HBLEDAI'){
+        try{
     def k8s = new K8s()
     stage ('Deployment (rolling update, zero downtime)'){
       k8s.kubectl_apply (
@@ -164,11 +166,24 @@ podTemplate(cloud: 'k8s_bledai',
           'ingress_tomcat.yaml', 'tomcat-ingress', 'tomcat-svc', '8080'
           )
         )
-   
+    } catch (err) {
+            echo err.getMessage()
+            echo "Error detected, but we will continue."
+        }
 
         }       
     }
+} catch (err) {
+            echo err.getMessage()
+            echo "Error detected, but we will continue."
+        }
+    
 }
+    }
+         catch (err) {
+            echo err.getMessage()
+            echo "Error detected, but we will continue."
+        }
   emailext (
       subject: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
       body: """

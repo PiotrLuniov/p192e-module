@@ -25,7 +25,7 @@ spec:
         ports:
         - containerPort: 8080   
       imagePullSecrets:
-      - name: ${creds}
+      - name: dockerrepo
 ---
 apiVersion: v1
 kind: Service

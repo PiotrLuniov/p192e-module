@@ -70,7 +70,7 @@ return temp.toString()*/
 Templates = template.Must(template.ParseFiles("deploy_tomcat.template")) 
 
 
-}
+
 }
 def serviceFile(def file_name = 'service_tomcat.yaml',def name_service = 'tomcat-svc',  def port = '8080', def targetPort = '8080'){
 sh """

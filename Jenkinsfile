@@ -12,125 +12,157 @@ URL: ${env.BUILD_URL}
 
 node('Host-Node') {
     stage('Checkout GitHub Repository') {
+        try {
         git branch: 'abutsko',
             url: 'https://github.com/MNT-Lab/p192e-module.git'
+        } catch(all) {
+            sendEmail()
+        }
     }
 
     stage('Build Project') {
         // Add git information to help page
         // I want to cute output in web-browser
-        sh 'echo "<head>\\n<meta charset="UTF-8">\\n</head>" > helloworld-ws/src/main/webapp/index.html'
-        sh 'echo "<pre>" >> helloworld-ws/src/main/webapp/index.html'
-        sh "echo 'Image: ${env.BUILD_NUMBER}' >> helloworld-ws/src/main/webapp/index.html"
-        sh 'git log | head -n 3 >> helloworld-ws/src/main/webapp/index.html'
-        sh 'echo "</pre>" >> helloworld-ws/src/main/webapp/index.html'
+        try {
+            sh 'echo "<head>\\n<meta charset="UTF-8">\\n</head>" > helloworld-ws/src/main/webapp/index.html'
+            sh 'echo "<pre>" >> helloworld-ws/src/main/webapp/index.html'
+            sh "echo 'Image: ${env.BUILD_NUMBER}' >> helloworld-ws/src/main/webapp/index.html"
+            sh 'git log | head -n 3 >> helloworld-ws/src/main/webapp/index.html'
+            sh 'echo "</pre>" >> helloworld-ws/src/main/webapp/index.html'
 
-        withMaven(
-            maven: 'Maven 3.6.1',
-            mavenSettingsConfig: 'Maven2-Nexus-Repos'
-        ) {
-            sh 'mvn -f helloworld-ws/pom.xml package'
+            withMaven(
+                maven: 'Maven 3.6.1',
+                mavenSettingsConfig: 'Maven2-Nexus-Repos'
+            ) {
+                sh 'mvn -f helloworld-ws/pom.xml package'
+            }
+        } catch(all) {
+            sendEmail()
         }
     }
     
     stage('Sonar Scanning') {
-        def scannerHome = tool 'SonarQubeScanner';
-        withSonarQubeEnv() {
-            sh "${scannerHome}/bin/sonar-scanner \
-               -Dsonar.projectName=abutsko-helloworld \
-               -Dsonar.projectKey=abutsko-helloworld \
-               -Dsonar.language=java \
-               -Dsonar.sources=helloworld-ws/src \
-               -Dsonar.java.binaries=**/target/classes"
+        try {
+            def scannerHome = tool 'SonarQubeScanner';
+            withSonarQubeEnv() {
+                sh "${scannerHome}/bin/sonar-scanner \
+                   -Dsonar.projectName=abutsko-helloworld \
+                   -Dsonar.projectKey=abutsko-helloworld \
+                   -Dsonar.language=java \
+                   -Dsonar.sources=helloworld-ws/src \
+                   -Dsonar.java.binaries=**/target/classes"
+            }
+        } catch(all) {
+            sendEmail()
         }
     }
 
     stage('Integration Tests') {
-        withMaven(
-            maven: 'Maven 3.6.1',
-            mavenSettingsConfig: 'Maven2-Nexus-Repos'
-        ) {
-            parallel (
-                'Pre-Integration Test': {
-                    echo 'mvn -f helloworld-ws/pom.xml pre-integration-test'
-                },
-                'Integration Test': {
-                    echo 'mvn -f helloworld-ws/pom.xml integration-test'
-                },
-                'Post-Integration Test': {
-                    echo 'mvn -f helloworld-ws/pom.xml post-integration-test'
-                }
-            )
+        try {
+            withMaven(
+                maven: 'Maven 3.6.1',
+                mavenSettingsConfig: 'Maven2-Nexus-Repos'
+            ) {
+                parallel (
+                    'Pre-Integration Test': {
+                        echo 'mvn -f helloworld-ws/pom.xml pre-integration-test'
+                    },
+                    'Integration Test': {
+                        echo 'mvn -f helloworld-ws/pom.xml integration-test'
+                    },
+                    'Post-Integration Test': {
+                        echo 'mvn -f helloworld-ws/pom.xml post-integration-test'
+                    }
+                )
+            }
+        } catch(all) {
+            sendEmail()
         }
     }
     
     def triggeredJob = 'MNTLAB-abutsko-child1-build-job'
     stage("Trigger ${triggeredJob}") {
-        build job: "${triggeredJob}",
-              parameters: [
-                string(
-                    name: 'BRANCH_NAME',
-                    value: 'abutsko'
-                )
-              ],
-              wait: true
+        try {
+            build job: "${triggeredJob}",
+                  parameters: [
+                    string(
+                        name: 'BRANCH_NAME',
+                        value: 'abutsko'
+                    )
+                  ],
+                  wait: true
 
-        copyArtifacts projectName: "${triggeredJob}",
-                      filter: 'output.txt'
+            copyArtifacts projectName: "${triggeredJob}",
+                          filter: 'output.txt'
+        } catch(all) {
+            sendEmail()
+        }
     }
 
     def archive = "pipeline-abutsko-${env.BUILD_NUMBER}"
     stage('Packaging and Publishing results') {
-        parallel(
-            'Create Archive for common files And Upload them': {
-                sh "tar czf ${archive}.tar.gz --transform='flags=r;s!^.*/!!' output.txt Jenkinsfile **/**/helloworld-ws.war"
+        try {
+            parallel(
+                'Create Archive for common files And Upload them': {
+                    sh "tar czf ${archive}.tar.gz --transform='flags=r;s!^.*/!!' output.txt Jenkinsfile **/**/helloworld-ws.war"
 
-                def pom =readMavenPom file: 'helloworld-ws/pom.xml'
-                nexusArtifactUploader(
-                    nexusVersion: 'nexus3',
-                    protocol: 'http',
-                    nexusUrl: 'localhost:8081',
-                    repository: 'MNT-pipeline-training',
-                    groupId: 'pipeline',
-                    version: "${env.BUILD_NUMBER}",
-                    credentialsId: 'nexus',
-                    artifacts: [
-                        [
-                            artifactId: 'abutsko',
-                            classifier: '',
-                            file: "${archive}.tar.gz",
-                            type: 'tar.gz'
+                    def pom =readMavenPom file: 'helloworld-ws/pom.xml'
+                    nexusArtifactUploader(
+                        nexusVersion: 'nexus3',
+                        protocol: 'http',
+                        nexusUrl: 'localhost:8081',
+                        repository: 'MNT-pipeline-training',
+                        groupId: 'pipeline',
+                        version: "${env.BUILD_NUMBER}",
+                        credentialsId: 'nexus',
+                        artifacts: [
+                            [
+                                artifactId: 'abutsko',
+                                classifier: '',
+                                file: "${archive}.tar.gz",
+                                type: 'tar.gz'
+                            ]
                         ]
-                    ]
-                )
-            },
-            'Building And Pushing Docker Image': {
-                docker.withRegistry('http://registry-ci.playpit.by', 'nexus') {
-                    def appImage = docker.build("registry-ci.playpit.by/helloworld-abutsko:${env.BUILD_NUMBER}", '-f config/Dockerfile .')
-                    appImage.push()
+                    )
+                },
+                'Building And Pushing Docker Image': {
+                    docker.withRegistry('http://registry-ci.playpit.by', 'nexus') {
+                        def appImage = docker.build("registry-ci.playpit.by/helloworld-abutsko:${env.BUILD_NUMBER}", '-f config/Dockerfile .')
+                        appImage.push()
+                    }
                 }
-            }
-        )
+            )
+        } catch(all) {
+            sendEmail()
+        }
     }
 
-     stage('Asking for manual approval') {
-         timeout(time: 5, unit: 'MINUTES') {
-             input(
-                 id: 'Deployment',
-                 message: 'Do you want to deploy Docker image?',
-                 ok: 'Deploy'
-             )
-         }
+    stage('Asking for manual approval') {
+        try {
+            timeout(time: 5, unit: 'MINUTES') {
+                input(
+                    id: 'Deployment',
+                    message: 'Do you want to deploy Docker image?',
+                    ok: 'Deploy'
+                )
+            }
+        } catch(all) {
+            sendEmail()
+        }
      }
 }
 
 stage('Quality Gate') {
-    timeout(time: 1, unit: 'HOURS') {
-        def qualityGate = waitForQualityGate()
+    try {
+        timeout(time: 1, unit: 'HOURS') {
+            def qualityGate = waitForQualityGate()
 
-        if (qualityGate.status != 'OK') {
-            error "Pipeline aborted due to quality gate failure: ${qualityGate.status}"
+            if (qualityGate.status != 'OK') {
+                error "Pipeline aborted due to quality gate failure: ${qualityGate.status}"
+            }
         }
+    } catch(all) {
+        sendEmail()
     }
 }
 
@@ -149,25 +181,33 @@ podTemplate(
 ) {
     node(POD_LABEL) {
         stage('Download files of configuration') {
-            git branch: 'abutsko',
-                url: 'https://github.com/MNT-Lab/p192e-module.git'
+            try {
+                git branch: 'abutsko',
+                    url: 'https://github.com/MNT-Lab/p192e-module.git'
+            } catch(all) {
+                sendEmail()
+            }
         }
 
         stage('Deploying a new application version') {
-            // set git hash for sanity check
-            def gitHash = sh(returnStdout: true,
-                             script: 'git log -n 1 --pretty=format:"%H"'.trim()
-                          )
-            sh "sed -i 's/PLACE_FOR_GIT_HASH/${gitHash}/' config/provision.yml"
+            try {
+                // set git hash for sanity check
+                def gitHash = sh(returnStdout: true,
+                                 script: 'git log -n 1 --pretty=format:"%H"'.trim()
+                              )
+                sh "sed -i 's/PLACE_FOR_GIT_HASH/${gitHash}/' config/provision.yml"
 
-            // set a new version for image
-            sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/sanity.yml"
-            sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/deployment.yml"
+                // set a new version for image
+                sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/sanity.yml"
+                sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/deployment.yml"
 
-            ansiblePlaybook(
-                playbook: 'config/provision.yml',
-                extras: '-v'
-            )
+                ansiblePlaybook(
+                    playbook: 'config/provision.yml',
+                    extras: '-v'
+                )
+            } catch(all) {
+                sendEmail()
+            }
         }
     }
 }

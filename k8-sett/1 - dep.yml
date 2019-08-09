@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: iyaruk-dep
+  namespace: iyaruk
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+      - name: iyaruk-app
+        image: registry-ci.playpit.by/helloworld-iyaruk:22 
+        ports:
+        - name: http-app
+          containerPort: 8080

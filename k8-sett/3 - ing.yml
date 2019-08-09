@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: iyaruk-ing
+  namespace: iyaruk
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /helloworld-ws/
+spec:
+  rules:
+  - host: iyaruk-app.k8s.playpit.by
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: iyaruk-svc
+          servicePort: iyaruk-apport

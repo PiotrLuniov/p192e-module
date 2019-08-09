@@ -5,20 +5,23 @@ try {
 	stage('Checking out'){
 		git branch: "kkaminski", url: 'https://github.com/MNT-Lab/p192e-module.git'
 	}
-	stage('Building code'){
-		 sh """ 
 
-	cat << EOF > helloworld-ws/src/main/webapp/test.html
-	<!DOCTYPE html>
-	<html>
-	<body>
-	<h3>custom page</h3>
-	<p>version ${env.BUILD_NUMBER}</p>
-	<p>Author: kkaminski</p>
-	</body>
-	</html> 
-	EOF
-	 """	
+	stage('Test page'){
+		sh """ 
+		cat << EOF > helloworld-ws/src/main/webapp/test.html
+		<!DOCTYPE html>
+		<html>
+		<body>
+		<h3>custom page</h3>
+		<p>version \${BUILD_NUMBER}</p>
+		<p>Author: kkaminski</p>
+		</body>
+		</html> 
+		EOF
+		"""
+	}
+	stage('Building code'){
+		
 		withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1', mavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac'){
 			sh 'mvn clean package -f helloworld-ws/pom.xml' 
 		}

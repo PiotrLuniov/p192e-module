@@ -117,18 +117,18 @@ node('Host-Node') {
                 replyTo: '', 
                 subject: 'Jenkins notify - Success', 
                 to: 'hleb_kanonik@epam.com',
-		mimeType: 'text/html'
+                mimeType: 'text/html'
 		
         } catch (any) {
                 currentBuild.result = 'FAILURE'
                 mail bcc: '', 
-                body: "<b>BUILD FAILURE</b><br><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL build: <a href=${env.BUILD_URL}> ${env.JOB_NAME}</a>", 
+                body: "<b>BUILD FAILURE</b><br><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL build: <a href=${env.BUILD_URL}> ${env.JOB_NAME}</a><br><br><b>FAILURE CODE:</b><br><i>${any}</i>", 
                 cc: '', 
                 // from: 'esscyh@gmail.com', 
                 replyTo: '', 
                 subject: 'Jenkins notify - Failure', 
                 to: 'hleb_kanonik@epam.com',
-		mimeType: 'text/html'
+                mimeType: 'text/html'
         }
 	*/	
 }

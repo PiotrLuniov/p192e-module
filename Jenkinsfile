@@ -101,12 +101,11 @@ stage("Asking for manual approval") {
                 }
             }
             def CONTAINER_NAME = "hbledai:${env.BUILD_ID}"
-            
+
 podTemplate(cloud: 'Kubernetes', 
             containers: [
                 containerTemplate(
                   image: 'hbledai/jenkins-slave:ansible-kubectl', 
-                  livenessProbe: 
                     name: 'jnlp', 
                     ttyEnabled: true
                     )], 

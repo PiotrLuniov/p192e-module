@@ -1,9 +1,8 @@
-node('Host-Node') {
-	def studentName = "kshevchenko"
-	
-	stage('Preparation (Checking out)'){
-		git branch: "${studentName}", url: 'https:github.com/MNT-Lab/p192e-module.git'
-	}
+node {
+   stage('Preparation') {
+      git branch: 'akuznetsova', url: 'https://github.com/MNT-Lab/build-t00ls.git'
+
+}
 
 	// stage('Building code'){
 	// 	withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \

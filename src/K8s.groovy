@@ -4,7 +4,7 @@ def deployFile ( def container_name,
 				def file_name = 'deploy_tomcat.yaml', 
 				def app_name = 'helloworld-ws', 
 				def container_port = '8080'){
-	
+
 	sh """
 	cat << EOF > ${file_name}
 apiVersion: extensions/v1beta1 
@@ -44,7 +44,7 @@ spec:
       - name: ${creds}
 
 	"""
-	return ${file_name}
+	return file_name
 }
 def serviceFile(def file_name = 'service_tomcat.yaml',def name_service = 'tomcat-svc',  def port = '8080', def targetPort = '8080'){
 	sh """
@@ -62,7 +62,7 @@ spec:
     app: tomcat
 EOF
 	"""
-return ${file_name}
+return file_name
 }
 def ingressFile ( def file_name = 'ingress_tomcat.yaml', def ingress_name = 'tomcat-ingress', def name_service = 'tomcat-svc', def port = '8080' ) {
 	sh """
@@ -85,7 +85,7 @@ spec:
           servicePort: ${port}
 EOF
 	"""
-	return ${file_name}
+	return file_name
 }
 def kubectl_apply (def file, def namespace = 'hbledai'){
 sh "kubectl apply -n ${namespace} ${file}"

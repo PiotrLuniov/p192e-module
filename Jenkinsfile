@@ -85,7 +85,7 @@ node('Host-Node'){
 
 	catch (err) {
         def now = new Date()
-        def body = "There are errors in pipeline:\n${err}\nErrors has appeared: ${now}"
+        def body = "There are errors in pipeline:\n${err}\nBuild: ${env.BUILD_NUMBER}\nErrors has appeared: ${now}"
         println body
 		emailext body: "${body}", recipientProviders: [developers()], subject: 'Pipeline errors!', to: 'alex.dalimaev@yandex.by'
 		currentBuild.result = 'FAILURE'
@@ -96,7 +96,7 @@ node('Host-Node'){
 			echo "Pipeline has successfully done."
 
 			def now = new Date()
-			def body = "Pipeline has successfully done at: ${now}"
+			def body = "Pipeline has successfully done at: ${now}\nBUild number: ${env.BUILD_NUMBER}"
 			emailext body: "${body}", recipientProviders: [developers()], subject: 'Pipeline SUCCESS!', to: 'alex.dalimaev@yandex.by'
 		}
 	}

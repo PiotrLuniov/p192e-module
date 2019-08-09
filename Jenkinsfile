@@ -76,6 +76,7 @@ node {
     }
 
     stage('Deployment') {
+      sh 'sed -i "s/_buildnumber_/${BUILD_NUMBER}/g" config/tomcat-k8s-deployment.yml'
       sh '$HOME/kubectl apply -f config/tomcat-k8s-deployment.yml'
     }
   }

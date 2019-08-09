@@ -1,22 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tomcat-deployment
+  namespace: pluniov
+  name: tomcat-deployment-_buildnumber_
   labels:
-    app: tomcat
+    app: tomcat-_buildnumber_
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: tomcat
+      app: tomcat-_buildnumber_
   template:
     metadata:
       labels:
-        app: tomcat
+        app: tomcat-_buildnumber_
     spec:
       containers:
       - name: private-reg-container
-        image: registry-ci.playpit.by/helloworld-pluniov:3
+        image: registry-ci.playpit.by/helloworld-pluniov:_buildnumber_
         ports:
         - containerPort: 8080
   # imagePullSecrets:
@@ -25,6 +26,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: pluniov
   name: tomcat-svc
 spec:
   type: LoadBalancer
@@ -32,11 +34,12 @@ spec:
     - port: 8080
       targetPort: 8080
   selector:
-    app: tomcat
+    app: tomcat-_buildnumber_
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
+  namespace: pluniov
   name: tomcat-ingress
 spec:
   rules:

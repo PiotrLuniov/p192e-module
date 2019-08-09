@@ -28,7 +28,7 @@ stage('Sonar scan') {
 									
 stage('Triggering job'){
     build job: 'MNTLAB-kshevchenko-child1-build-job', parameters: [string(name: 'BRANCH_NAME', value: 'kshevchenko')], wait: true
-								}
+}
 // stage('Packaging and Publishing results')
 // 		{
 //     copyArtifacts(projectName: 'MNTLAB-kshevchenko-child1-build-job')
@@ -45,10 +45,8 @@ stage('Packaging and Publishing results') {
 					sh "docker build -t localhost:6566/helloworld-kshevchenko:${BUILD_NUMBER} -f Dockerfile ."
 					sh "docker push localhost:6566/helloworld-kshevchenko:${BUILD_NUMBER}"
  				}			
-			}
+		}
 		)
-}							
-									
 }
-}									
+								
 									

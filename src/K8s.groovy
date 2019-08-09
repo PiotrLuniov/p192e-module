@@ -52,7 +52,7 @@ def deployFile ( def container_name,
 				def file_name = 'deploy_tomcat.yml', 
 				def app_name = 'helloworld-ws', 
 				def container_port = '8080'){
-health (container_name)	
+this.health(container_name)	
 
 sh """
 cat << EOF > ${file_name}

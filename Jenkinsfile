@@ -64,11 +64,12 @@ try {
 	}
 		stage('Deployment') {
 			sh '$HOME/kubectl apply -f k8s-deploy.yml'
-		}fsdfsd
-	}
+		}
+	}fsdfs
 
 	catch (err) {
 	echo "Some errors in pipeline:${err}"
+	emailext body: 'Some errors appeared', subject: 'Pipeline failed', to: 'kaminkir@gmail.com'
  }
  
  	finally {

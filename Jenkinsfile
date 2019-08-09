@@ -54,7 +54,7 @@ node('Host-Node') {
 		sh '''
 		docker login -u iyaruk -p iyaruk1234 https://registry-ci.playpit.by 
 		docker build -t helloworld-iyaruk:${BUILD_NUMBER} -f Dockerfile .
-		docker build -t nexus-ci.playpit.by/helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile .
+		docker build -t https://registry-ci.playpit.by/helloworld-${studentName}:${BUILD_NUMBER} -f Dockerfile .
 		docker push nexus-ci.playpit.by/helloworld-iyaruk:${BUILD_NUMBER}
 		'''
 		}

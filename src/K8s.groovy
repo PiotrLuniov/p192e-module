@@ -35,10 +35,10 @@ spec:
         - containerPort: 8080
 
         readinessProbe:
-          httpGet:
+        - httpGet:
             path: /${app_name}
             port: ${container_port}
-          exec:
+        - exec:
             command:
             - 'curl tomcat-svc.hbledai..svc.cluster.local/helloworld-ws | grep -q "helloworld-ws Quickstart"'  
           initialDelaySeconds: 5

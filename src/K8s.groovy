@@ -54,10 +54,7 @@ spec:
         livenessProbe:
           exec:
             command: 
-            - cat 
-            - /usr/local/tomcat/webapps/helloworld-ws/healthz.html 
-            - |
-            - grep -q registry-ci.playpit.by/${container_name}
+            - cat /usr/local/tomcat/webapps/helloworld-ws/healthz.html | grep -q registry-ci.playpit.by/${container_name}
 
           initialDelaySeconds: 3
           periodSeconds: 3      

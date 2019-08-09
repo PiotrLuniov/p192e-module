@@ -11,9 +11,9 @@ cat << EOF > ${file_name}
 apiVersion: extensions/v1beta1 
 kind: Deployment
 metadata:
-  name: ${name_app}
+  name: tomcat
   labels:
-    app: ${name_labels}
+    app: tomcat
 spec:
   strategy:
     type: RollingUpdate
@@ -23,14 +23,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ${name_labels}
+      app: tomcat
   template:
     metadata:
       labels:
-        app: ${name_labels}
+        app: tomcat
     spec:
       containers:
-      - name: ${name_app}
+      - name: tomcat
         image: registry-ci.playpit.by/${container_name}
         ports:
         - containerPort: ${container_port}

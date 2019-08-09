@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: private-reg-container
-        image: nexus-ci.playpit.by:6566/helloworld-pluniov:3
+        image: registry-ci.playpit.by/helloworld-pluniov:3
         ports:
         - containerPort: 8080
   # imagePullSecrets:

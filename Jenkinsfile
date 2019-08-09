@@ -54,7 +54,7 @@ node {
           nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'MNT-pipeline-training', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: "pipeline-${student}-\${BUILD_NUMBER}.tar.gz"]], mavenCoordinate: [artifactId: "${student}", groupId: 'pipeline', packaging: 'tar.gz', version: '${BUILD_NUMBER}']]]
         },
         'Creating Docker Image': {
-          withDockerRegistry(credentialsId: 'nexus', url: 'http://localhost:6566') {
+          withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'http://localhost:6566') {
             sh "docker build -t localhost:6566/helloworld-${student}:${BUILD_NUMBER} -f config/Dockerfile ."
             sh "docker push localhost:6566/helloworld-${student}:${BUILD_NUMBER}"
           }
@@ -63,9 +63,13 @@ node {
     }
 
     stage('Asking for manual approval'){
-        timeout(time: 1, unit: 'MINUTES') {
+      timeout(time: 1, unit: 'MINUTES') {
              input(id: "Deployment of artifact", message: "Deploy to Kubernetes?", ok: "Deploy")
-        }
+      }
+    }
+
+    stage('Deployment') {
+      kubectl apply -f config/k8s-deploy.yml
     }
 
 }

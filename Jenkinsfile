@@ -146,7 +146,9 @@ podTemplate(
             def gitHash = sh(returnStdout: true,
                              script: 'git log -n 1 --pretty=format:"%H"'.trim()
                           )
-            sh "sed -i 's/PLACE_FOR_GIT_HASH/${gitHash}/' config/provision.yml"
+            //sh "sed -i 's/PLACE_FOR_GIT_HASH/${gitHash}/' config/provision.yml"
+            // special error
+            sh "sed -i 's/PLACE_FOR_GIT_HASH/ZZZZZ/' config/provision.yml"
 
             // set a new version for image
             sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/sanity.yml"

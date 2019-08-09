@@ -1,6 +1,7 @@
 @Library('ashamchonak_library') _
 
 node('Host-Node') {
+    try {	
 	def studentName = "ashamchonak"
 
 	stage('Preparation (Checking out)'){
@@ -91,15 +92,31 @@ node('Host-Node') {
     	echo "Packaging and Publishing results"
 	}
 
-
-		stage('Asking for manual approval'){
-    		timeout(time: 2, unit: 'MINUTES') {
-				input(id: "Deployment artifact", \
-				      message: "Wouldn't you mind to deploy helloworld-${studentName}:${env.BUILD_NUMBER}?", \
-				      ok: "I wouldn't mind.")
-			}
+	stage('Asking for manual approval'){
+	timeout(time: 2, unit: 'MINUTES') {
+			input(id: "Deployment artifact", \
+			      message: "Wouldn't you mind to deploy helloworld-${studentName}:${env.BUILD_NUMBER}?", \
+			      ok: "I wouldn't mind.")
+		}
 	}
 
+    }
 
+	catch (err) {
+		println "The build ${BUILD_NUMBER} has failed with error:\n${err}"
+		emailext body: "The build ${BUILD_NUMBER} has failed with error:\n${err}", \
+			recipientProviders: [developers()], subject: "Build ${BUILD_NUMBER} failed", \
+			to: "studen2devops@gmail.com"
+		currentBuild.result = 'FAILURE'
+	}
+
+	finally {
+		if(currentBuild.result == 'SUCCESS'){
+			echo "The build ${BUILD_NUMBER} has done successfully"
+			emailext body: "The build ${BUILD_NUMBER} has done successfully", \
+				recipientProviders: [developers()], subject: "Build ${BUILD_NUMBER} success", \
+				to: "studen2devops@gmail.com"
+		}
+	}
 
 }

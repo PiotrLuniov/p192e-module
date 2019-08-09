@@ -143,7 +143,9 @@ podTemplate(
 
         stage('Sanity Test') {
             // set git hash for sanity check
-            def gitHash = 'git log -n 1 --pretty=format:"%H"'.execute().text
+            def gitHash = sh(returnStdout: true,
+                             script: 'git log -n 1 --pretty=format:"%H"'.trim()
+                          )
             sh "sed -i 's/PLACE_FOR_GIT_HASH/${gitHash}/' config/provision.yml"
 
             // set a new version for image

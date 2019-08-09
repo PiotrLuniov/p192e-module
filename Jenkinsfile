@@ -1,4 +1,5 @@
-@Library('abutsko-library')
+@Library('abutsko-library') _
+
 def sendEmail(String stage) {
     emailext(
         subject: "[Jenkins] FAILED!",

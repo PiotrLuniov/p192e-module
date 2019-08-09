@@ -28,46 +28,46 @@ EOF
   }	
 
 
-  stage('Sonar-scan') {
-    def scannerHome = tool 'SonarQubeScanner';
-    withSonarQubeEnv() {
-       sh "${scannerHome}/bin/sonar-scanner " +
-       '-Dsonar.projectKey=apavarnitsyn ' +
-       '-Dsonar.language=java ' +
-       '-Dsonar.sources=helloworld-ws/src/main/java  '+
-       '-Dsonar.java.binaries=**/target/classes'
-    }
-  } 
+  // stage('Sonar-scan') {
+  //   def scannerHome = tool 'SonarQubeScanner';
+  //   withSonarQubeEnv() {
+  //      sh "${scannerHome}/bin/sonar-scanner " +
+  //      '-Dsonar.projectKey=apavarnitsyn ' +
+  //      '-Dsonar.language=java ' +
+  //      '-Dsonar.sources=helloworld-ws/src/main/java  '+
+  //      '-Dsonar.java.binaries=**/target/classes'
+  //   }
+  // } 
 
-  stage('run-parallel-mvn-tests') {
-    parallel(
-	    a: {
-	    withMaven(
-	        jdk: 'JDK9',
-	        maven: 'Maven 3.6.1', 
-	        mavenSettingsConfig: 'Maven2-Nexus-Repos') {
-	    	sh "mvn pre-integration-test -f helloworld-ws/pom.xml"
-	    	}
-	    },
-	    b: {
-	    withMaven(
-	        jdk: 'JDK9',
-	        maven: 'Maven 3.6.1', 
-	        mavenSettingsConfig: 'Maven2-Nexus-Repos') {	
-	        sh "mvn integration-test -f helloworld-ws/pom.xml"
-	    	}
-	    },
-	    c: {
-	    withMaven(
-	        jdk: 'JDK9',
-	        maven: 'Maven 3.6.1', 
-	        mavenSettingsConfig: 'Maven2-Nexus-Repos') {
-	        sh "mvn post-integration-test -f helloworld-ws/pom.xml"
-	        }
-		}
-    )
+  // stage('run-parallel-mvn-tests') {
+  //   parallel(
+	 //    a: {
+	 //    withMaven(
+	 //        jdk: 'JDK9',
+	 //        maven: 'Maven 3.6.1', 
+	 //        mavenSettingsConfig: 'Maven2-Nexus-Repos') {
+	 //    	sh "mvn pre-integration-test -f helloworld-ws/pom.xml"
+	 //    	}
+	 //    },
+	 //    b: {
+	 //    withMaven(
+	 //        jdk: 'JDK9',
+	 //        maven: 'Maven 3.6.1', 
+	 //        mavenSettingsConfig: 'Maven2-Nexus-Repos') {	
+	 //        sh "mvn integration-test -f helloworld-ws/pom.xml"
+	 //    	}
+	 //    },
+	 //    c: {
+	 //    withMaven(
+	 //        jdk: 'JDK9',
+	 //        maven: 'Maven 3.6.1', 
+	 //        mavenSettingsConfig: 'Maven2-Nexus-Repos') {
+	 //        sh "mvn post-integration-test -f helloworld-ws/pom.xml"
+	 //        }
+		// }
+  //   )
         
-    }
+  //   }
 
 
 

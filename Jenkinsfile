@@ -21,31 +21,31 @@ node('Host-Node'){
 			}
 		}
 
-		// stage('Sonar scan'){
-		// 	withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
-		// 		withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac') {
-		// 			sh "mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar -f helloworld-ws/pom.xml -Dsonar.projectKey=adalimayeu_helloworld -Dsonar.projectName=adalimayeu_helloworld"
-		// 		}
-		// 	}
-		// }
+		stage('Sonar scan'){
+			withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
+				withSonarQubeEnv(credentialsId: 'c4a2af68-473f-4764-a84f-6520c8bf22ac') {
+					sh "mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar -f helloworld-ws/pom.xml -Dsonar.projectKey=adalimayeu_helloworld -Dsonar.projectName=adalimayeu_helloworld"
+				}
+			}
+		}
 
-		// stage('Testing'){
-		// 	parallel 'pre-integration-test': {
-		// 			withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {
-	 //   					sh 'mvn pre-integration-test -f helloworld-ws/pom.xml'
-		// 			}
-		// 		},
-		// 		'integration-test': {
-		// 			withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {
-	 //   					sh 'mvn integration-test -f helloworld-ws/pom.xml'
-		// 			}
-		// 		},
-		// 		'post-integration-test': {
-		// 			withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {
-	 //   					sh 'mvn post-integration-test -f helloworld-ws/pom.xml'
-		// 			}
-		// 		}
-		// }
+		stage('Testing'){
+			parallel 'pre-integration-test': {
+					withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {
+	   					sh 'mvn pre-integration-test -f helloworld-ws/pom.xml'
+					}
+				},
+				'integration-test': {
+					withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {
+	   					sh 'mvn integration-test -f helloworld-ws/pom.xml'
+					}
+				},
+				'post-integration-test': {
+					withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', jdk: 'JDK9', maven: 'Maven 3.6.1') {
+	   					sh 'mvn post-integration-test -f helloworld-ws/pom.xml'
+					}
+				}
+		}
 
 		stage('Triggering job and fetching artefact after finishing'){
 			build job: "MNTLAB-${studentName}-child1-build-job", parameters: [string(name: 'BRANCH_NAME', value: "${studentName}")], wait: true
@@ -63,21 +63,19 @@ node('Host-Node'){
 				}
 		}
 
-		// stage('Asking for manual approval'){
-		// 	timeout(time: 2, unit: 'MINUTES') {
-		// 		input(id: "Deploy artifact", message: "Deploy helloworld-${studentName}:${env.BUILD_NUMBER}?", ok: 'Deploy')
-		// 		}
+		stage('Asking for manual approval'){
+			timeout(time: 2, unit: 'MINUTES') {
+				input(id: "Deploy artifact", message: "Deploy helloworld-${studentName}:${env.BUILD_NUMBER}?", ok: 'Deploy')
+				}
 
-		// }
+		}
 
 		stage('Deployment'){
-			// node('HBLEDAI_kubectl'){
 				sh "wget https://raw.githubusercontent.com/MNT-Lab/p192e-module/${studentName}/config/hello_k8s.yml -O hello_k8s.yml"
 				sh "sed -i \"s/_studentName_/${studentName}/g\" hello_k8s.yml"
 				sh 'sed -i "s/_buildNumber_/${BUILD_NUMBER}/g" hello_k8s.yml'
 
 				sh "$HOME/kubectl apply --namespace=${studentName} -f hello_k8s.yml"
-			// }
 		}
 
 		currentBuild.result = 'SUCCESS'

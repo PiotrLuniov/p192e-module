@@ -38,12 +38,15 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: tomcat-ingress
+  annotations:
+    #nginx.ingress.kubernetes.io/app-root: /helloworld-ws
+    nginx.ingress.kubernetes.io/rewrite-target: /helloworld-ws/$1
 spec:
   rules:
   - host: pluniov-app.k8s.playpit.by
     http:
       paths:
-      - path: /
+      - path: /(.*)
         backend:
           serviceName: tomcat-svc
           servicePort: 8080

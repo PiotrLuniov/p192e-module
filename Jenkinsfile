@@ -8,7 +8,7 @@ node {
         sh label: '', script: '''builddate=$(date)
         cat << EOF > helloworld-ws/src/main/webapp/metadata.html
         build: $BUILD_NUMBER <br>
-        author: ${student} <br>
+        author: $student <br>
         build_url: $BUILD_URL <br>
         buils_data: $builddate
         EOF'''

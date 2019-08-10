@@ -9,7 +9,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: tomcat
+      app: tomcat_BUILD_NUMBER
   template:
     metadata:
       labels:

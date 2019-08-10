@@ -122,9 +122,6 @@ sleep 15
 sed "s/STUDENT_NAME/${studentName}/g" tomcat/tomcat-s-i.yaml > tomcat-s-i.yaml
 $HOME/kubectl apply -f tomcat-s-i.yaml
 
-ls -la
-ls -la tomcat
-
 echo "Deployment  END"
 		"""
 	}

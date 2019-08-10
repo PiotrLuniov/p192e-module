@@ -31,7 +31,7 @@ spec:
             path: /helloworld-ws/version.html
             httpHeaders:
               - name: Host
-                value: "Build:100" #BUILD_NUMBER"
+                value: "Build:BUILD_NUMBER"
             port: 8080
           exec:
           initialDelaySeconds: 30

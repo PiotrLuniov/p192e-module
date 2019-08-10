@@ -99,8 +99,6 @@ node {
 
       currentBuild.result = 'SUCCESS'
       echo "BUILD_SUCCESS"
-      //mail bcc: '', body: 'BUILD_SUCCESS<br>Project:${JOB_NAME}<br>BUILD_NUMBER:${BUILD_NUMBER}' cc: '', from: '', replyTo: '', subject: 'Successful deployment', to: 'pluniov@gmail.com'
-
     }
 
     catch (err) {

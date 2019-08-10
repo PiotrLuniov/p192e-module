@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       labels:
-        app: tomcat
+        app: tomcat_BUILD_NUMBER
     spec:
       containers:
         - name: tomcat

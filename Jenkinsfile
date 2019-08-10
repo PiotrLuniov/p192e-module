@@ -16,37 +16,37 @@ node {
         sh 'mvn clean package -f helloworld-ws/pom.xml'
       }
     }
-
-    stage('Sonar scan') {
-      def scannerHome = tool 'SonarQubeScanner'
-      withSonarQubeEnv('sonar-ci') {
-         sh "${scannerHome}/bin/sonar-scanner " +
-         '-Dsonar.projectKey=helloworld-ws-pluniov '+
-         '-Dsonar.language=java '+
-         '-Dsonar.sources=helloworld-ws/src '+
-         '-Dsonar.java.binaries=helloworld-ws/target'
-       }
-    }
-
-    stage('Tests') {
-     parallel(
-        'pre-integration-test': {
-              withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', maven: 'Maven 3.6.1'){
-                sh 'mvn pre-integration-test -f helloworld-ws/pom.xml'
-              }
-        },
-        'integration-test': {
-              withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', maven: 'Maven 3.6.1'){
-                sh 'mvn integration-test -f helloworld-ws/pom.xml'
-              }
-        },
-        'post-integration-test': {
-              withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', maven: 'Maven 3.6.1'){
-                sh 'mvn post-integration-test -f helloworld-ws/pom.xml'
-              }
-        }
-      )
-    }
+    //
+    // stage('Sonar scan') {
+    //   def scannerHome = tool 'SonarQubeScanner'
+    //   withSonarQubeEnv('sonar-ci') {
+    //      sh "${scannerHome}/bin/sonar-scanner " +
+    //      '-Dsonar.projectKey=helloworld-ws-pluniov '+
+    //      '-Dsonar.language=java '+
+    //      '-Dsonar.sources=helloworld-ws/src '+
+    //      '-Dsonar.java.binaries=helloworld-ws/target'
+    //    }
+    // }
+    //
+    // stage('Tests') {
+    //  parallel(
+    //     'pre-integration-test': {
+    //           withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', maven: 'Maven 3.6.1'){
+    //             sh 'mvn pre-integration-test -f helloworld-ws/pom.xml'
+    //           }
+    //     },
+    //     'integration-test': {
+    //           withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', maven: 'Maven 3.6.1'){
+    //             sh 'mvn integration-test -f helloworld-ws/pom.xml'
+    //           }
+    //     },
+    //     'post-integration-test': {
+    //           withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', maven: 'Maven 3.6.1'){
+    //             sh 'mvn post-integration-test -f helloworld-ws/pom.xml'
+    //           }
+    //     }
+    //   )
+    // }
 
     stage('Triggering job and fetching artefact after finishing') {
       build job: "MNTLAB-${student}-child1-build-job", parameters: [[$class: 'StringParameterValue', name: 'BRANCH_NAME', value: "${student}"]], wait: true
@@ -82,6 +82,7 @@ node {
 
     stage('Health check'){
       sh '''
+      sleep 10
       CURL_HEALTH=$(curl -IL http://pluniov-app.k8s.playpit.by/helloworld-ws/main.html)
       if [ $(echo "$CURL_HEALTH" | grep -c 'HTTP/1.1 200') -eq 1 ]
       then
@@ -89,8 +90,10 @@ node {
       fi
         '''
     }
+
   }
-  //currentBuild.result = 'SUCCESS'
+  currentBuild.result = 'SUCCESS'
+  echo "BUILD_SUCCESS"
   //mail bcc: '', body: 'BUILD_SUCCESS<br>Project:${JOB_NAME}<br>BUILD_NUMBER:${BUILD_NUMBER}' cc: '', from: '', replyTo: '', subject: 'Successful deployment', to: 'pluniov@gmail.com'
 
   catch (err) {
@@ -98,11 +101,11 @@ node {
     echo "BUILD_FAILURE"
     //mail bcc: '', body: 'BUILD_FAILURE<br>Project:${JOB_NAME}<br>BUILD_NUMBER:${BUILD_NUMBER}<br>Errors:${err}' cc: '', from: '', replyTo: '', subject: 'Failed deployment', to: 'pluniov@gmail.com'
   }
-  finally {
-    if(currentBuild.result == 'SUCCESS'){
-      echo "BUILD_SUCCESS"
-    fi
-    }
-  }
+  // finally {
+  //   if(currentBuild.result == 'SUCCESS'){
+  //     echo "BUILD_SUCCESS"
+  //   fi
+  //   }
+  // }
 
 }

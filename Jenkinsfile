@@ -116,6 +116,8 @@ stage('Packaging and Publishing results') {
 //$HOME/kubectl apply -f deploy/tomcat-ns.yaml
 stage('Deployment'){
 		sh """
+		ls -la
+		ls -la deploy
 sed -i "s/LAST_BUILD_NUM/${BUILD_NUMBER}/g" deploy/tomcat_dep.yaml > deploy/tomcat_dep.yaml
 $HOME/kubectl apply -f deploy/tomcat_dep.yaml
 sleep 30

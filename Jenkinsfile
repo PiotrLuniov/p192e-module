@@ -9,7 +9,6 @@ node {
         checkout scm
 //        checkout([$class: 'GitSCM', branches: [[name: "*/$STUDENT"]], userRemoteConfigs: [[url: ' https://github.com/MNT-Lab/p192e-module']]])
     }
-! Implement handling  errors on each stage. The message (feedback) should be sent by email to DL (distribution list) with pro
 
     stage('Creation metadata page'){
         sh label: '', script: '''builddate=$(date)

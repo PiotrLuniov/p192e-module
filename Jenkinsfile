@@ -3,16 +3,13 @@ node {
     def MV_CONF = 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac'
     def MV_V = 'Maven 3.6.1'
 
-try { 
 	
     stage('Preparation') {
 
         checkout scm
 //        checkout([$class: 'GitSCM', branches: [[name: "*/$STUDENT"]], userRemoteConfigs: [[url: ' https://github.com/MNT-Lab/p192e-module']]])
     }
-} catch(err) { 
-   currentBuild.result = 'FAILED'
-    echo "BUILD_FAILED"
+
 	
     stage('Creation metadata page'){
         sh label: '', script: '''builddate=$(date)
@@ -24,9 +21,7 @@ try {
         EOF'''
 
     }
-} catch(err) { 
-   currentBuild.result = 'FAILED'
-    echo "BUILD_FAILED"
+
 
     stage ('Buildingcode') {
         withMaven(
@@ -50,9 +45,7 @@ try {
         }
     }
 	
-} catch(err) { 
-   currentBuild.result = 'FAILED'
-    echo "BUILD_FAILED"
+
 
 //    stage('Testing') {
 //        parallel 'pre-integration-test': {
@@ -82,9 +75,7 @@ try {
         copyArtifacts filter: "output.txt", fingerprintArtifacts: true, projectName: "MNTLAB-${STUDENT}-child1-build-job", selector: lastSuccessful()
     }
 	
-} catch(err) { 
-   currentBuild.result = 'FAILED'
-    echo "BUILD_FAILED"
+
 
 
     stage('Packaging and Publishing results') {
@@ -103,9 +94,7 @@ try {
                 }
         )
 	    
-} catch(err) { 
-   currentBuild.result = 'FAILED'
-    echo "BUILD_FAILED"
+
 	    
 	    
     }
@@ -117,9 +106,7 @@ try {
     }
 }
 
-} catch(err) { 
-   currentBuild.result = 'FAILED'
-    echo "BUILD_FAILED"
+
 	
 	
 	
@@ -142,9 +129,7 @@ try {
         '''
 	}
 
-} catch(err) { 
-   currentBuild.result = 'FAILED'
-    echo "Deployment FAILED"
+
 	
 	
 	stage('Health check'){
@@ -158,15 +143,9 @@ try {
         '''
     }
 	
-} catch(err) { 
-   currentBuild.result = 'FAILED'
-    echo "BUILD_FAILED"
+
 	
-} 
-	
-finally {
-         println("The final block");
-      }
+
 
 
 }

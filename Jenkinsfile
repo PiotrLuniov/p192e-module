@@ -100,7 +100,7 @@ node {
         sh'''
         ls
 	pwd
-         sed -i "s/_BUILD_NUMBER/${BUILD_NUMBER}/g" /opt/jenkins-slave/workspace/EPBYMINW9128/mntlab-ci-pipeline@2/deployment.yaml
+//         sed -i "s/_BUILD_NUMBER/${BUILD_NUMBER}/g" /opt/jenkins-slave/workspace/EPBYMINW9128/mntlab-ci-pipeline@2/deployment.yaml
 	 ls
 	 pwd
          $HOME/kubectl apply -f /opt/jenkins-slave/workspace/EPBYMINW9128/mntlab-ci-pipeline@2/deployment.yaml

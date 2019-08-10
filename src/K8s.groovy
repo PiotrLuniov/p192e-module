@@ -44,7 +44,7 @@ spec:
             #- helloworld-ws 
             #- /usr/local/tomcat/webapps/helloworld-ws/healthz.html
           httpGet:
-            path: /healthz.html
+            path: /helloworld-ws/healthz.html
             port: ${container_port}
           initialDelaySeconds: 3
           periodSeconds: 3

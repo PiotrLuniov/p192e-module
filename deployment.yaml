@@ -5,6 +5,7 @@ metadata:
   namespace: ymlechka
   labels:
     app: tomcat
+spec:
   replicas: 1
   selector:
     matchLabels:

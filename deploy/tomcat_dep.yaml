@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tomcat-$LAST_BUILD_NUM
+  name: tomcat-LAST_BUILD_NUM
   namespace: kshevchenko
   labels:
     app: tomcat
@@ -15,13 +15,13 @@ spec:
   template:
     metadata:
       annotations:
-        pod.beta.kubernetes.io/hostname: tomcat$LAST_BUILD_NUM
+        pod.beta.kubernetes.io/hostname: tomcatLAST_BUILD_NUM
       labels:
         app: tomcat
     spec:
       containers:
       - name: tomcat
-        image: "registry-ci.playpit.by/helloworld-kshevchenko:$LAST_BUILD_NUM"
+        image: "registry-ci.playpit.by/helloworld-kshevchenko:LAST_BUILD_NUM"
         ports:
         - name: tomcatport
           containerPort: 8080
@@ -31,8 +31,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tomcat-service-$LAST_BUILD_NUM
-  namespace: kshevchenko
+  name: tomcat-service-LAST_BUILD_NUM
+  namespace: tomcat
 spec:
   selector:
     app: tomcat

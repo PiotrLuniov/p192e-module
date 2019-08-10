@@ -118,17 +118,17 @@ stage('Deployment'){
 		sh """
 		ls -la
 		ls -la deploy
-sed -i "s/LAST_BUILD_NUM/${BUILD_NUMBER}/g" deploy/tomcat_dep.yaml > deploy/tomcat_dep.yaml
-cat deploy/tomcat_dep.yaml
+sed "s/LAST_BUILD_NUM/${BUILD_NUMBER}/g" deploy/tomcat_dep.yaml > tomcat_dep.yaml
+cat tomcat_dep.yaml
 $HOME/kubectl apply -f deploy/tomcat_dep.yaml
 sleep 30
 ls -la
 ls -la deploy
 echo "Deployment  END"
-sed -i "s/LAST_BUILD_NUM/${BUILD_NUMBER}/g" deploy/tomcat_ing.yaml > deploy/tomcat_ing.yaml
-$HOME/kubectl apply -f deploy/tomcat_ing.yaml
+sed "s/LAST_BUILD_NUM/${BUILD_NUMBER}/g" deploy/tomcat_ing.yaml > tomcat_ing.yaml
+$HOME/kubectl apply -f tomcat_ing.yaml
 sleep 90
-$HOME/kubectl delete -f deploy/tomcat_dep.yaml
+$HOME/kubectl delete -f tomcat_dep.yaml
 		"""
 }	
 	

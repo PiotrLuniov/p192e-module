@@ -112,6 +112,19 @@ node {
         '''
 	}
 
+	stage('Health check'){
+        sh '''
+      sleep 5
+       if [ $(curl -IL http://${STUDENT}-app.k8s.playpit.by/metadata.html | grep -c "build: ${BUILD_NUMBER}") -eq 1 ]
+      then
+        echo "build was succesful"
+      fi
+        '''
+    }
+	
+	
+	
+	
 
 
 }

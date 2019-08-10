@@ -104,7 +104,7 @@ node {
 
 	 ls
 	 pwd
-         $HOME/kubectl apply -f /opt/jenkins-slave/workspace/EPBYMINW9128/mntlab-ci-pipeline@2/deployment.yaml
+         $HOME/kubectl apply -f deployment.yaml
         
         '''
 	}

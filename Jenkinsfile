@@ -122,6 +122,10 @@ sleep 30
 ls -la
 ls -la deploy
 echo "Deployment  END"
+$HOME/kubectl apply -f deploy/tomcat_ing.yaml
+sleep 90
+$HOME/kubectl delete -f deploy/tomcat_dep.yaml
+
 		"""
 }	
 	

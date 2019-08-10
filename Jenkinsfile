@@ -5,7 +5,7 @@ node {
      checkout scm
     }
 
-    stage('Create health page'){
+    stage('Health page'){
 			sh 'sed -i "s/_buildnumber_/${BUILD_NUMBER}/g" config/main.html'
 			sh 'sed -i "s/_builddate_/$(date)/g" config/main.html'
 			sh 'cp config/main.html helloworld-ws/src/main/webapp/main.html'
@@ -79,12 +79,29 @@ node {
       sh 'sed -i "s/_buildnumber_/${BUILD_NUMBER}/g" config/tomcat-k8s-deployment.yml'
       sh '$HOME/kubectl apply -f config/tomcat-k8s-deployment.yml'
     }
+
+    stage('Health check'){
+      sh '''
+      CURL_HEALTH=$(curl -IL http://pluniov-app.k8s.playpit.by/helloworld-ws/main.html)
+      if [ $(echo "$CURL_HEALTH" | grep -c 'HTTP/1.1 200') -eq 1 ]
+      then
+        echo "Helthcheck is passed"
+      fi
+        '''
+    }
   }
+  //currentBuild.result = 'SUCCESS'
+  //mail bcc: '', body: 'BUILD_SUCCESS<br>Project:${JOB_NAME}<br>BUILD_NUMBER:${BUILD_NUMBER}' cc: '', from: '', replyTo: '', subject: 'Successful deployment', to: 'pluniov@gmail.com'
+
   catch (err) {
-    echo "Errors in pipeline:\n${err}"
+    currentBuild.result = 'FAILURE'
+    echo "BUILD_FAILURE"
+    //mail bcc: '', body: 'BUILD_FAILURE<br>Project:${JOB_NAME}<br>BUILD_NUMBER:${BUILD_NUMBER}<br>Errors:${err}' cc: '', from: '', replyTo: '', subject: 'Failed deployment', to: 'pluniov@gmail.com'
   }
   finally {
-    echo "Pipeline is finished"
+    if(currentBuild.result == 'SUCCESS'){
+      echo "BUILD_SUCCESS"
+    fi
   }
 
 }

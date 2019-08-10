@@ -60,34 +60,44 @@ node ('Host-Node'){
 
     
     stage('Packaging and Publishing results'){
+       
          parallel(
+             
             'Archiving artifact':{
+                try{ 
                 copyArtifacts(projectName: 'MNT-LAB-hbledai-child-1-build-job')
         sh '''
         tar xzvf hbledai_dsl_script.tar.gz
         ls helloworld-ws/target/ 
         tar czvf pipeline-hbledai-${BUILD_NUMBER}.tar.gz Jenkinsfile output.txt helloworld-ws/target/helloworld-ws.war
             '''
-               /* def pom =readMavenPom file: 'helloworld-ws/pom.xml'
-                nexusPublisher nexusInstanceId: 'nexus', 
-                    nexusRepositoryId: 'MNT-pipeline-training', 
-                    packages: [
-                        [
-                            $class: 'MavenPackage', 
-                            mavenAssetList: [
-                                [
-                                    filePath: "pipeline-hbledai-${env.BUILD_NUMBER}.tar.gz"
-                                    ]
-                                    ], 
-                    mavenCoordinate: [
-                        artifactId: "hbledai", 
-                        groupId: 'pipeline', 
-                        packaging: '.tar.gz', 
-                        version: '${env.BUILD_NUMBER}']
+           
+                 nexusArtifactUploader(
+                        nexusVersion: 'nexus3',
+                        protocol: 'http',
+                        nexusUrl: 'localhost:8081',
+                        repository: 'MNT-pipeline-training',
+                        groupId: 'hbledai',
+                        version: "${env.BUILD_NUMBER}",
+                        credentialsId: 'nexus',
+                        artifacts: [
+                            [
+                                artifactId: 'hbledai',
+                                classifier: '',
+                                file: "pipeline-hbledai-${BUILD_NUMBER}.tar.gz",
+                                type: 'tar.gz'
+                            ]
                         ]
-                        ]
-*/},
-            'Creating Docker Image':{
+                    )
+                } catch (err) {
+            echo err.getMessage()
+            echo "Error detected, but we will continue."
+        }
+                
+    
+},
+            'Creating Docker Image': {
+                try{
                        sh '''
 cat << EOF > $WORKSPACE/Dockerfile
 # Pull base image
@@ -110,15 +120,20 @@ EOF
                 customImage.push()
                 }
             }
-            )
-        }
+                 catch (err) {
+            echo err.getMessage()
+            echo "Error detected, but we will continue."
+                   }
+            }
+      )
+}
 stage("Asking for manual approval") {
                 timeout(time: 300, unit: 'SECONDS') {                  
                        def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next'  
                 }
             }
             
-
+try {
 podTemplate(cloud: 'k8s_bledai', 
             containers: [
                 containerTemplate(
@@ -129,17 +144,16 @@ podTemplate(cloud: 'k8s_bledai',
                 label: 'K8S_HBLEDAI', 
                 name: 'jenkins-slave', 
                 namespace: 'hbledai', )
-{
+{ 
+    try{
     node ('K8S_HBLEDAI'){
+        
     def k8s = new K8s()
     stage ('Deployment (rolling update, zero downtime)'){
+        try{
       k8s.kubectl_apply (
-        k8s.deployFile(
-          container_name: CONTAINER_NAME, 
-          creds: 'dockerrepo', 
-          file_name: 'deploy_tomcat.yml', 
-          app_name: 'helloworld-ws', 
-          container_port: '8080'
+        k8s.deployFile( CONTAINER_NAME,  'dockerrepo',  'deploy_tomcat.yml',  'helloworld-ws', 
+ '8080'
           )
         )
 
@@ -153,11 +167,22 @@ podTemplate(cloud: 'k8s_bledai',
           'ingress_tomcat.yaml', 'tomcat-ingress', 'tomcat-svc', '8080'
           )
         )
-   
-
+     } 
+         catch (err) {
+            echo err.getMessage()
+            echo "Error detected, but we will continue."
+            }
         }       
     }
-}
+} catch (err) {
+            echo err.getMessage()
+            echo "Error detected, but we will continue."
+        }  
+    }
+} catch (err) {
+            echo err.getMessage()
+            echo "Error detected, but we will continue."
+        }
   emailext (
       subject: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
       body: """

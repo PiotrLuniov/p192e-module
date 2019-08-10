@@ -30,9 +30,7 @@ node {
         }
     }
 	
-	} catch(err) { 
-   currentBuild.result = 'FAILED'
-    echo "BUILD_FAILED"
+
 	
     stage('Sonar scan') {
         def scannerHome = tool 'SonarQubeScanner'
@@ -66,9 +64,7 @@ node {
 //
 //    }
 
-	} catch(err) { 
-   currentBuild.result = 'FAILED'
-    echo "BUILD_FAILED"
+
 
     stage('Triggering job and fetching artefact after finishing'){
         build job: "MNTLAB-${STUDENT}-child1-build-job", parameters: [string(name: 'BRANCH_NAME', value: "${STUDENT}")], wait: true

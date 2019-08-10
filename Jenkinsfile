@@ -97,7 +97,7 @@ node {
 		
 	echo 'creation ns'
         sh'''
-        sed -i "s/S_N/${STUDENT}/g" ns.yaml
+        sed -i "s/STUD/${STUDENT}/g" ns.yaml
         $HOME/kubectl apply -f ns.yaml  
             '''
 //		echo "downloading config files"

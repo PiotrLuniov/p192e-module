@@ -120,7 +120,7 @@ catch (err) {
 		println "The build ${BUILD_NUMBER} has failed with error:\n${err}"
 		emailext body: "The build ${BUILD_NUMBER} has failed with error:\n${err}", \
 			recipientProviders: [developers()], subject: "Build ${BUILD_NUMBER} failed", \
-			to: "studen2devops@gmail.com"
+			to: "workaccmsq@gmail.com"
 		currentBuild.result = 'FAILURE'
 	}
 
@@ -129,7 +129,7 @@ catch (err) {
 			echo "The build ${BUILD_NUMBER} has done successfully"
 			emailext body: "The build ${BUILD_NUMBER} has done successfully", \
 				recipientProviders: [developers()], subject: "Build ${BUILD_NUMBER} success", \
-				to: "studen2devops@gmail.com"
+				to: "workaccmsq@gmail.com"
 		}
 
 	

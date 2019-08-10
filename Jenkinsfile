@@ -97,15 +97,11 @@ node {
 //		echo "downloading config files"
 //        git branch: "STUDENT",
 //                url: 'https://github.com/MNT-Lab/p192e-module.git'
-// sed -i "s/_BUILD_NUMBER/${BUILD_NUMBER}/g" /opt/jenkins-slave/workspace/EPBYMINW9128/mntlab-ci-pipeline@2/deployment.yaml
         sh'''
         ls
 	pwd
-
-	 ls
-	 pwd
-         $HOME/kubectl apply -f deployment.yaml
-        
+	sed -i "s/_BUILD_NUMBER/${BUILD_NUMBER}/g" deployment.yaml
+        $HOME/kubectl apply -f deployment.yaml        
         '''
 	}
 

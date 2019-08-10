@@ -102,6 +102,7 @@ node {
     if(currentBuild.result == 'SUCCESS'){
       echo "BUILD_SUCCESS"
     fi
+    }
   }
 
 }

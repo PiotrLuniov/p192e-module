@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tomcat
+  name: Tomcat_BUILD_NUMBER
   namespace: ymlechka
   labels:
-    app: tomcat
+    app: tomcat_BUILD_NUMBER
 spec:
   replicas: 1
   selector:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: tomcat
-          image: "registry-ci.playpit.by/helloworld-ymlechka:546"
+          image: "registry-ci.playpit.by/helloworld-ymlechka:_BUILD_NUMBER"
           ports:
             - name: tomcatport
               containerPort: 8080
@@ -31,7 +31,7 @@ metadata:
   namespace: ymlechka
 spec:
   selector:
-    app: tomcat
+    app: tomcat_BUILD_NUMBER
   type: LoadBalancer
   ports:
     - name: tomcatsvcport
@@ -44,7 +44,7 @@ metadata:
   name: tomcat-ingress
   namespace: ymlechka
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /helloworld-ws/$2
+    nginx.ingress.kubernetes.io/rewrite-target: /helloworld-ws/$1
 spec:
   rules:
     - host: ymlechka-app.k8s.playpit.by

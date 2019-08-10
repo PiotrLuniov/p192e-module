@@ -47,24 +47,24 @@ node {
 	
 
 
-//    stage('Testing') {
-//        parallel 'pre-integration-test': {
-//                withMaven(globalMavenSettingsConfig: "$MV_CONF", jdk: 'JDK9', maven: "$MV_V") {
-//                sh 'mvn pre-integration-test -f helloworld-ws/pom.xml'
-//            }
-//        },
-//                'integration-test': {
-//                    withMaven(globalMavenSettingsConfig: "$MV_CONF", jdk: 'JDK9', maven: "$MV_V") {
-//                        sh 'mvn integration-test -f helloworld-ws/pom.xml'
-//                    }
-//                },
-//                'post-integration-test': {
-//                    withMaven(globalMavenSettingsConfig: "$MV_CONF", jdk: 'JDK9', maven: "$MV_V") {
-//                        sh 'mvn post-integration-test -f helloworld-ws/pom.xml'
-//                    }
-//                }
-//
-//    }
+    stage('Testing') {
+        parallel 'pre-integration-test': {
+                withMaven(globalMavenSettingsConfig: "$MV_CONF", jdk: 'JDK9', maven: "$MV_V") {
+                sh 'mvn pre-integration-test -f helloworld-ws/pom.xml'
+            }
+        },
+                'integration-test': {
+                    withMaven(globalMavenSettingsConfig: "$MV_CONF", jdk: 'JDK9', maven: "$MV_V") {
+                        sh 'mvn integration-test -f helloworld-ws/pom.xml'
+                    }
+                },
+                'post-integration-test': {
+                    withMaven(globalMavenSettingsConfig: "$MV_CONF", jdk: 'JDK9', maven: "$MV_V") {
+                        sh 'mvn post-integration-test -f helloworld-ws/pom.xml'
+                    }
+                }
+
+    }
 
 
 

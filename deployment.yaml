@@ -1,11 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tomcat_BUILD_NUMBER
+  name: tomcat
   namespace: ymlechka
   labels:
-    app: tomcat_BUILD_NUMBER
-spec:
+    app: tomcat
   replicas: 1
   selector:
     matchLabels:
@@ -17,7 +16,7 @@ spec:
     spec:
       containers:
         - name: tomcat
-          image: "registry-ci.playpit.by/helloworld-ymlechka:_BUILD_NUMBER"
+          image: "registry-ci.playpit.by/helloworld-ymlechka:552"
           ports:
             - name: tomcatport
               containerPort: 8080
@@ -27,11 +26,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tomcat-service_BUILD_NUMBER
+  name: tomcat-service
   namespace: ymlechka
 spec:
   selector:
-    app: tomcat_BUILD_NUMBER
+    app: tomcat
   type: LoadBalancer
   ports:
     - name: tomcatsvcport
@@ -52,6 +51,6 @@ spec:
         paths:
           - path: /(.*)
             backend:
-              serviceName: tomcat-service_BUILD_NUMBER
+              serviceName: tomcat-service
               servicePort: tomcatsvcport
 

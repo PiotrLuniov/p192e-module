@@ -140,8 +140,8 @@ node {
         '''
     }
 	
-	catch (err) {
-    			currentBuild.result = 'FAILURE'
-    			echo "Build Failed"
-  }
+    catch (err) {
+      currentBuild.result = 'FAILURE'
+      echo "BUILD_FAILURE"
+    }
 }

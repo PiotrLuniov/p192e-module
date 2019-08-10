@@ -36,18 +36,18 @@ spec:
         image: registry-ci.playpit.by/${container_name}
         ports:
         - containerPort: ${container_port}
-        readinessProbe:
-          exec:
-            command:
-            - grep
-            - '-q'
-            - 'helloworld-ws' 
-            - /usr/local/tomcat/webapps/helloworld-ws/healthz.html
+        #readinessProbe:
+         # exec:
+          #  command:
+           # - grep
+            #- '-q'
+            #- 'helloworld-ws' 
+            #- /usr/local/tomcat/webapps/helloworld-ws/healthz.html
           #httpGet:
            # path: /${app_name}
             #port: ${container_port}
-          initialDelaySeconds: 3
-          periodSeconds: 3
+          #initialDelaySeconds: 3
+          #periodSeconds: 3
         livenessProbe:
           httpGet:
             path: /${app_name}

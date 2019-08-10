@@ -6,7 +6,7 @@ def deployFile ( String container_name,
 				String app_name = 'helloworld-ws', 
 				String container_port = '8080'
 ){
-this.health(container_name)	
+
 
 sh """
 cat << EOF > ${file_name}
@@ -37,9 +37,12 @@ spec:
         ports:
         - containerPort: ${container_port}
         readinessProbe:
-          httpGet:
-            path: /${app_name}
-            port: ${container_port}
+          exec:
+            command:
+            - cat /usr/local/tomcat/webapps/helloworld-ws/healthz.html
+          #httpGet:
+           # path: /${app_name}
+            #port: ${container_port}
           initialDelaySeconds: 3
           periodSeconds: 3
         livenessProbe:

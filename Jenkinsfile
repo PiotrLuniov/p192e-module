@@ -93,14 +93,17 @@ node {
     }
 }
 
-
 	stage('Deployment'){
-		echo "Deployment-stage"
+//		echo "downloading config files"
+//        git branch: "STUDENT",
+//                url: 'https://github.com/MNT-Lab/p192e-module.git'
+        sh'''
+        
+         'sed -i "s/_BUILD_NUMBER/${BUILD_NUMBER}/g" deployment.yaml'
+         kubectl apply -f deployment.yaml
+        
+        '''
 	}
-
-    
-
-
 
 
 

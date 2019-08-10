@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
       - name: tomcat-pramanouski-container
-        image: registry-ci.playpit.by/helloworld-pramanouski:20
+        image: registry-ci.playpit.by/helloworld-pramanouski:TAG
         ports:
         - containerPort: 8080

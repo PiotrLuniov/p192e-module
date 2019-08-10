@@ -74,7 +74,7 @@ node {
 
     stage('Asking for manual approval'){
       timeout(time: 1, unit: 'MINUTES') {
-             input(id: "Deploy of artifact", message: "Deploy to Kubernetes helloworld-${STUDENT}:${env.BUILD_NUMBER}?", ok: "ok")
+             input(id: "Deploy of artifact", message: "Deploy to Kubernetes helloworld-${student}:${env.BUILD_NUMBER}?", ok: "ok")
       }
     }
 

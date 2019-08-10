@@ -98,8 +98,11 @@ node {
 //        git branch: "STUDENT",
 //                url: 'https://github.com/MNT-Lab/p192e-module.git'
         sh'''
-        
+        ls
+	pwd
          'sed -i "s/_BUILD_NUMBER/${BUILD_NUMBER}/g" deployment.yaml'
+	 ls
+	 pwd
          kubectl apply -f deployment.yaml
         
         '''

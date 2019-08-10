@@ -15,5 +15,5 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: tomcat-service-$LAST_BUILD_NUM
+          serviceName: tomcat-service-LAST_BUILD_NUM
           servicePort: tomcatsvcport

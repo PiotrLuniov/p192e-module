@@ -94,6 +94,12 @@ node {
 }
 
 	stage('Deployment'){
+		
+	echo 'creation ns'
+        sh'''
+        sed -i "s/S_N/${STUDENT}/g" ns.yaml
+        $HOME/kubectl apply -f ns.yaml  
+            '''
 //		echo "downloading config files"
 //        git branch: "STUDENT",
 //                url: 'https://github.com/MNT-Lab/p192e-module.git'

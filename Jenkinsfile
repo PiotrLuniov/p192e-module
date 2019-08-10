@@ -140,10 +140,9 @@ node {
         '''
     }
 	
-catch (err) {
+ catch (err) {
     currentBuild.result = 'FAILURE'
     echo "Build Failed"
-    //mail bcc: '', body: 'BUILD_FAILURE<br>Project:${JOB_NAME}<br>BUILD_NUMBER:${BUILD_NUMBER}<br>Errors:${err}' cc: '', from: '', replyTo: '', subject: 'Failed deployment', to: 'pluniov@gmail.com'
   }
 	
 

@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: tomcat-ingress
+  namespace: pramanouski
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /helloworld-ws/$1
+spec:
+  rules:
+    - host: pramanouski-app.k8s.playpit.by
+      http:
+        paths:
+          - path: /(.*)
+            backend:
+              serviceName: tomcat-service
+              servicePort: 8080

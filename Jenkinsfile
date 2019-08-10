@@ -11,7 +11,8 @@ node('Host-Node') {
 	stage('BuildNumber page'){
 		sh """
 cat << EOF > helloworld-ws/src/main/webapp/version.html
-<html><head><title>Build:${BUILD_NUMBER}</title></head></html>
+<html><head><title>Build:${BUILD_NUMBER}</title></head>
+<body><header><h1>Build:${BUILD_NUMBER}</h1></header></html>
 EOF
 		"""
 	}
@@ -40,33 +41,33 @@ EOF
 	    	}
 	}
 
-//	stage('Testing') {
-//		parallel (
-//			'pre-integration-test': {
-//				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
-//					jdk: 'JDK9', maven: 'Maven 3.6.1') {
-//					sh "mvn pre-integration-test -f helloworld-ws/pom.xml"
-//				}
-//
-//			},
-//
-//			'integration-test': {
-//				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
-//					jdk: 'JDK9', maven: 'Maven 3.6.1') {
-//					sh "mvn integration-test -f helloworld-ws/pom.xml"
-//				}
-//
-//			},
-//
-//			'post-integration-test': {
-//				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
-//					jdk: 'JDK9', maven: 'Maven 3.6.1') {
-//					sh "mvn post-integration-test -f helloworld-ws/pom.xml"
-//				}
-//
-//			}
-//		)
-//	}
+	stage('Testing') {
+		parallel (
+			'pre-integration-test': {
+				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
+					jdk: 'JDK9', maven: 'Maven 3.6.1') {
+					sh "mvn pre-integration-test -f helloworld-ws/pom.xml"
+				}
+
+			},
+
+			'integration-test': {
+				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
+					jdk: 'JDK9', maven: 'Maven 3.6.1') {
+					sh "mvn integration-test -f helloworld-ws/pom.xml"
+				}
+
+			},
+
+			'post-integration-test': {
+				withMaven(globalMavenSettingsConfig: 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac', \
+					jdk: 'JDK9', maven: 'Maven 3.6.1') {
+					sh "mvn post-integration-test -f helloworld-ws/pom.xml"
+				}
+
+			}
+		)
+	}
 
 	stage('Triggering job and fetching artefact after finishing'){
 		build job: "MNTLAB-${studentName}-child1-build-job", \

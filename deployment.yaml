@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: Tomcat_BUILD_NUMBER
+  name: tomcat_BUILD_NUMBER
   namespace: ymlechka
   labels:
     app: tomcat_BUILD_NUMBER

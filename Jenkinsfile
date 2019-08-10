@@ -127,10 +127,9 @@ node {
         '''
 	}
 
-
-	
 	
 	stage('Health check'){
+		
         sh '''
       sleep 20
        CHECK_URL="http://ymlechka-app.k8s.playpit.by/metadata.html"
@@ -141,11 +140,11 @@ node {
         '''
     }
 	currentBuild.result = 'SUCCESS'
-        echo "BUILD_SUCCESS"
+        echo "Build was succesfull"
     }
 	
     catch (err) {
       currentBuild.result = 'FAILURE'
-      echo "BUILD_FAILURE"
+      echo "Build has failed"
     }
 }

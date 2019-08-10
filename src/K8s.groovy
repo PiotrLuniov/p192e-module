@@ -37,12 +37,11 @@ spec:
         ports:
         - containerPort: ${container_port}
         #readinessProbe:
-         # exec:
-          #  command:
-           # - grep
-            #- '-q'
-            #- 'helloworld-ws' 
-            #- /usr/local/tomcat/webapps/helloworld-ws/healthz.html
+          exec:
+            command:
+            - grep
+            - helloworld-ws 
+            - /usr/local/tomcat/webapps/helloworld-ws/healthz.html
           #httpGet:
            # path: /${app_name}
             #port: ${container_port}

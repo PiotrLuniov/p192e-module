@@ -140,6 +140,9 @@ node {
       fi
         '''
     }
+	currentBuild.result = 'SUCCESS'
+        echo "BUILD_SUCCESS"
+    }
 	
     catch (err) {
       currentBuild.result = 'FAILURE'

@@ -5,13 +5,9 @@ def deployFile ( String container_name,
 				String file_name = 'deploy_tomcat.yml', 
 				String app_name = 'helloworld-ws', 
 				String container_port = '8080'
-<<<<<<< HEAD
+
 ){
 
-
-=======
-){	
->>>>>>> 93c1f78fd13694b9927fd9f09e5eecff780ad0e5
 sh """
 cat << EOF > ${file_name}
 apiVersion: extensions/v1beta1 

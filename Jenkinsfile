@@ -3,13 +3,17 @@ node {
     def MV_CONF = 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac'
     def MV_V = 'Maven 3.6.1'
 
-
+try { 
+	
     stage('Preparation') {
 
         checkout scm
 //        checkout([$class: 'GitSCM', branches: [[name: "*/$STUDENT"]], userRemoteConfigs: [[url: ' https://github.com/MNT-Lab/p192e-module']]])
     }
-
+} catch(err) { 
+   currentBuild.result = 'FAILED'
+    echo "BUILD_FAILED"
+	
     stage('Creation metadata page'){
         sh label: '', script: '''builddate=$(date)
         cat << EOF > helloworld-ws/src/main/webapp/metadata.html
@@ -20,7 +24,9 @@ node {
         EOF'''
 
     }
-
+} catch(err) { 
+   currentBuild.result = 'FAILED'
+    echo "BUILD_FAILED"
 
     stage ('Buildingcode') {
         withMaven(
@@ -28,6 +34,11 @@ node {
             sh 'mvn clean package -f helloworld-ws/pom.xml'
         }
     }
+	
+	} catch(err) { 
+   currentBuild.result = 'FAILED'
+    echo "BUILD_FAILED"
+	
     stage('Sonar scan') {
         def scannerHome = tool 'SonarQubeScanner'
         withSonarQubeEnv('sonar-ci') {
@@ -38,7 +49,10 @@ node {
                     '-Dsonar.java.binaries=helloworld-ws/target'
         }
     }
-
+	
+} catch(err) { 
+   currentBuild.result = 'FAILED'
+    echo "BUILD_FAILED"
 
 //    stage('Testing') {
 //        parallel 'pre-integration-test': {
@@ -59,12 +73,18 @@ node {
 //
 //    }
 
+	} catch(err) { 
+   currentBuild.result = 'FAILED'
+    echo "BUILD_FAILED"
 
     stage('Triggering job and fetching artefact after finishing'){
         build job: "MNTLAB-${STUDENT}-child1-build-job", parameters: [string(name: 'BRANCH_NAME', value: "${STUDENT}")], wait: true
         copyArtifacts filter: "output.txt", fingerprintArtifacts: true, projectName: "MNTLAB-${STUDENT}-child1-build-job", selector: lastSuccessful()
     }
-
+	
+} catch(err) { 
+   currentBuild.result = 'FAILED'
+    echo "BUILD_FAILED"
 
 
     stage('Packaging and Publishing results') {
@@ -82,7 +102,12 @@ node {
 
                 }
         )
-
+	    
+} catch(err) { 
+   currentBuild.result = 'FAILED'
+    echo "BUILD_FAILED"
+	    
+	    
     }
 
    stage('Asking for manual approval'){
@@ -92,6 +117,12 @@ node {
     }
 }
 
+} catch(err) { 
+   currentBuild.result = 'FAILED'
+    echo "BUILD_FAILED"
+	
+	
+	
 	stage('Deployment'){
 		
 	echo 'creation ns'
@@ -111,6 +142,11 @@ node {
         '''
 	}
 
+} catch(err) { 
+   currentBuild.result = 'FAILED'
+    echo "Deployment FAILED"
+	
+	
 	stage('Health check'){
         sh '''
       sleep 20
@@ -122,7 +158,11 @@ node {
         '''
     }
 	
+} catch(err) { 
+   currentBuild.result = 'FAILED'
+    echo "BUILD_FAILED"
 	
+} 
 	
 	
 

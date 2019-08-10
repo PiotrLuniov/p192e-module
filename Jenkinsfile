@@ -1,9 +1,10 @@
 node {
+   try {
     def STUDENT = 'ymlechka'
     def MV_CONF = 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac'
     def MV_V = 'Maven 3.6.1'
 	
-	try {
+	
 	
     stage('Preparation') {
 

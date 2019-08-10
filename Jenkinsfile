@@ -6,6 +6,7 @@ node {
     }
 
     stage('Health page'){
+      ll
 			sh 'sed -i "s/_buildnumber_/${BUILD_NUMBER}/g" config/main.html'
 			sh 'sed -i "s/_builddate_/$(date)/g" config/main.html'
 			sh 'cp config/main.html helloworld-ws/src/main/webapp/main.html'

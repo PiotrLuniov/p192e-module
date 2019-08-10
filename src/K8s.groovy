@@ -39,7 +39,8 @@ spec:
         readinessProbe:
           exec:
             command:
-            - cat /usr/local/tomcat/webapps/helloworld-ws/healthz.html
+            - cat 
+            - /usr/local/tomcat/webapps/helloworld-ws/healthz.html
           #httpGet:
            # path: /${app_name}
             #port: ${container_port}

@@ -85,4 +85,3 @@ node {
       sh '$HOME/kubectl apply -f k8scfg/tomcat-ingress.yml'
     }
   }
-}

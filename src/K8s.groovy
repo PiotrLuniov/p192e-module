@@ -38,19 +38,18 @@ spec:
         - containerPort: ${container_port}
         livenessProbe:
         
-          exec:
-            command:
-            - grep
-            - helloworld-ws 
-            - /usr/local/tomcat/webapps/helloworld-ws/healthz.html
-          #httpGet:
-           # path: /${app_name}
-            #port: ${container_port}
+          #exec:
+            #command:
+            #- grep
+            #- helloworld-ws 
+            #- /usr/local/tomcat/webapps/helloworld-ws/healthz.html
+          httpGet:
+            path: /healthz.html
+            port: ${container_port}
           initialDelaySeconds: 3
           periodSeconds: 3
         readinessProbe:
-          httpGet:
-            path: /${app_name}
+          tcpSocket:
             port: ${container_port}
           initialDelaySeconds: 3
           periodSeconds: 3      

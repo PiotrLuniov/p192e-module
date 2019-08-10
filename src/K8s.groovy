@@ -39,7 +39,7 @@ spec:
         readinessProbe:
           exec:
             command:
-            - cat 
+            - grep -q '145' 
             - /usr/local/tomcat/webapps/helloworld-ws/healthz.html
           #httpGet:
            # path: /

@@ -42,13 +42,13 @@ spec:
             - cat 
             - /usr/local/tomcat/webapps/helloworld-ws/healthz.html
           #httpGet:
-           # path: /${app_name}
+           # path: /
             #port: ${container_port}
           initialDelaySeconds: 3
           periodSeconds: 3
         livenessProbe:
           httpGet:
-            path: /${app_name}
+            path: /
             port: ${container_port}
           initialDelaySeconds: 3
           periodSeconds: 3      

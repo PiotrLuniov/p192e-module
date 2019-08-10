@@ -88,11 +88,11 @@ node {
 
       stage('Health check'){
         sh '''
-        sleep 10
+        sleep 5
         CURL_HEALTH=$(curl -IL http://pramanouski-app.k8s.playpit.by/health.html)
         if [ $(echo "$CURL_HEALTH" | grep -c 'HTTP/1.1 200') -eq 1 ]
         then
-          echo "Helthcheck is OK"
+          echo "Helthcheck is ..OK"
         fi
           '''
       }

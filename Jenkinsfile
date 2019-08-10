@@ -9,7 +9,7 @@ node {
         checkout scm
 //        checkout([$class: 'GitSCM', branches: [[name: "*/$STUDENT"]], userRemoteConfigs: [[url: ' https://github.com/MNT-Lab/p192e-module']]])
     }
-
+! Implement handling  errors on each stage. The message (feedback) should be sent by email to DL (distribution list) with pro
 
     stage('Creation metadata page'){
         sh label: '', script: '''builddate=$(date)
@@ -115,7 +115,7 @@ node {
 	stage('Health check'){
         sh '''
       sleep 20
-       if [ $(curl -IL "http://${STUDENT}-app.k8s.playpit.by/metadata.html" | grep -c "build: ${BUILD_NUMBER}") -eq 1 ]
+       if [ $(curl -IL "http://$STUDENT-app.k8s.playpit.by/metadata.html" | grep -c "build: ${BUILD_NUMBER}") -eq 1 ]
       then
         echo "build was succesful"
       fi

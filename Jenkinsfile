@@ -115,7 +115,7 @@ node {
         sh '''
       sleep 20
        CHECK_URL="http://ymlechka-app.k8s.playpit.by/metadata.html"
-       if [ $(curl -IL "$CHECK_URL" | grep -c "build: ${BUILD_NUMBER}") -eq 1 ]
+       if [ $(curl "$CHECK_URL" | grep -c "build: ${BUILD_NUMBER}") -eq 1 ]
       then
         echo "build was succesful"
       fi

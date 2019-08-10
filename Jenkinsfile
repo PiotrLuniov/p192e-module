@@ -20,11 +20,11 @@ cat << EOF > helloworld-ws/src/main/webapp/deploy.html
     <h1>Maintainer "Kirill Shevchenko"</h1>
   </header>
   <article>
-    <h2>WELCO!</h2>
+    <h2>WELCOM!</h2>
     <p>Build:${BUILD_NUMBER}</p>
   </article>
   <footer>
-    Copyright Kirill Shevchenko
+    Copyright: Kirill Shevchenko
   </footer>
  </body> 
 </html>

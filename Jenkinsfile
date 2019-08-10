@@ -116,13 +116,13 @@ stage('Packaging and Publishing results') {
 
 stage('Deployment'){
 		sh """
-$HOME/kubectl apply -f tomcat/tomcat-ns.yaml
-sed "s/LAST_BUILD_NUM/${BUILD_NUMBER}/g" tomcat/tomcat-dep.yaml > tomcat-dep.yaml
+$HOME/kubectl apply -f deploy/tomcat-ns.yaml
+sed "s/LAST_BUILD_NUM/${BUILD_NUMBER}/g" deploy/tomcat-dep.yaml > tomcat-dep.yaml
 sed -i "s/STUDENT_NAME/kshevchenko/g" tomcat-dep.yaml
 $HOME/kubectl apply -f tomcat-dep.yaml
 sleep 30
 ls -la
-ls -la tomcat
+ls -la deploy
 echo "Deployment  END"
 		"""
 }	

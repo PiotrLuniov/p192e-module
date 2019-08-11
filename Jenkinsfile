@@ -208,7 +208,7 @@ podTemplate(
 //                    extras: '-v'
 //                )
                 // Deploying a sanity pod
-                sh 'kubectl -f config/santiy.yml'
+                sh 'kubectl apply -f config/santiy.yml'
 
                 // Get old html page
                 def oldPage = new URL('http://abutsko-helloworld.abutsko.svc.cluster.local:8080/helloworld-ws').text

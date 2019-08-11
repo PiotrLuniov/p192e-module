@@ -82,8 +82,8 @@ node('Host-Node') {
 	stage ('Checking') {
        		try {
             		sh "curl http://iyaruk-app.k8s.playpit.by/ | grep 'helloworld-ws Quickstart'"
-            			return true
-				echo "Simple check with curl passed with SUCCESS!"
+			echo "Simple check with curl passed with SUCCESS!"
+			return true
       			} catch (resp) {
         			echo "Simple check with curl failured!"
         			currentBuild.result = 'FAILURE'

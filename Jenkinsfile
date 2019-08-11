@@ -162,7 +162,7 @@ def emailReport(stage, what, result) {
                    "Final result:  ${result}"
         emailext subject: "Report from [Jenkins]",
             	 body: """${text}""",
-            	 recipientProviders: [developers()],
+            	 recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
             	 to: 'paradoxicalm5@gmail.com' 
     }
     catch(Throwable e) {

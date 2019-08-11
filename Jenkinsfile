@@ -150,12 +150,12 @@ def test(String command) {
             maven: "${MAVEN_VERSION}",
             globalMavenSettingsConfig: "${MAVEN_CONFIG}") {
                 dir('helloworld-ws') {
-                    sh """mvn ${command}"""
+                    sh """ls && mvn ${command}"""
             }
         }
     } 
     catch(all) {
-        emailReport(command, 'unknown', ${DEFAULT_RES})
+        //emailReport(command, 'unknown', ${DEFAULT_RES})
     }
     finally {
         echo ("something goes wrong")

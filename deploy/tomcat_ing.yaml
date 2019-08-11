@@ -13,7 +13,7 @@ spec:
   - host: kschevchenko.k8s.playpit.by
     http:
       paths:
-      - path: /
+      - path: /helloworld-ws/
         backend:
           serviceName: tomcat-service-LAST_BUILD_NUM
           servicePort: tomcatsvcport

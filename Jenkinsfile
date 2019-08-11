@@ -42,11 +42,8 @@ node {
                 '-Dsonar.java.binaries=**/target/classes'
             }
         }
-        catch(Exception e) {
-            echo e.getMessage()
-        }
-        catch(Error e) {
-            echo e.getMessage()
+        catch(Throwable t) {
+            echo t.getMessage()
         }
         // catch(Exception e) {
         //     emailReport('Sonar scan', e.getMessage(), ${DEFAULT_RES})
@@ -54,10 +51,10 @@ node {
         // catch(Error e) {
         //     emailReport('Sonar scan', Error e.getMessage(), ${DEFAULT_RES})
         // }
-        catch(all) {
-            //emailReport('Sonar scan', 'unknown', ${DEFAULT_RES})
-             echo ("something goes wrong")
-        }
+        // catch(all) {
+        //     //emailReport('Sonar scan', 'unknown', ${DEFAULT_RES})
+        //      echo ("something goes wrong")
+        // }
     }
 
     stage('Testing') {
@@ -158,16 +155,19 @@ def test(String command) {
             }
         }
     }
-    catch(Exception e) {
-        echo e.getMessage()
-    }
-    catch(Error e) {
-        echo e.getMessage()
-    }
-    catch(all) {
-        echo ("something goes wrong")
-        //emailReport(command, 'unknown', ${DEFAULT_RES})
-    }
+            catch(Throwable t) {
+            echo t.getMessage()
+        }
+    // catch(Exception e) {
+    //     echo e.getMessage()
+    // }
+    // catch(Error e) {
+    //     echo e.getMessage()
+    // }
+    // catch(all) {
+    //     echo ("something goes wrong")
+    //     //emailReport(command, 'unknown', ${DEFAULT_RES})
+    // }
 }
 
 // def emailReport(stage, what, result) {

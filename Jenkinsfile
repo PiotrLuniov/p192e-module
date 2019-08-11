@@ -11,7 +11,7 @@ node {
         }
         catch(Error e) {
             echo ("something goes wrong")
-            emailReport('Preparation', Error e.getMessage(), ${DEFAULT_RES})
+            emailReport('Preparation', e.getMessage(), ${DEFAULT_RES})
         }
     }
 

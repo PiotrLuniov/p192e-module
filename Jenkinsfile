@@ -1,12 +1,12 @@
 @Library('akuznetsova-shared-library') _
 node {
+  try{
   def studentName = 'akuznetsova'
    stage('Preparation') {
       git branch: 'akuznetsova', url: 'https://github.com/MNT-Lab/build-t00ls.git'
 
    }
    stage('Build') {
-     sh 'ls ../../EPBYMINW9149/'
       withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1'){
           sh 'mvn -f helloworld-project/helloworld-ws/pom.xml package'
       }
@@ -79,4 +79,24 @@ stage('Deployment'){
     sh "$HOME/kubectl create namespace akuznetsova"
     sh "$HOME/kubectl apply --namespace=${studentName} -f tomcat_app.yml"
 }
+def result = 'success';
+}
+
+	catch (err) {
+        def now = new Date()
+        def body = "There are errors in pipeline:\n${err}\nBuild: ${env.BUILD_NUMBER}\nErrors has appeared: ${now}"
+        println body
+		emailext body: "${body}", subject: 'Pipeline errors!', to: 'alexminsk.noir@gmail.com'
+		result = 'fail'
+	}
+
+	finally {
+		if(result == 'success'){
+			echo "Pipeline has successfully done."
+
+			def now = new Date()
+			def body = "Pipeline has successfully done at: ${now}\nBUild number: ${env.BUILD_NUMBER}"
+			emailext body: "${body}", subject: 'Pipeline SUCCESS!', to: 'alexminsk.noir@gmail.com'
+		}
+	}
 }

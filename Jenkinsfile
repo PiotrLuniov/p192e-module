@@ -79,5 +79,5 @@ node('Host-Node') {
 		$HOME/kubectl apply -f k8-sett/'3 - ing.yml'
 		'''
 	}
-}
+//}
 //}

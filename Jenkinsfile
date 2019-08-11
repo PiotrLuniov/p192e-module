@@ -141,9 +141,18 @@ node {
     }
 	currentBuild.result = 'SUCCESS'
         echo "Build was succesfull"
+	//emailext body: "Build ${BUILD_NUMBER} succeed" , \
+	//		recipientProviders: [developers()], subject: "Build ${BUILD_NUMBER} succesful", \
+	//		to: "devops_prj@gmail.com"
+		   
+	   
     }
 	
     catch (err) {
+	println "Build ${BUILD_NUMBER} finished incorrectly"
+	//emailext body: "Build ${BUILD_NUMBER} failed with error: ${err}", \
+	//		recipientProviders: [developers()], subject: "Build ${BUILD_NUMBER} failed", \
+	//		to: "devops_prj@gmail.com"
       currentBuild.result = 'FAILURE'
       echo "Build has failed"
     }

@@ -2,7 +2,7 @@ def MAVEN_VERSION = 'Maven 3.6.1'
 def MAVEN_CONFIG = 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac'
 def STUDENT = 'mmarkova'
 def DEFAULT_RES = 'FAILURE'
-def Error e_MSG
+def EX_MSG
 
 node {
     stage('Preparation') {

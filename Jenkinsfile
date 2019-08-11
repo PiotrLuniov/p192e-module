@@ -137,7 +137,7 @@ node {
 
 def test(String command) {
     try { 
-        git branch: "$STUDENT", url: 'https://github.com/MNT-Lab/p192e-module'
+        git branch: "mmarkova", url: 'https://github.com/MNT-Lab/p192e-module'
         withMaven(
             maven: "${MAVEN_VERSION}",
             globalMavenSettingsConfig: "${MAVEN_CONFIG}") {

@@ -21,21 +21,21 @@ node('Host-Node') {
         }
     }
     
-//   stage('Tests') {
-//        withMaven(maven: 'Maven 3.6.1',) {
-//            parallel (
-//                '1 - Pre-Int': {
-//                   sh 'mvn -f helloworld-ws/pom.xml pre-integration-test'
-//                   },
-//               '2 - Int': {
-//                    sh 'mvn -f helloworld-ws/pom.xml integration-test'
-//                   },
-//                '3 - Post-Int': {
-//                    sh 'mvn -f helloworld-ws/pom.xml post-integration-test'
-//                   }
-//            
-//            )
-//        }
+   stage('Tests') {
+        withMaven(maven: 'Maven 3.6.1',) {
+            parallel (
+                '1 - Pre-Int': {
+                   sh 'mvn -f helloworld-ws/pom.xml pre-integration-test'
+                   },
+               '2 - Int': {
+                    sh 'mvn -f helloworld-ws/pom.xml integration-test'
+                   },
+                '3 - Post-Int': {
+                    sh 'mvn -f helloworld-ws/pom.xml post-integration-test'
+                   }
+            
+            )
+        }
 
      stage('Triggering and fetching && Publishing'){
         build job: 'MNTLAB-iyaruk-child1-build-job', parameters: [string(name: 'BRANCH_NAME', value: 'iyaruk')], wait: true
@@ -51,14 +51,14 @@ node('Host-Node') {
     }
     }
 
-//	stage('Creating Docker Image') {
-//		withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'https://registry-ci.playpit.by') {
-//		sh '''
-//		docker login -u iyaruk -p iyaruk1234 registry-ci.playpit.by
-//		docker build -t registry-ci.playpit.by/helloworld-iyaruk:${BUILD_NUMBER} -f Dockerfile .
-//		docker push registry-ci.playpit.by/helloworld-iyaruk:${BUILD_NUMBER}
-//		'''
-//		}
+	stage('Creating Docker Image') {
+		withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'https://registry-ci.playpit.by') {
+		sh '''
+		docker login -u iyaruk -p iyaruk1234 registry-ci.playpit.by
+		docker build -t registry-ci.playpit.by/helloworld-iyaruk:${BUILD_NUMBER} -f Dockerfile .
+		docker push registry-ci.playpit.by/helloworld-iyaruk:${BUILD_NUMBER}
+		'''
+		}
 
 	stage('Manual approval'){
 		timeout(time: 1, unit: 'MINUTES') {
@@ -79,5 +79,5 @@ node('Host-Node') {
 		$HOME/kubectl apply -f k8-sett/'3 - ing.yml'
 		'''
 	}
-//}
-//}
+}
+}

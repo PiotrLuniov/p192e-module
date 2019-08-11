@@ -38,7 +38,7 @@ node {
 	      		sh "${sqScannerHome}/bin/sonar-scanner -X \
 	      		-Dsonar.projectKey=helloworld-ws:${STUDENT} \
 	      		-Dsonar.language=java \
-	      		-Dsonar.java.binaries=*/target/classes"
+	      		-Dsonar.java.binaries=**/target/classes"
 	      	}
       	}
       	// catch(Exception e) {

@@ -1,5 +1,5 @@
 @Library('abutsko-library') _
-//
+
 def sendEmail(String stage) {
     emailext(
         subject: "[Jenkins] FAILED!",
@@ -126,6 +126,7 @@ node('Host-Node') {
 //                        def appImage = docker.build("registry-ci.playpit.by/helloworld-abutsko:${env.BUILD_NUMBER}", '-f config/Dockerfile .')
 //                        appImage.push()
 //                    }
+                    def abutsko = new Abutsko()
                     abutsko.pushDockerImage(
                         nameImage: "helloworld-abutsko:${env.BUILD_NUMBER}",
                         nameRepo: 'registry-ci.playpit.by',

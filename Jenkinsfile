@@ -10,7 +10,7 @@ node {
         }
         catch(Throwable e) {
             echo ("something goes wrong")
-            emailReport('Preparation', e.getMessage(), "${DEFAULT_RES}")
+            emailReport('Preparation', e.getMessage(),  'FAILURE')
         }
     }
 
@@ -26,7 +26,7 @@ node {
         }
         catch(Throwable e) {
             echo ("something goes wrong")
-            emailReport('Building', e.getMessage(), "${DEFAULT_RES}")
+            emailReport('Building', e.getMessage(),  'FAILURE')
         }
     }
 
@@ -91,7 +91,7 @@ node {
                 }
                 catch(Throwable e) {
                     echo ("something goes wrong")
-                    emailReport('Archive', e.getMessage(), "${DEFAULT_RES}")
+                    emailReport('Archive', e.getMessage(), 'FAILURE')
                 }
             },
             'create Docker image': {
@@ -103,7 +103,7 @@ node {
                 }
                 catch(Throwable e) {
                     echo ("something goes wrong")
-                    emailReport('Docker image creation', e.getMessage(), "${DEFAULT_RES}")
+                    emailReport('Docker image creation', e.getMessage(), 'FAILURE')
                 }
             }
         )
@@ -129,7 +129,7 @@ node {
         }
         catch(Throwable e) {
             echo ("something goes wrong")
-            emailReport('Deployment', e.getMessage(), "${DEFAULT_RES}")
+            emailReport('Deployment', e.getMessage(), 'FAILURE')
         }
     }
 }
@@ -146,7 +146,7 @@ def test(String command) {
         }
     }
     catch(Throwable e) {
-    	emailReport(command, 'unknown', "${DEFAULT_RES}")
+    	emailReport(command, e.getMessage(), 'FAILURE')
     }
 }
 

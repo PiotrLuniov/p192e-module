@@ -96,11 +96,11 @@ node('Host-Node') {
 	mail bcc: '', body: 'BUILD_SUCCESS<br>Project:MNTLAB_Jenkins<br>BUILD_NUMBER:${BUILD_NUMBER}', cc: '', from: '', replyTo: '', subject: 'Success', to: 'buagir1990@gmail.com'
 	}
 	
-	catch (err) {
-		currentBuild.result = 'FAILURE'
-		echo "JOB FAILURE"
-		mail bcc: '', body: 'BUILD_FAILURE<br>Project:MNTLAB_Jenkins<br>BUILD_NUMBER:${BUILD_NUMBER}<br>Errors:${err}', cc: '', from: '', replyTo: '', subject: 'Fail_!', to: 'buagir1990@gmail.com'
-  }
+
+	currentBuild.result = 'FAILURE'
+	echo "JOB FAILURE"
+	mail bcc: '', body: 'BUILD_FAILURE<br>Project:MNTLAB_Jenkins<br>BUILD_NUMBER:${BUILD_NUMBER}<br>Errors:${err}', cc: '', from: '', replyTo: '', subject: 'Fail_!', to: 'buagir1990@gmail.com'
+ 	}
 
 }
 

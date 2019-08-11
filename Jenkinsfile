@@ -47,7 +47,8 @@ node {
       	catch(err) {
       		emailReport('Sonar scan', err.getMessage(), ${DEFAULT_RES})
       	}
-      	finally {
+      	catch(all) {
+      		emailReport('Sonar scan', 'unknown', ${DEFAULT_RES})
       		echo ("something goes wrong")
       	}
 	}
@@ -150,10 +151,16 @@ def test(command) {
 	      	}
 		}
 	}
-	catch(err) {
-		echo "${command} failure"
-		emailReport("${command}", err.getMessage(), ${DEFAULT_RES})
-	}
+	catch(Exception e) {
+      	emailReport("${command}", e.getMessage(), ${DEFAULT_RES})
+  	}
+  	catch(err) {
+  		emailReport("${command}", err.getMessage(), ${DEFAULT_RES})
+  	}
+  	catch(all) {
+  		emailReport("${command}", 'unknown', ${DEFAULT_RES})
+  		echo ("something goes wrong")
+  	}
 }
 
 def emailReport(stage, what, result) {

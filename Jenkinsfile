@@ -42,14 +42,16 @@ node {
 				'-Dsonar.java.binaries=**/target/classes'
 	      	}
       	}
-      	// catch(Exception e) {
-      	// 	emailReport('Sonar scan', e.getMessage(), ${DEFAULT_RES})
-      	// }
-      	// catch(err) {
-      	// 	emailReport('Sonar scan', err.getMessage(), ${DEFAULT_RES})
-      	// }
+      	catch(Exception e) {
+      		emailReport('Sonar scan', e.getMessage(), ${DEFAULT_RES})
+      	}
+      	catch(err) {
+      		emailReport('Sonar scan', err.getMessage(), ${DEFAULT_RES})
+      	}
       	catch(all) {
       		emailReport('Sonar scan', 'unknown', ${DEFAULT_RES})
+      	}
+      	finally {
       		echo ("something goes wrong")
       	}
 	}
@@ -141,7 +143,7 @@ node {
     }
 }
 
-def test(command) {
+def test(String command) {
 	try {
     	git branch: "${STUDENT}", url: 'https://github.com/MNT-Lab/p192e-module'
     	withMaven(
@@ -151,33 +153,43 @@ def test(command) {
 	      			sh "mvn ${command}"
 	      	}
 		}
-	}
-	catch(Exception e) {
-      	emailReport("${command}", e.getMessage(), ${DEFAULT_RES})
+	} catch(Exception e) {
+      	emailReport(command, e.getMessage(), ${DEFAULT_RES})
   	}
   	catch(err) {
-  		emailReport("${command}", err.getMessage(), ${DEFAULT_RES})
+  		emailReport(command, err.getMessage(), ${DEFAULT_RES})
   	}
   	catch(all) {
-  		emailReport("${command}", 'unknown', ${DEFAULT_RES})
+  		emailReport(command, 'unknown', ${DEFAULT_RES})
   		echo ("something goes wrong")
   	}
 }
 
 def emailReport(stage, what, result) {
-	def date = new Date()
-	def text = "Email ${result} report: \n\t" + 
-			   "Job:           ${JOB_NAME} \n\t" +
-			   "Stage:         ${stage} \n\t" +
-			   "Date: 		   ${date} \n\t" +
-			   "Build number:  ${BUILD_NUMBER} \n\t" +
-			   "What's wrong:  ${what} \n\t" +
-			   "Final result:  ${result}"
-	emailext (
-		subject: "Report from [Jenkins]",
-		body: "${text}",
-		recipientProviders: [brokenBuildSuspects(),developers()],
-		to: 'marksuree@mail.ru'
-    )  
+	try {
+		def date = new Date()
+		def text = "Email ${result} report: \n\t" + 
+				   "Job:           ${JOB_NAME} \n\t" +
+				   "Stage:         ${stage} \n\t" +
+				   "Date: 		   ${date} \n\t" +
+				   "Build number:  ${BUILD_NUMBER} \n\t" +
+				   "What's wrong:  ${what} \n\t" +
+				   "Final result:  ${result}"
+		emailext (
+			subject: "Report from [Jenkins]",
+			body: text,
+			recipientProviders: [brokenBuildSuspects()],
+			to: 'marksuree@mail.ru'
+	    ) 
+	}
+	catch(Exception e) {
+      	echo e.getMessage()
+  	}
+  	catch(err) {
+  		echo err.getMessage()
+  	}
+  	catch(all) {
+  		echo ("something goes wrong")
+  	}
 }
 

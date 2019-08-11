@@ -21,21 +21,21 @@ node('Host-Node') {
         }
     }
     
-   stage('Tests') {
-        withMaven(maven: 'Maven 3.6.1',) {
-            parallel (
-                '1 - Pre-Int': {
-                   sh 'mvn -f helloworld-ws/pom.xml pre-integration-test'
-                   },
-               '2 - Int': {
-                    sh 'mvn -f helloworld-ws/pom.xml integration-test'
-                   },
-                '3 - Post-Int': {
-                    sh 'mvn -f helloworld-ws/pom.xml post-integration-test'
-                   }
-            
-            )
-        }
+//   stage('Tests') {
+//        withMaven(maven: 'Maven 3.6.1',) {
+//            parallel (
+//                '1 - Pre-Int': {
+//                   sh 'mvn -f helloworld-ws/pom.xml pre-integration-test'
+//                   },
+//               '2 - Int': {
+//                    sh 'mvn -f helloworld-ws/pom.xml integration-test'
+//                   },
+//                '3 - Post-Int': {
+//                    sh 'mvn -f helloworld-ws/pom.xml post-integration-test'
+//                   }
+//            
+//            )
+//        }
 
      stage('Triggering and fetching && Publishing'){
         build job: 'MNTLAB-iyaruk-child1-build-job', parameters: [string(name: 'BRANCH_NAME', value: 'iyaruk')], wait: true

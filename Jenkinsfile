@@ -79,11 +79,11 @@ stage('Sonar scan'){
 	stage('Triggering job'){
     build job: 'MNTLAB-kshevchenko-child1-build-job', parameters: [string(name: 'BRANCH_NAME', value: 'kshevchenko')], wait: true
 }
-stage('Packaging and Publishing results')
-		{
-    copyArtifacts(projectName: 'MNTLAB-kshevchenko-child1-build-job')
-    sh 'tar xzvf kshevchenko_dsl_script.tar.gz && ls'
-		} 
+// stage('Packaging and Publishing results')
+// 		{
+//     copyArtifacts(projectName: 'MNTLAB-kshevchenko-child1-build-job')
+//     sh 'tar xzvf kshevchenko_dsl_script.tar.gz && ls'
+// 		} 
 stage('Packaging and Publishing results') {
 		parallel(
 			'Create archieve': {
@@ -105,13 +105,15 @@ stage('Packaging and Publishing results') {
 
 	
 	
-// stage('Asking for manual approval'){
-// 	timeout(time: 2, unit: 'MINUTES') {
-// 			input(id: "Deployment artifact", \
-// 			      message: "Wouldn\'t you mind to deploy helloworld-'kshevchenko':${BUILD_NUMBER}?", \
-// 			      ok: "I wouldn\'t mind.")
-// 		}
-// }		
+	
+stage('Asking for manual approval'){
+	timeout(time: 2, unit: 'MINUTES') {
+			input(id: "Deployment artifact", \
+			      message: "Wouldn\'t you mind to deploy helloworld-'kshevchenko':${BUILD_NUMBER}?", \
+			      ok: "I wouldn\'t mind.")
+		}
+}
+	
 //$HOME/kubectl apply -f deploy/tomcat-ns.yaml
 stage('Deployment'){
 		sh """

@@ -35,10 +35,11 @@ node {
 		try {
 			def sqScannerHome = tool 'SonarQubeScanner'
 			 withSonarQubeEnv() { 
-	      		sh "${sqScannerHome}/bin/sonar-scanner -X \
-	      		-Dsonar.projectKey=helloworld-ws:${STUDENT} \
-	      		-Dsonar.language=java \
-	      		-Dsonar.java.binaries=**/target/classes"
+				sh "${scannerHome}/bin/sonar-scanner " +
+				"-Dsonar.projectKey=${STUDENT} " +
+				'-Dsonar.language=java ' +
+				'-Dsonar.sources=helloworld-ws/src/main/java  '+
+				'-Dsonar.java.binaries=**/target/classes'
 	      	}
       	}
       	// catch(Exception e) {

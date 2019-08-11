@@ -145,12 +145,14 @@ node {
 
 def test(String command) {
 	try {
+		def cmd = 'mvn' + command 
+		echo cmd
     	git branch: "${STUDENT}", url: 'https://github.com/MNT-Lab/p192e-module'
     	withMaven(
 	        maven: "${MAVEN_VERSION}",
 	        globalMavenSettingsConfig: "${MAVEN_CONFIG}") {
     			dir('helloworld-ws') {
-	      			sh "mvn ${command}"
+	      			sh cmd
 	      	}
 		}
 	} catch(Exception e) {

@@ -1,10 +1,9 @@
-def MAVEN_VERSION = 'Maven 3.6.1'
-def MAVEN_CONFIG = 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac'
-def STUDENT = 'mmarkova'
-def DEFAULT_RES = 'FAILURE'
-def EX_MSG
-
 node {
+	def MAVEN_VERSION = 'Maven 3.6.1'
+	def MAVEN_CONFIG = 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac'
+	def STUDENT = 'mmarkova'
+	def DEFAULT_RES = 'FAILURE'
+
     stage('Preparation') {
         try {
             checkout([$class: 'GitSCM', branches: [[name: "*/${STUDENT}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/MNT-Lab/p192e-module']]])
@@ -69,7 +68,7 @@ node {
         }
         catch(Throwable e) {
             echo ("something goes wrong")
-            emailReport('Triggering', e.getMessage(), "${DEFAULT_RES}")
+            emailReport('Triggering', e.getMessage(), DEFAULT_RES)
         }
     }
 

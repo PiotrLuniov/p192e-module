@@ -59,7 +59,7 @@ stage('Archieve and Dockerfile'){
       sh '''
 cat << EOF > $WORKSPACE/Dockerfile
 From tomcat:8-jre8
-ADD helloworld-ws/target/helloworld-ws.war  /usr/local/tomcat/webapps/
+ADD helloworld-project/helloworld-ws/target/helloworld-ws.war  /usr/local/tomcat/webapps/
 EOF
 '''
       nexus_push('docker', studentName)

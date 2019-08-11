@@ -79,5 +79,15 @@ node('Host-Node') {
 		$HOME/kubectl apply -f k8-sett/'3 - ing.yml'
 		'''
 	}
+	stage ('Checking') {
+       		try {
+            		sh "curl http://iyaruk-app.k8s.playpit.by/ | grep 'helloworld-ws Quickstart'"
+            			return true
+      			} catch (resp) {
+        			echo "Simple check with curl failured!"
+        			currentBuild.result = 'FAILURE'
+        			
+				}
+    		}
 }
 }

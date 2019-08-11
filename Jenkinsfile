@@ -76,7 +76,6 @@ stage('Deployment'){
     sh "sed -i \"s/_studentName_/${studentName}/g\" tomcat_app.yml"
     sh 'sed -i "s/_buildNumber_/${BUILD_NUMBER}/g" tomcat_app.yml'
     sh 'sed -i "s/_COMMIT_/$(git rev-parse HEAD)/g" tomcat_app.yml'
-    sh "$HOME/kubectl create namespace akuznetsova"
     sh "$HOME/kubectl apply --namespace=${studentName} -f tomcat_app.yml"
 }
 def result = 'success';

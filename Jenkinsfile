@@ -2,16 +2,16 @@ def MAVEN_VERSION = 'Maven 3.6.1'
 def MAVEN_CONFIG = 'e1b3beed-2dd3-45b7-998e-5361dfe1b6ac'
 def STUDENT = 'mmarkova'
 def DEFAULT_RES = 'FAILURE'
-def ERR_MSG
+def Error e_MSG
 
 node {
     stage('Preparation') {
         try {
-            checkout([$class: 'GitSCM', branches: [[name: "*/${STUDENT}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/MNT-Lab/p192e-module']]])
+            checkout([$class: 'GitSCM', branches: [[name: "*/${STUDENT}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], usError eemoteConfigs: [[url: 'https://github.com/MNT-Lab/p192e-module']]])
         }
-        catch(err) {
+        catch(Error e) {
             echo ("something goes wrong")
-            emailReport('Preparation', err.getMessage(), ${DEFAULT_RES})
+            emailReport('Preparation', Error e.getMessage(), ${DEFAULT_RES})
         }
     }
 
@@ -25,9 +25,9 @@ node {
                 sh "mvn -f helloworld-ws/pom.xml package"
             }
         }
-        catch(err) {
+        catch(Error e) {
             echo ("something goes wrong")
-            emailReport('Building', err.getMessage(), ${DEFAULT_RES})
+            emailReport('Building', e.getMessage(), ${DEFAULT_RES})
         }
     }
 
@@ -51,8 +51,8 @@ node {
         // catch(Exception e) {
         //     emailReport('Sonar scan', e.getMessage(), ${DEFAULT_RES})
         // }
-        // catch(err) {
-        //     emailReport('Sonar scan', err.getMessage(), ${DEFAULT_RES})
+        // catch(Error e) {
+        //     emailReport('Sonar scan', Error e.getMessage(), ${DEFAULT_RES})
         // }
         catch(all) {
             //emailReport('Sonar scan', 'unknown', ${DEFAULT_RES})
@@ -79,9 +79,9 @@ node {
             build job: "MNTLAB-${STUDENT}-child1-build-job", parameters: [string(name: 'BRANCH_NAME', value: "${STUDENT}")], wait: true
             copyArtifacts filter: 'jobs.groovy', projectName: "MNTLAB-${STUDENT}-child1-build-job"
         }
-        catch(err) {
+        catch(Error e) {
             echo ("something goes wrong")
-            emailReport('Triggering', err.getMessage(), ${DEFAULT_RES})
+            emailReport('Triggering', e.getMessage(), ${DEFAULT_RES})
         }
     }
 
@@ -102,21 +102,21 @@ node {
                         ]
                     ]
                 }
-                catch(err) {
+                catch(Error e) {
                     echo ("something goes wrong")
-                    emailReport('Archive', err.getMessage(), ${DEFAULT_RES})
+                    emailReport('Archive', e.getMessage(), ${DEFAULT_RES})
                 }
             },
             'create Docker image': {
                 try {
-                    withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'http://localhost:6566') {
+                    withDockError eegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'http://localhost:6566') {
                         sh "docker build -t localhost:6566/helloworld-${STUDENT}:$BUILD_NUMBER ."
                         sh "docker push localhost:6566/helloworld-${STUDENT}:${BUILD_NUMBER}"
                     }
                 }
-                catch(err) {
+                catch(Error e) {
                     echo ("something goes wrong")
-                    emailReport('Docker image creation', err.getMessage(), ${DEFAULT_RES})
+                    emailReport('Docker image creation', e.getMessage(), ${DEFAULT_RES})
                 }
             }
         )
@@ -130,7 +130,7 @@ node {
 
     stage('Deployment (rolling update, zero downtime') {
         try {
-            sh "${HOME}/kubectl apply -f app.yml"
+            sh "${HOME}/kubectl apply -f app.yaml"
             def proc = "curl -X HEAD -I http://nexus-ci.playpit.by/repository/docker/v2/helloworld-mmarkova/manifests/${BUILD_NUMBER}"
                        .execute().text
             sh """
@@ -140,9 +140,9 @@ node {
             """
             emailReport('Deployment', 'all right', 'SUCCESS')
         }
-        catch(err) {
+        catch(Error e) {
             echo ("something goes wrong")
-            emailReport('Deployment', err.getMessage(), ${DEFAULT_RES})
+            emailReport('Deployment', e.getMessage(), ${DEFAULT_RES})
         }
     }
 }
@@ -161,14 +161,12 @@ def test(String command) {
     catch(Exception e) {
         echo e.getMessage()
     }
-    catch(err) {
-        echo err.getMessage()
+    catch(Error e) {
+        echo e.getMessage()
     }
     catch(all) {
-        //emailReport(command, 'unknown', ${DEFAULT_RES})
-    }
-    finally {
         echo ("something goes wrong")
+        //emailReport(command, 'unknown', ${DEFAULT_RES})
     }
 }
 
@@ -192,8 +190,8 @@ def emailReport(stage, what, result) {
     catch(Exception e) {
         echo e.getMessage()
     }
-    catch(err) {
-        echo err.getMessage()
+    catch(Error e) {
+        echo e.getMessage()
     }
     catch(all) {
         echo ("something goes wrong in email")

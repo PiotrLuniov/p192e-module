@@ -186,7 +186,7 @@ def emailReport(stage, what, result) {
         echo err.getMessage()
     }
     catch(all) {
-        echo ("something goes wrong")
+        echo ("something goes wrong in email")
     }
 }
 

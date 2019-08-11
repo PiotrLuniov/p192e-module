@@ -192,7 +192,7 @@ podTemplate(
         }
 
         stage('Deploying a new application version') {
-            try {
+//            try {
                 // set git hash for sanity check
                 def gitHash = sh(returnStdout: true,
                                  script: 'git log -n 1 --pretty=format:"%H"'.trim()
@@ -216,9 +216,9 @@ podTemplate(
                 def newPage = new URL('http://abutsko-helloworld.abutsko.svc.cluster.local:8080/helloworld-ws').text
                 echo oldPage
                 echo newPage
-            } catch(all) {
-                sendEmail('Deploying a new application version')
-            }
+//            } catch(all) {
+//                sendEmail('Deploying a new application version')
+//            }
         }
     }
 }

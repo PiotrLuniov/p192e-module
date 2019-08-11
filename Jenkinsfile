@@ -212,9 +212,9 @@ podTemplate(
 
                 // Get old html page
                 def oldPage = new URL('http://abutsko-helloworld.abutsko.svc.cluster.local:8080/helloworld-ws').text
-                // Get new html page
-                def newPage = new URL('http://abutsko-helloworld.abutsko.svc.cluster.local:8080/helloworld-ws').text
                 echo oldPage
+                // Get new html page
+                def newPage = new URL('http://abutsko-sanity.abutsko.svc.cluster.local:8080/helloworld-ws').text
                 echo newPage
 //            } catch(all) {
 //                sendEmail('Deploying a new application version')

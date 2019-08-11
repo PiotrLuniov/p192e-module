@@ -68,7 +68,7 @@ node {
         }
         catch(Throwable e) {
             echo ("something goes wrong")
-            emailReport('Triggering', e.getMessage(), DEFAULT_RES)
+            emailReport('Triggering', e.getMessage(), 'FAILURE')
         }
     }
 

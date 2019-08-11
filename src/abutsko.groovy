@@ -4,3 +4,5 @@ def pushDockerImage(String nameImage, String nameRepo, String credentialId, Stri
         appImage.push()
     }
 }
+
+return this

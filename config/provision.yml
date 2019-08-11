@@ -71,3 +71,7 @@
     - name: Return ingress
       shell: |
         kubectl apply -f ingress.yml
+    always:
+    - name: Remove sanity pod
+      shell: |
+        kubectl delete -f sanity.yml

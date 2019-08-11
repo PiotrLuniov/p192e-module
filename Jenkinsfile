@@ -68,7 +68,15 @@ EOF
 }
 stage('Ask for approval'){
   timeout(time: 10, unit: 'MINUTES') {
-				input(id: "Try to deploy", message: "Deploy helloworld-${studentName}:${env.BUILD_NUMBER}?", ok: 'Deploying')
+				input(id: "Try to deploy?", message: "Deploy helloworld-${studentName}:${env.BUILD_NUMBER}?", ok: "deploy!")
 				}
+}
+stage('Deployment'){
+    sh "wget https://raw.githubusercontent.com/MNT-Lab/build-t00ls/${studentName}/tomcat_app.yml -O tomcat_app.yml"
+    sh "sed -i \"s/_studentName_/${studentName}/g\" tomcat_app.yml"
+    sh 'sed -i "s/_buildNumber_/${BUILD_NUMBER}/g" tomcat_app.yml'
+    sh 'sed -i "s/_COMMIT_/$(git rev-parse HEAD)/g" tomcat_app.yml'
+
+    sh "$HOME/kubectl apply --namespace=${studentName} -f tomcat_app.yml"
 }
 }

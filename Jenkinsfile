@@ -20,7 +20,7 @@ cat << EOF > helloworld-ws/src/main/webapp/deploy.html
     <h1>Maintainer "Kirill Shevchenko"</h1>
   </header>
   <article>
-    <h2>WELCOM!</h2>
+    <h2>WELCOME!</h2>
     <p>Build:${BUILD_NUMBER}</p>
   </article>
   <footer>

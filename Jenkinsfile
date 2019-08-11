@@ -163,7 +163,6 @@ def emailReport(stage, what, result) {
         emailext subject: "Report from [Jenkins]",
             	 body: """${text}""",
             	 recipientProviders: [developers()],
-            	 from: 'paradoxicalm5@gmail.com',
             	 to: 'paradoxicalm5@gmail.com' 
     }
     catch(Throwable e) {

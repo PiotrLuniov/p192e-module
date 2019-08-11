@@ -30,16 +30,10 @@
         return_content: yes
       register: new_helloworld
 
-    - debug:
-        msg: "{{ new_helloworld }}"
-
-    - debug:
-        msg: "{{ old_helloworld }}"
-
     - name: Testing new content
       fail:
         msg: It is the same content.
-      failed_when: new_helloworld.content == old_helloworld.content
+      when: new_helloworld.content == old_helloworld.content
 
   - block:
     - name: Change ingress to santy pod (for zero downtime)
@@ -47,6 +41,8 @@
         path: ingress.yml
         regexp: abutsko-helloworld
         replace: abutsko-sanity
+
+    - shell: cat ingress.yml
     
     - name: Change ingress to santy pod
       shell: |

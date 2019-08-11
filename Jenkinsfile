@@ -109,7 +109,7 @@ node {
             },
             'create Docker image': {
                 try {
-                    withDockError eegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'http://localhost:6566') {
+                    withDockerRegistry(credentialsId: 'nexus', toolName: 'dockerTool', url: 'http://localhost:6566') {
                         sh "docker build -t localhost:6566/helloworld-${STUDENT}:$BUILD_NUMBER ."
                         sh "docker push localhost:6566/helloworld-${STUDENT}:${BUILD_NUMBER}"
                     }

@@ -37,90 +37,90 @@ node('Host-Node') {
         }
     }
     
-    stage('Sonar Scanning') {
-        try {
-            def scannerHome = tool 'SonarQubeScanner';
-            withSonarQubeEnv() {
-                sh "${scannerHome}/bin/sonar-scanner \
-                   -Dsonar.projectName=abutsko-helloworld \
-                   -Dsonar.projectKey=abutsko-helloworld \
-                   -Dsonar.language=java \
-                   -Dsonar.sources=helloworld-ws/src \
-                   -Dsonar.java.binaries=**/target/classes"
-            }
-        } catch(all) {
-            sendEmail('Sonar Scanning')
-        }
-    }
+//    stage('Sonar Scanning') {
+//        try {
+//            def scannerHome = tool 'SonarQubeScanner';
+//            withSonarQubeEnv() {
+//                sh "${scannerHome}/bin/sonar-scanner \
+//                   -Dsonar.projectName=abutsko-helloworld \
+//                   -Dsonar.projectKey=abutsko-helloworld \
+//                   -Dsonar.language=java \
+//                   -Dsonar.sources=helloworld-ws/src \
+//                   -Dsonar.java.binaries=**/target/classes"
+//            }
+//        } catch(all) {
+//            sendEmail('Sonar Scanning')
+//        }
+//    }
 
-    stage('Integration Tests') {
-        try {
-            withMaven(
-                maven: 'Maven 3.6.1',
-                mavenSettingsConfig: 'Maven2-Nexus-Repos'
-            ) {
-                parallel (
-                    'Pre-Integration Test': {
-                        echo 'mvn -f helloworld-ws/pom.xml pre-integration-test'
-                    },
-                    'Integration Test': {
-                        echo 'mvn -f helloworld-ws/pom.xml integration-test'
-                    },
-                    'Post-Integration Test': {
-                        echo 'mvn -f helloworld-ws/pom.xml post-integration-test'
-                    }
-                )
-            }
-        } catch(all) {
-            sendEmail('Integration Tests')
-        }
-    }
+//    stage('Integration Tests') {
+//        try {
+//            withMaven(
+//                maven: 'Maven 3.6.1',
+//                mavenSettingsConfig: 'Maven2-Nexus-Repos'
+//            ) {
+//                parallel (
+//                    'Pre-Integration Test': {
+//                        echo 'mvn -f helloworld-ws/pom.xml pre-integration-test'
+//                    },
+//                    'Integration Test': {
+//                        echo 'mvn -f helloworld-ws/pom.xml integration-test'
+//                    },
+//                    'Post-Integration Test': {
+//                        echo 'mvn -f helloworld-ws/pom.xml post-integration-test'
+//                    }
+//                )
+//            }
+//        } catch(all) {
+//            sendEmail('Integration Tests')
+//        }
+//    }
     
-    def triggeredJob = 'MNTLAB-abutsko-child1-build-job'
-    stage("Trigger ${triggeredJob}") {
-        try {
-            build job: "${triggeredJob}",
-                  parameters: [
-                    string(
-                        name: 'BRANCH_NAME',
-                        value: 'abutsko'
-                    )
-                  ],
-                  wait: true
+//    def triggeredJob = 'MNTLAB-abutsko-child1-build-job'
+//    stage("Trigger ${triggeredJob}") {
+//        try {
+//            build job: "${triggeredJob}",
+//                  parameters: [
+//                    string(
+//                        name: 'BRANCH_NAME',
+//                        value: 'abutsko'
+//                    )
+//                  ],
+//                  wait: true
 
-            copyArtifacts projectName: "${triggeredJob}",
-                          filter: 'output.txt'
-        } catch(all) {
-            sendEmail("Trigger ${triggeredJob}")
-        }
-    }
+//            copyArtifacts projectName: "${triggeredJob}",
+//                          filter: 'output.txt'
+//        } catch(all) {
+//            sendEmail("Trigger ${triggeredJob}")
+//        }
+//    }
 
     def archive = "pipeline-abutsko-${env.BUILD_NUMBER}"
     stage('Packaging and Publishing results') {
         try {
             parallel(
-                'Create Archive for common files And Upload them': {
-                    sh "tar czf ${archive}.tar.gz --transform='flags=r;s!^.*/!!' output.txt Jenkinsfile **/**/helloworld-ws.war"
+//                'Create Archive for common files And Upload them': {
+//                    sh "tar czf ${archive}.tar.gz --transform='flags=r;s!^.*/!!' output.txt Jenkinsfile **/**/helloworld-ws.war"
 
-                    def pom =readMavenPom file: 'helloworld-ws/pom.xml'
-                    nexusArtifactUploader(
-                        nexusVersion: 'nexus3',
-                        protocol: 'http',
-                        nexusUrl: 'localhost:8081',
-                        repository: 'MNT-pipeline-training',
-                        groupId: 'pipeline',
-                        version: "${env.BUILD_NUMBER}",
-                        credentialsId: 'nexus',
-                        artifacts: [
-                            [
-                                artifactId: 'abutsko',
-                                classifier: '',
-                                file: "${archive}.tar.gz",
-                                type: 'tar.gz'
-                            ]
-                        ]
-                    )
-                },
+//                    def pom =readMavenPom file: 'helloworld-ws/pom.xml'
+//                    nexusArtifactUploader(
+//                        nexusVersion: 'nexus3',
+//                        protocol: 'http',
+//                        nexusUrl: 'localhost:8081',
+//                        repository: 'MNT-pipeline-training',
+//                        groupId: 'pipeline',
+//                        version: "${env.BUILD_NUMBER}",
+//                        credentialsId: 'nexus',
+//                        artifacts: [
+//                            [
+//                                artifactId: 'abutsko',
+//                                classifier: '',
+//                                file: "${archive}.tar.gz",
+//                                type: 'tar.gz'
+//                            ]
+//                        ]
+//                    )
+//                },
                 'Building And Pushing Docker Image': {
                     docker.withRegistry('http://registry-ci.playpit.by', 'nexus') {
                         def appImage = docker.build("registry-ci.playpit.by/helloworld-abutsko:${env.BUILD_NUMBER}", '-f config/Dockerfile .')
@@ -154,19 +154,19 @@ node('Host-Node') {
 //     }
 }
 
-stage('Quality Gate') {
-    try {
-        timeout(time: 1, unit: 'HOURS') {
-            def qualityGate = waitForQualityGate()
-
-            if (qualityGate.status != 'OK') {
-                error "Pipeline aborted due to quality gate failure: ${qualityGate.status}"
-            }
-        }
-    } catch(all) {
-        sendEmail('Quality Gate')
-    }
-}
+//stage('Quality Gate') {
+//    try {
+//        timeout(time: 1, unit: 'HOURS') {
+//            def qualityGate = waitForQualityGate()
+//
+//            if (qualityGate.status != 'OK') {
+//                error "Pipeline aborted due to quality gate failure: ${qualityGate.status}"
+//            }
+//        }
+//    } catch(all) {
+//        sendEmail('Quality Gate')
+//    }
+//}
 
 podTemplate(
     name: 'abutsko',
@@ -208,7 +208,7 @@ podTemplate(
 //                    extras: '-v'
 //                )
                 // Deploying a sanity pod
-                sh 'kubectl apply -f config/santiy.yml'
+                sh 'kubectl apply -f config/sanity.yml'
 
                 // Get old html page
                 def oldPage = new URL('http://abutsko-helloworld.abutsko.svc.cluster.local:8080/helloworld-ws').text

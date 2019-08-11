@@ -11,7 +11,7 @@ node {
         }
         catch(Throwable e) {
             echo ("something goes wrong")
-            emailReport('Preparation', e.getMessage(), ${DEFAULT_RES})
+            emailReport('Preparation', e.getMessage(), "${DEFAULT_RES}")
         }
     }
 
@@ -27,7 +27,7 @@ node {
         }
         catch(Throwable e) {
             echo ("something goes wrong")
-            emailReport('Building', e.getMessage(), ${DEFAULT_RES})
+            emailReport('Building', e.getMessage(), "${DEFAULT_RES}")
         }
     }
 
@@ -69,7 +69,7 @@ node {
         }
         catch(Throwable e) {
             echo ("something goes wrong")
-            emailReport('Triggering', e.getMessage(), ${DEFAULT_RES})
+            emailReport('Triggering', e.getMessage(), "${DEFAULT_RES}")
         }
     }
 
@@ -92,7 +92,7 @@ node {
                 }
                 catch(Throwable e) {
                     echo ("something goes wrong")
-                    emailReport('Archive', e.getMessage(), ${DEFAULT_RES})
+                    emailReport('Archive', e.getMessage(), "${DEFAULT_RES}")
                 }
             },
             'create Docker image': {
@@ -104,7 +104,7 @@ node {
                 }
                 catch(Throwable e) {
                     echo ("something goes wrong")
-                    emailReport('Docker image creation', e.getMessage(), ${DEFAULT_RES})
+                    emailReport('Docker image creation', e.getMessage(), "${DEFAULT_RES}")
                 }
             }
         )
@@ -130,7 +130,7 @@ node {
         }
         catch(Throwable e) {
             echo ("something goes wrong")
-            emailReport('Deployment', e.getMessage(), ${DEFAULT_RES})
+            emailReport('Deployment', e.getMessage(), "${DEFAULT_RES}")
         }
     }
 }
@@ -146,37 +146,31 @@ def test(String command) {
             }
         }
     }
-            catch(Throwable e) {
-            echo e.getMessage()
-        }
-    //     //emailReport(command, 'unknown', ${DEFAULT_RES})
+    catch(Throwable e) {
+    	emailReport(command, 'unknown', "${DEFAULT_RES}")
+    }
 }
 
-// def emailReport(stage, what, result) {
-//     try {
-//         def date = new Date()
-//         def text = "Email ${result} report: \n\t" + 
-//                    "Job:           ${JOB_NAME} \n\t" +
-//                    "Stage:         ${stage} \n\t" +
-//                    "Date:          ${date} \n\t" +
-//                    "Build number:  ${BUILD_NUMBER} \n\t" +
-//                    "What's wrong:  ${what} \n\t" +
-//                    "Final result:  ${result}"
-//         emailext (
-//             subject: "Report from [Jenkins]",
-//             body: text,
-//             recipientProviders: [brokenBuildSuspects()],
-//             to: 'marksuree@mail.ru'
-//         ) 
-//     }
-//     catch(Exception e) {
-//         echo e.getMessage()
-//     }
-//     catch(Error e) {
-//         echo e.getMessage()
-//     }
-//     catch(all) {
-//         echo ("something goes wrong in email")
-//     }
-//}
+def emailReport(stage, what, result) {
+    try {
+        def date = new Date()
+        def text = "Email ${result} report: \n\t" + 
+                   "Job:           ${JOB_NAME} \n\t" +
+                   "Stage:         ${stage} \n\t" +
+                   "Date:          ${date} \n\t" +
+                   "Build number:  ${BUILD_NUMBER} \n\t" +
+                   "What's wrong:  ${what} \n\t" +
+                   "Final result:  ${result}"
+        emailext //(
+            subject: "Report from [Jenkins]",
+            body: """${text}""",
+            recipientProviders: [developers()],
+            from: 'marksuree@mail.ru',
+            to: 'marksuree@mail.ru'
+        //) 
+    }
+    catch(Throwable e) {
+        echo e.getMessage()
+    }
+}
 

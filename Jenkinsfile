@@ -145,7 +145,7 @@ node {
 
 def test(String command) {
 	try {
-		def cmd = 'mvn ' + command 
+		def cmd = """mvn ${command}""" 
 		echo cmd
     	git branch: "${STUDENT}", url: 'https://github.com/MNT-Lab/p192e-module'
     	withMaven(

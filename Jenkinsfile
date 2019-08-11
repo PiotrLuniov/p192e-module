@@ -35,7 +35,7 @@ node {
 		try {
 			def sqScannerHome = tool 'SonarQubeScanner'
 			 withSonarQubeEnv() { 
-				sh "${scannerHome}/bin/sonar-scanner " +
+				sh "${sqScannerHome}/bin/sonar-scanner " +
 				"-Dsonar.projectKey=${STUDENT} " +
 				'-Dsonar.language=java ' +
 				'-Dsonar.sources=helloworld-ws/src/main/java  '+

@@ -134,11 +134,7 @@ $HOME/kubectl delete -f tomcat_dep.yaml
 }	
 	
 	
-stage('Sending status')	{
-		sh """
-		echo "Status OK!"
-		"""
-}	
+
 	
 	
 }	

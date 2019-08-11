@@ -196,5 +196,5 @@ def test(String command) {
 //     catch(all) {
 //         echo ("something goes wrong in email")
 //     }
-}
+//}
 

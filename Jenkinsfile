@@ -69,10 +69,12 @@ node('Host-Node') {
 
 	stage('Kubernetes Deployment'){
 		sh '''
+		echo "Deployment with new build number"
+		sed -i "s/NUMBER/${BUILD_NUMBER}/g" K8-sett/1 - dep.yml
 		$HOME/kubectl apply -f k8-sett/'1 - dep.yml'
-		sleep 15
+		sleep 5
 		$HOME/kubectl apply -f k8-sett/'2 - svc.yml'
-		sleep 15
+		sleep 5
 		$HOME/kubectl apply -f k8-sett/'3 - ing.yml'
 		'''
 	}

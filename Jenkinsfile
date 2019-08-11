@@ -153,14 +153,11 @@ def test(String command) {
                     sh """mvn ${command}"""
             }
         }
-    } catch(Exception e) {
-        emailReport(command, e.getMessage(), ${DEFAULT_RES})
-    }
-    catch(err) {
-        emailReport(command, err.getMessage(), ${DEFAULT_RES})
-    }
+    } 
     catch(all) {
         emailReport(command, 'unknown', ${DEFAULT_RES})
+    }
+    finally {
         echo ("something goes wrong")
     }
 }

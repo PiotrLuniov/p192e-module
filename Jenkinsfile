@@ -9,7 +9,7 @@ node {
         try {
             checkout([$class: 'GitSCM', branches: [[name: "*/${STUDENT}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/MNT-Lab/p192e-module']]])
         }
-        catch(Error e) {
+        catch(Throwable e) {
             echo ("something goes wrong")
             emailReport('Preparation', e.getMessage(), ${DEFAULT_RES})
         }
@@ -25,7 +25,7 @@ node {
                 sh "mvn -f helloworld-ws/pom.xml package"
             }
         }
-        catch(Error e) {
+        catch(Throwable e) {
             echo ("something goes wrong")
             emailReport('Building', e.getMessage(), ${DEFAULT_RES})
         }
@@ -42,19 +42,10 @@ node {
                 '-Dsonar.java.binaries=**/target/classes'
             }
         }
-        catch(Throwable t) {
-            echo t.getMessage()
+        catch(Throwable e) {
+            echo e.getMessage()
         }
-        // catch(Exception e) {
         //     emailReport('Sonar scan', e.getMessage(), ${DEFAULT_RES})
-        // }
-        // catch(Error e) {
-        //     emailReport('Sonar scan', Error e.getMessage(), ${DEFAULT_RES})
-        // }
-        // catch(all) {
-        //     //emailReport('Sonar scan', 'unknown', ${DEFAULT_RES})
-        //      echo ("something goes wrong")
-        // }
     }
 
     stage('Testing') {
@@ -76,7 +67,7 @@ node {
             build job: "MNTLAB-${STUDENT}-child1-build-job", parameters: [string(name: 'BRANCH_NAME', value: "${STUDENT}")], wait: true
             copyArtifacts filter: 'jobs.groovy', projectName: "MNTLAB-${STUDENT}-child1-build-job"
         }
-        catch(Error e) {
+        catch(Throwable e) {
             echo ("something goes wrong")
             emailReport('Triggering', e.getMessage(), ${DEFAULT_RES})
         }
@@ -99,7 +90,7 @@ node {
                         ]
                     ]
                 }
-                catch(Error e) {
+                catch(Throwable e) {
                     echo ("something goes wrong")
                     emailReport('Archive', e.getMessage(), ${DEFAULT_RES})
                 }
@@ -111,7 +102,7 @@ node {
                         sh "docker push localhost:6566/helloworld-${STUDENT}:${BUILD_NUMBER}"
                     }
                 }
-                catch(Error e) {
+                catch(Throwable e) {
                     echo ("something goes wrong")
                     emailReport('Docker image creation', e.getMessage(), ${DEFAULT_RES})
                 }
@@ -137,7 +128,7 @@ node {
             """
             emailReport('Deployment', 'all right', 'SUCCESS')
         }
-        catch(Error e) {
+        catch(Throwable e) {
             echo ("something goes wrong")
             emailReport('Deployment', e.getMessage(), ${DEFAULT_RES})
         }
@@ -146,7 +137,7 @@ node {
 
 def test(String command) {
     try { 
-        git branch: "${STUDENT}", url: 'https://github.com/MNT-Lab/p192e-module'
+        git branch: "$STUDENT", url: 'https://github.com/MNT-Lab/p192e-module'
         withMaven(
             maven: "${MAVEN_VERSION}",
             globalMavenSettingsConfig: "${MAVEN_CONFIG}") {
@@ -155,19 +146,10 @@ def test(String command) {
             }
         }
     }
-            catch(Throwable t) {
-            echo t.getMessage()
+            catch(Throwable e) {
+            echo e.getMessage()
         }
-    // catch(Exception e) {
-    //     echo e.getMessage()
-    // }
-    // catch(Error e) {
-    //     echo e.getMessage()
-    // }
-    // catch(all) {
-    //     echo ("something goes wrong")
     //     //emailReport(command, 'unknown', ${DEFAULT_RES})
-    // }
 }
 
 // def emailReport(stage, what, result) {

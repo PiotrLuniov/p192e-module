@@ -97,7 +97,7 @@ node('Host-Node') {
 
     def archive = "pipeline-abutsko-${env.BUILD_NUMBER}"
     stage('Packaging and Publishing results') {
-        try {
+//        try {
             parallel(
 //                'Create Archive for common files And Upload them': {
 //                    sh "tar czf ${archive}.tar.gz --transform='flags=r;s!^.*/!!' output.txt Jenkinsfile **/**/helloworld-ws.war"
@@ -134,9 +134,9 @@ node('Host-Node') {
                     )
                 }
             )
-        } catch(all) {
-            sendEmail('Packaging and Publishing results')
-        }
+//        } catch(all) {
+//            sendEmail('Packaging and Publishing results')
+//        }
     }
 
 //    stage('Asking for manual approval') {

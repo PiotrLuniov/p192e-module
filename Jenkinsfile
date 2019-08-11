@@ -41,12 +41,12 @@ node {
 	      		-Dsonar.java.binaries=*/target/classes"
 	      	}
       	}
-      	catch(Exception e) {
-      		emailReport('Sonar scan', e.getMessage(), ${DEFAULT_RES})
-      	}
-      	catch(err) {
-      		emailReport('Sonar scan', err.getMessage(), ${DEFAULT_RES})
-      	}
+      	// catch(Exception e) {
+      	// 	emailReport('Sonar scan', e.getMessage(), ${DEFAULT_RES})
+      	// }
+      	// catch(err) {
+      	// 	emailReport('Sonar scan', err.getMessage(), ${DEFAULT_RES})
+      	// }
       	catch(all) {
       		emailReport('Sonar scan', 'unknown', ${DEFAULT_RES})
       		echo ("something goes wrong")

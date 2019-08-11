@@ -94,6 +94,7 @@ node('Host-Node') {
 	currentBuild.result = 'SUCCESS'
 	echo "BUILD_SUCCESS"
 	mail bcc: '', body: 'BUILD_SUCCESS<br>Project:MNTLAB_Jenkins<br>BUILD_NUMBER:${BUILD_NUMBER}' cc: '', from: '', replyTo: '', subject: 'Success', to: 'buagir1990@gmail.com'
+	}
 	
 	catch (err) {
 		currentBuild.result = 'FAILURE'

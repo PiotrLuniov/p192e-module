@@ -214,14 +214,14 @@ podTemplate(
                 def url = new URL('http://abutsko-helloworld.abutsko.svc.cluster.local:8080/helloworld-ws')
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection()
                 connection.setRequestMethod('GET')
-                connecntion.connect()
+                connection.connect()
                 def oldPage = connection.content
                 echo oldPage
                 // Get new html page
                 url = new URL('http://abutsko-sanity.abutsko.svc.cluster.local:8080/helloworld-ws')
                 connection = (HttpURLConnection) url.openConnection()
                 connection.setRequestMethod('GET')
-                connecntion.connect()
+                connection.connect()
                 def newPage = connection.content
                 echo newPage
 //            } catch(all) {

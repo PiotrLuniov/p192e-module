@@ -32,7 +32,7 @@ spec:
     app: sanity
   type: ClusterIP
   ports:
-  - name: sanity-svc
+  - name: abutsko-svc
     protocol: TCP
     port: 8080
     targetPort: abutsko-sanity

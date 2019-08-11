@@ -43,13 +43,19 @@ node {
             }
         }
         catch(Exception e) {
-            emailReport('Sonar scan', e.getMessage(), ${DEFAULT_RES})
+            echo e.getMessage()
         }
         catch(err) {
-            emailReport('Sonar scan', err.getMessage(), ${DEFAULT_RES})
+            echo err.getMessage()
         }
+        // catch(Exception e) {
+        //     emailReport('Sonar scan', e.getMessage(), ${DEFAULT_RES})
+        // }
+        // catch(err) {
+        //     emailReport('Sonar scan', err.getMessage(), ${DEFAULT_RES})
+        // }
         catch(all) {
-            emailReport('Sonar scan', 'unknown', ${DEFAULT_RES})
+            //emailReport('Sonar scan', 'unknown', ${DEFAULT_RES})
         }
         finally {
             echo ("something goes wrong")
@@ -150,10 +156,16 @@ def test(String command) {
             maven: "${MAVEN_VERSION}",
             globalMavenSettingsConfig: "${MAVEN_CONFIG}") {
                 dir('helloworld-ws') {
-                    sh """ls && mvn ${command}"""
+                    sh """mvn ${command}"""
             }
         }
-    } 
+    }
+    catch(Exception e) {
+        echo e.getMessage()
+    }
+    catch(err) {
+        echo err.getMessage()
+    }
     catch(all) {
         //emailReport(command, 'unknown', ${DEFAULT_RES})
     }

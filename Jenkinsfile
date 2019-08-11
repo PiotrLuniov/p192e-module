@@ -7,7 +7,7 @@ def Error e_MSG
 node {
     stage('Preparation') {
         try {
-            checkout([$class: 'GitSCM', branches: [[name: "*/${STUDENT}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], usError eemoteConfigs: [[url: 'https://github.com/MNT-Lab/p192e-module']]])
+            checkout([$class: 'GitSCM', branches: [[name: "*/${STUDENT}"]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/MNT-Lab/p192e-module']]])
         }
         catch(Error e) {
             echo ("something goes wrong")
@@ -170,31 +170,31 @@ def test(String command) {
     }
 }
 
-def emailReport(stage, what, result) {
-    try {
-        def date = new Date()
-        def text = "Email ${result} report: \n\t" + 
-                   "Job:           ${JOB_NAME} \n\t" +
-                   "Stage:         ${stage} \n\t" +
-                   "Date:          ${date} \n\t" +
-                   "Build number:  ${BUILD_NUMBER} \n\t" +
-                   "What's wrong:  ${what} \n\t" +
-                   "Final result:  ${result}"
-        emailext (
-            subject: "Report from [Jenkins]",
-            body: text,
-            recipientProviders: [brokenBuildSuspects()],
-            to: 'marksuree@mail.ru'
-        ) 
-    }
-    catch(Exception e) {
-        echo e.getMessage()
-    }
-    catch(Error e) {
-        echo e.getMessage()
-    }
-    catch(all) {
-        echo ("something goes wrong in email")
-    }
+// def emailReport(stage, what, result) {
+//     try {
+//         def date = new Date()
+//         def text = "Email ${result} report: \n\t" + 
+//                    "Job:           ${JOB_NAME} \n\t" +
+//                    "Stage:         ${stage} \n\t" +
+//                    "Date:          ${date} \n\t" +
+//                    "Build number:  ${BUILD_NUMBER} \n\t" +
+//                    "What's wrong:  ${what} \n\t" +
+//                    "Final result:  ${result}"
+//         emailext (
+//             subject: "Report from [Jenkins]",
+//             body: text,
+//             recipientProviders: [brokenBuildSuspects()],
+//             to: 'marksuree@mail.ru'
+//         ) 
+//     }
+//     catch(Exception e) {
+//         echo e.getMessage()
+//     }
+//     catch(Error e) {
+//         echo e.getMessage()
+//     }
+//     catch(all) {
+//         echo ("something goes wrong in email")
+//     }
 }
 

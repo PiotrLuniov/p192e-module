@@ -161,13 +161,11 @@ def emailReport(stage, what, result) {
                    "Build number:  ${BUILD_NUMBER} \n\t" +
                    "What's wrong:  ${what} \n\t" +
                    "Final result:  ${result}"
-        emailext //(
-            subject: "Report from [Jenkins]",
-            body: """${text}""",
-            recipientProviders: [developers()],
-            from: 'marksuree@mail.ru',
-            to: 'marksuree@mail.ru'
-        //) 
+        emailext subject: "Report from [Jenkins]",
+            	 body: """${text}""",
+            	 recipientProviders: [developers()],
+            	 from: 'paradoxicalm5@gmail.com',
+            	 to: 'paradoxicalm5@gmail.com' 
     }
     catch(Throwable e) {
         echo e.getMessage()

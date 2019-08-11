@@ -45,8 +45,8 @@ node {
         catch(Exception e) {
             echo e.getMessage()
         }
-        catch(err) {
-            echo err.getMessage()
+        catch(Error e) {
+            echo e.getMessage()
         }
         // catch(Exception e) {
         //     emailReport('Sonar scan', e.getMessage(), ${DEFAULT_RES})
@@ -56,9 +56,7 @@ node {
         // }
         catch(all) {
             //emailReport('Sonar scan', 'unknown', ${DEFAULT_RES})
-        }
-        finally {
-            echo ("something goes wrong")
+             echo ("something goes wrong")
         }
     }
 

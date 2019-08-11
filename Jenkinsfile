@@ -127,10 +127,10 @@ node('Host-Node') {
 //                        appImage.push()
 //                    }
                     pushDockerImage(
-                        nameImage: "helloworld-abutsko:${env.BUILD_NUMBER}",
-                        nameRepo: 'registry-ci.playpit.by',
-                        credentialId: 'nexus',
-                        Dockerfile: 'config/Dockerfile'
+                        "helloworld-abutsko:${env.BUILD_NUMBER}",
+                        'registry-ci.playpit.by',
+                        'nexus',
+                        'config/Dockerfile'
                     )
                 }
             )

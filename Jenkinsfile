@@ -54,7 +54,7 @@ stage('Archieve and Dockerfile'){
     'Create archieve': {
       sh 'tar -czf pipeline-akuznetsova-${BUILD_NUMBER}.tar.gz output.txt Jenkinsfile helloworld-project/helloworld-ws/target/helloworld-ws.war'
       archiveArtifacts 'pipeline-akuznetsova-${BUILD_NUMBER}.tar.gz'
-      nexus_push('MNT-pipeline-training', studentName)
+      nexus_push('MNT-pipeline-training', 'akuznetsova')
     },
     'Create Dockerfile': {
       sh '''
@@ -63,28 +63,26 @@ From tomcat:8-jre8
 ADD helloworld-project/helloworld-ws/target/helloworld-ws.war  /usr/local/tomcat/webapps/
 EOF
 '''
-      nexus_push('docker', studentName)
+      nexus_push('docker', 'akuznetsova')
     }
     )
 }
 stage('Ask for approval'){
   timeout(time: 10, unit: 'MINUTES') {
-				input(id: "Try to deploy?", message: "Deploy helloworld-${studentName}:${env.BUILD_NUMBER}?", ok: "deploy!")
+				input(id: "Try to deploy?", message: "Deploy helloworld-akuznetsova:${BUILD_NUMBER}?", ok: "deploy!")
 				}
 }
 stage('Deployment'){
-    sh "wget https://raw.githubusercontent.com/MNT-Lab/build-t00ls/${studentName}/tomcat_app.yml -O tomcat_app.yml"
-    sh "sed -i \"s/_studentName_/${studentName}/g\" tomcat_app.yml"
+    sh "wget https://raw.githubusercontent.com/MNT-Lab/build-t00ls/akuznetsova/tomcat_app.yml -O tomcat_app.yml"
     sh 'sed -i "s/_buildNumber_/${BUILD_NUMBER}/g" tomcat_app.yml'
-    sh 'sed -i "s/_COMMIT_/$(git rev-parse HEAD)/g" tomcat_app.yml'
-    sh "$HOME/kubectl apply --namespace=${studentName} -f tomcat_app.yml"
+    sh "$HOME/kubectl apply --namespace=akuznetsova -f tomcat_app.yml"
 }
   result = 'success';
 }
 
 	catch (err) {
         def now = new Date()
-        def body = "There are errors in pipeline:\n${err}\nBuild: ${env.BUILD_NUMBER}\nErrors has appeared: ${now}"
+        def body = "There are errors in pipeline:\n${err}\nBuild: ${BUILD_NUMBER}\nErrors has appeared: ${now}"
         println body
 		emailext body: "${body}", subject: 'Pipeline errors!', to: 'alexminsk.noir@gmail.com'
 		result = 'fail'
@@ -95,8 +93,8 @@ stage('Deployment'){
 			echo "Pipeline has successfully done."
 
 			def now = new Date()
-			def body = "Pipeline has successfully done at: ${now}\nBUild number: ${env.BUILD_NUMBER}"
-			emailext body: "${body}", subject: 'Pipeline SUCCESS!', to: 'alexminsk.noir@gmail.com'
+			def body = "Pipeline has successfully done at: ${now}\nBUild number: ${BUILD_NUMBER}"
+			emailext body: "${body}", subject: 'Pipeline success!', to: 'alexminsk.noir@gmail.com'
 		}
 	}
 }

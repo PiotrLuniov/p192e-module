@@ -9,14 +9,22 @@ node ('Host-Node'){
         """}
         catch (err) {
             echo err.getMessage()
+
             echo "Error detected, but we will continue."
+            sendemail(err.getMessage())
         }
     }
     stage('Building code'){
-    
-        withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
+    try{        
+            withMaven(jdk: 'JDK9', maven: 'Maven 3.6.1') {
             sh 'mvn clean package -f helloworld-ws/pom.xml '
         }
+      }
+      catch (err) {
+            echo err.getMessage()
+            echo "Error detected, but we will continue."
+            sendemail(err.getMessage())
+                   }
     }
     stage('Sonar'){
         def scannerHome = tool 'SonarQubeScanner';
@@ -52,6 +60,7 @@ node ('Host-Node'){
        catch (err) {
             echo err.getMessage()
             echo "Error detected, but we will continue."
+            sendemail(err.getMessage())
         }
         }
     stage('Triggering job and fetching artefact after finishing'){
@@ -92,6 +101,7 @@ node ('Host-Node'){
                 } catch (err) {
             echo err.getMessage()
             echo "Error detected, but we will continue."
+            sendemail(err.getMessage())
         }
                 
     
@@ -123,17 +133,24 @@ EOF
                  catch (err) {
             echo err.getMessage()
             echo "Error detected, but we will continue."
+            sendemail(err.getMessage())
                    }
             }
       )
 }
 stage("Asking for manual approval") {
+  try{
                 timeout(time: 300, unit: 'SECONDS') {                  
                        def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next'  
                 }
+              }catch (err) {
+            echo err.getMessage()
+            echo "Error detected, but we will continue."
+            sendemail(err.getMessage())
+                   }
             }
-            
-try {
+       
+
 podTemplate(cloud: 'k8s_bledai', 
             containers: [
                 containerTemplate(
@@ -145,52 +162,49 @@ podTemplate(cloud: 'k8s_bledai',
                 name: 'jenkins-slave', 
                 namespace: 'hbledai', )
 { 
-    try{
+   
     node ('K8S_HBLEDAI'){
         
     def k8s = new K8s()
     stage ('Deployment (rolling update, zero downtime)'){
         try{
       k8s.kubectl_apply (
-        k8s.deployFile( CONTAINER_NAME,  'dockerrepo',  'deploy_tomcat.yml',  'helloworld-ws', 
+        k8s.deployFile( "registry-ci.playpit.by/${CONTAINER_NAME}",  'dockerrepo',  'helloworld-ws', 
  '8080'
           )
         )
 
       k8s.kubectl_apply (
         k8s.serviceFile(
-          'service_tomcat.yaml', 'tomcat-svc', '8080', '8080'
+          'tomcat-svc', '8080', '8080'
           )
         )
       k8s.kubectl_apply (
         k8s.ingressFile(
-          'ingress_tomcat.yaml', 'tomcat-ingress', 'tomcat-svc', '8080'
+          'tomcat-ingress', 'tomcat-svc', '8080'
           )
         )
      } 
          catch (err) {
             echo err.getMessage()
             echo "Error detected, but we will continue."
+            sendemail(err.getMessage())
             }
         }       
     }
-} catch (err) {
-            echo err.getMessage()
-            echo "Error detected, but we will continue."
-        }  
+ 
     }
-} catch (err) {
-            echo err.getMessage()
-            echo "Error detected, but we will continue."
-        }
+def sendemail(String str){
   emailext (
-      subject: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+      subject: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}] '",
       body: """
+}
 STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
-Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]"
+${str}"
 """,
       recipientProviders: [brokenBuildSuspects()],
       to: 'hannabledai@gmail.com'
     )  
+}
 }
 

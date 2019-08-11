@@ -1,10 +1,10 @@
 
 def url = 'nexus-ci.playpit.by:6566'
 def deployFile ( String container_name, 
-				String creds = 'dockerrepo', 
-				String file_name = 'deploy_tomcat.yml', 
-				String app_name = 'helloworld-ws', 
-				String container_port = '8080'
+				String creds ,  
+				String app_name , 
+				String container_port ,
+				String file_name = 'deploy_tomcat.yml'
 
 ){
 
@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
       - name: tomcat
-        image: registry-ci.playpit.by/${container_name}
+        image: ${container_name}
         ports:
         - containerPort: ${container_port}
         livenessProbe:
@@ -44,7 +44,7 @@ spec:
             #- helloworld-ws 
             #- /usr/local/tomcat/webapps/helloworld-ws/healthz.html
           httpGet:
-            path: /helloworld-ws/healthz.html
+            path: /${app_name}/healthz.html
             port: ${container_port}
           initialDelaySeconds: 3
           periodSeconds: 3
@@ -79,7 +79,7 @@ Templates = template.Must(template.ParseFiles("deploy_tomcat.template"))
 
 }
 
-def serviceFile(def file_name = 'service_tomcat.yaml', def name_service = 'tomcat-svc',  def port = '8080', def targetPort = '8080'){
+def serviceFile( String name_service ,  String port , String targetPort , String file_name = 'service_tomcat.yaml'){
 sh """
 cat << EOF > ${file_name}
 apiVersion: v1
@@ -97,8 +97,8 @@ EOF
 """
 return file_name
 }
-def ingressFile ( def file_name = 'ingress_tomcat.yaml', def ingress_name = 'tomcat-ingress', 
-	def name_service = 'tomcat-svc', def port = '8080' ) {
+def ingressFile (  String ingress_name , 
+	String name_service , def port = '8080', String file_name = 'ingress_tomcat.yaml' ) {
 	sh """
 cat << EOF > ${file_name}
 apiVersion: extensions/v1beta1
@@ -121,7 +121,7 @@ EOF
 	"""
 	return file_name
 }
-def kubectl_apply (def file, def namespace = 'hbledai'){
+def kubectl_apply (String file, String namespace = 'hbledai'){
 sh "kubectl apply -n ${namespace} -f ${file}"
 }
 return this 

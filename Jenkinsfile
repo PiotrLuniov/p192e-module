@@ -1,5 +1,6 @@
 @Library('akuznetsova-shared-library') _
 node {
+  def result=''
   try{
   def studentName = 'akuznetsova'
    stage('Preparation') {
@@ -78,7 +79,7 @@ stage('Deployment'){
     sh 'sed -i "s/_COMMIT_/$(git rev-parse HEAD)/g" tomcat_app.yml'
     sh "$HOME/kubectl apply --namespace=${studentName} -f tomcat_app.yml"
 }
-def result = 'success';
+  result = 'success';
 }
 
 	catch (err) {

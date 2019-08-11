@@ -203,27 +203,11 @@ podTemplate(
                 sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/sanity.yml"
                 sh "sed -i 's/PLACE_FOR_NEW_TAG/${env.BUILD_NUMBER}/' config/deployment.yml"
 
-//                ansiblePlaybook(
-//                    playbook: 'config/provision.yml',
-//                    extras: '-v'
-//                )
-                // Deploying a sanity pod
-                sh 'kubectl apply -f config/sanity.yml'
+                ansiblePlaybook(
+                    playbook: 'config/provision.yml',
+                    extras: '-v'
+                )
 
-                // Get old html page
-                def url = new URL('http://abutsko-helloworld.abutsko.svc.cluster.local:8080/helloworld-ws')
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection()
-                connection.setRequestMethod('GET')
-                connection.connect()
-                def oldPage = connection.content
-                echo oldPage
-                // Get new html page
-                url = new URL('http://abutsko-sanity.abutsko.svc.cluster.local:8080/helloworld-ws')
-                connection = (HttpURLConnection) url.openConnection()
-                connection.setRequestMethod('GET')
-                connection.connect()
-                def newPage = connection.content
-                echo newPage
 //            } catch(all) {
 //                sendEmail('Deploying a new application version')
 //            }

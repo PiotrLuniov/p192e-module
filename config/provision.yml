@@ -29,8 +29,13 @@
         status_code: 200
         return_content: yes
       register: new_helloworld
-      #register: helloworld
-      #failed_when: "'PLACE_FOR_GIT_HASH' not in helloworld.content"
+
+    - debug:
+        msg: "{{ new_helloworld }}"
+
+    - debug:
+        msg: "{{ old_helloworld }}"
+
     - name: Testing new content
       fail:
         msg: It is the same content.
@@ -56,7 +61,10 @@
 
     - name: Wait for port 8080 to become open
       wait_for:
-        timeout: 10
+        host: abutsko-helloworld.abutsko.svc.cluster.local
+        port: 8080
+        delay: 10
+        timeout: 80
 
     - name: Return ingress
       replace:
